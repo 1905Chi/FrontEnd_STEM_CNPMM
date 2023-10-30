@@ -1,0 +1,46 @@
+.header {
+  top: 0;
+  left: 0;
+  width: 100%;
+  position: fixed;
+  z-index: 100;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  
+}
+
+.sider-left {
+  position: relative; 
+  top:65px;
+  flex: 2.3;
+  padding-left: 15px;
+  overflow-y: auto; /* Cho phép thanh cuộn dọc cho cả hai phần */
+  max-height: calc(100vh );
+
+}
+
+.sider-right {
+  position: relative; 
+  top:65px;
+  flex:2.3;
+  overflow-y: auto; /* Cho phép thanh cuộn dọc cho cả hai phần */
+  max-height: calc(100vh );
+}
+
+
+
+
+.content-main{
+
+  position: relative  ; 
+  margin: 25px 15px 0 15px;
+  top:65px;
+  flex: 5.4; 
+  overflow-y: auto; /* Cho phép thanh cuộn dọc cho cả hai phần */
+  max-height: calc(100vh );
+ 
+}

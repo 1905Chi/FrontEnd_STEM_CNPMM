@@ -1,0 +1,23 @@
+.postbutton {
+    background-color: #007bff;
+    color: #fff;  
+    border: none;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    flex: auto;
+    height: 50px;
+}
+
+.anhluachon {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+.post {
+    background-color: aliceblue;
+}
