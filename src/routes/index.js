@@ -14,11 +14,8 @@ import LeftItemGroup from '../pages/group/layouts/LeftItemGroup';
 import MainGroup from '../pages/group/itemgroup/MainGroup';
 import Profile from '../pages/profile/Profile';
 import RightProfile from '../../src/pages/profile/layouts/RightProfile';
-<<<<<<< HEAD
 import EditPost from '../pages/home/components/EditPost';
-=======
 import LandingPage from '../pages/landing/LandingPage';
->>>>>>> 87da479e6993048fad4550cdc2ac60711e2283ba
 const privateRoutes = [
 	{ path: '/', component: Home, Left: Left, Right: Right },
 	{ path: '/groups', component: Home, Left: LeftsGroup, Right: Right },
