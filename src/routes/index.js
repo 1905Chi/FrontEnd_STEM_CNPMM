@@ -14,13 +14,17 @@ import LeftItemGroup from '../pages/group/layouts/LeftItemGroup';
 import MainGroup from '../pages/group/itemgroup/MainGroup';
 import Profile from '../pages/profile/Profile';
 import RightProfile from '../../src/pages/profile/layouts/RightProfile';
+<<<<<<< HEAD
 import EditPost from '../pages/home/components/EditPost';
+=======
+import LandingPage from '../pages/landing/LandingPage';
+>>>>>>> 87da479e6993048fad4550cdc2ac60711e2283ba
 const privateRoutes = [
 	{ path: '/', component: Home, Left: Left, Right: Right },
 	{ path: '/groups', component: Home, Left: LeftsGroup, Right: Right },
 	{ path: '/groups/create', component: CreateGroup, Left: LeftCreateGroup, Right: Right },
 	{ path: '/groups/:uuid', component: MainGroup, Left: LeftItemGroup, Right: Right },
-	{path:'/profile',component:Profile,Left:Left,Right:RightProfile}
+	{ path: '/profile', component: Profile, Left: Left, Right: RightProfile },
 ];
 
 const publicRoutes = [
@@ -29,7 +33,7 @@ const publicRoutes = [
 	{ path: '/forgot-password/', component: ForgotPassword },
 	{ path: '/forgot-password/:uuid', component: ForgotPassword },
 	{ path: '/verify/:uuid', component: Verify },
-	
+	{ path: 'landing', component: LandingPage },
 ];
 
 const notFoundRoute = { path: '*', component: NotFound };
