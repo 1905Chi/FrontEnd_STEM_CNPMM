@@ -84,7 +84,7 @@ export default function LeftCreateGroup() {
 						let a = RefeshToken();
 						if (a === 200) {
 							create(values);
-						} else if (a === 401) {
+						} else  {
 							// lỗi khi refresh token hết hạn
 							toast.error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
 							setTimeout(() => {
@@ -93,11 +93,6 @@ export default function LeftCreateGroup() {
 							}, 5000);
 						}
 						// token không hợp lệ trả về mã lỗi
-						toast.error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
-						setTimeout(() => {
-							localStorage.clear();
-							navigate('/login');
-						}, 5000);
 					}
 				} else if (error.request) {
 					// Lỗi không có phản hồi từ máy chủ

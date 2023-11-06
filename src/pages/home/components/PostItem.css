@@ -1,15 +1,18 @@
 .post-item {
   margin-bottom: 10px;
   margin-top: 20px;
+  margin-right: 15px;
   background-color: aliceblue;
 }
 
 .user-info {
   display: flex;
+  margin: 15px 0 0 15px;
 }
 
 .user-name {
   flex: 7;
+  margin:25px 0 0 5px;
 }
 
 .post-actions-icon {
@@ -22,6 +25,10 @@
 .post-actions {
   display: flex;
   justify-content: space-around;
+  border-top: 0.1px solid #ddd0d0;
+  border-bottom: 0.1px solid #ddd0d0;
+  width: 90%;
+  margin: 0 30px;
 }
 
 .like-button {
@@ -45,6 +52,92 @@
 }
 
 .post-image{
-  width: 80%;
-  height: 80%;
+  width: 40%;
+  height: 40vh;
+  margin:0 5px
 }
+
+
+.image-post{
+  margin: 0 0 0 60px;
+  position: relative;
+}
+.post-content{
+  margin: 0 0 90px 30px;
+}
+
+.avatarPost{
+  margin:5px
+}
+.ant-avatar {
+  width: 50px;
+  height: 50px;
+}
+.overlay {
+  position: absolute;
+  bottom: 4px;
+  right: 113px;
+  background-color: rgba(0, 0, 0, 0.7); /* Màu nền của lớp overlay */
+  color: #fff; /* Màu chữ trắng */
+ display: flex;
+ justify-content: center;
+ text-align: center;
+  width: 40%;
+  height: 40vh;
+  z-index: 2; /* Đảm bảo lớp overlay hiển thị trên ảnh */
+}
+
+.overlay-content{
+  text-align: center;
+  padding:90px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.file-post{
+  display: flex;
+
+}
+.image-file{
+  flex:2;
+}
+
+.name-file{
+  flex:8;
+}
+.likes-count{
+  margin: 0 0 10px 30px;
+}
+
+.content-container {
+  max-height: 500px;
+  overflow: hidden;
+  position: relative;
+}
+
+
+.show-more.active {
+  display: block;
+}
+
+.show-more-button {
+ 
+  background-color: aliceblue;
+  color: #007bff;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  right: 20px;
+  padding: 25px;
+  width: auto;
+
+}
+
+
+.show-more-button.active {
+  display: block;
+}
+.show-more-button :hover{
+  background-color: aliceblue;
+}
+
+
