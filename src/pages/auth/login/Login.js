@@ -156,7 +156,7 @@ function Login() {
 						<div style={{ display: 'flex', justifyContent: 'center' }}>Chưa có tài khoản?</div>
 						<br />
 						<div style={{ display: 'flex', justifyContent: 'center' }}>
-							<Button type="primary" onClick={register} className="login-form-button">
+							<Button type="primary" onClick={register} className="login-form-button" style={{backgroundColor:'green'}}>
 								Đăng ký
 							</Button>
 						</div>
