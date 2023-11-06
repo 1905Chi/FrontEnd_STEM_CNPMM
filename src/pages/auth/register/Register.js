@@ -1,21 +1,75 @@
-import { Form, Input, Button, Radio, Spin,Tooltip  } from 'antd';
+import { Form, Input, Button, Radio, Tooltip, DatePicker, Select } from 'antd';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
-import { useState } from 'react';
+import { FcManager } from 'react-icons/fc';
+import { FcBusinesswoman } from 'react-icons/fc';
+import { useState, useEffect } from 'react';
 import { PiStudentBold } from 'react-icons/pi';
 import { RiParentLine } from 'react-icons/ri';
 import { AiFillQuestionCircle } from 'react-icons/ai';
 import { LiaChalkboardTeacherSolid } from 'react-icons/lia';
+import {CloseOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import './Register.css';
 import { url } from '../../../constants/Constant';
-import Loading from '../../../components/Loading';	
+import Loading from '../../../components/Loading';
+import { GiCancel } from 'react-icons/gi';
 
-export default function Register() {
+export default function Register(props) {
 	const roles = ['STUDENT', 'TEACHER', 'PARENT'];
 	const navigate = useNavigate();
+	const [provinces, setProvinces] = useState([]);
+	const [districts, setDistricts] = useState([]);
+	const [schools, setSchools] = useState([]);
+	const [grade, setGrade] = useState([]);
+	const [isRegisterForParent, setIsRegisterForParent] = useState(false);
+	
+	useEffect(() => {
+		axios
+			.get(url + 'api/v1/locations/provinces')
+			.then((response) => {
+				setProvinces(response.data.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}, []);
+	const handleChangeProvince = (value) => {
+		axios
+			.get(url + `api/v1/locations/districts?provinceId=${value}`)
+			.then((response) => {
+				setDistricts(response.data.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+	const handleChangeDistrict = (value) => {
+		axios
+			.get(url + `api/v1/locations/schools?districtId=${value}`)
+			.then((response) => {
+				setSchools(response.data.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+	const { Option } = Select;
+	const RegisterForParent = () => {
+		setIsRegisterForParent(!isRegisterForParent);
+	};
+
 	const login = () => {
 		navigate('/login');
+	};
+	const config = {
+		rules: [
+			{
+				type: 'object',
+				required: true,
+				message: 'Chọn ngày tháng năm sinh!',
+			},
+		],
 	};
 	const [loading, setLoading] = useState(false); // Trạng thái loading
 	const handleNext = (values) => {
@@ -78,107 +132,373 @@ export default function Register() {
 
 	return (
 		<>
-		{loading ?// Nếu đang loading thì hiển thị component loading
-				<Loading></Loading>:null
-			}
+			{loading ? ( // Nếu đang loading thì hiển thị component loading
+				<Loading></Loading>
+			) : null}
 			<div className="Register-form">
 				<div className="register-body-form">
-					<div style={{ overflow: 'hidden' }}>
-						<img
-							src="https://in3ds.com/wp-content/uploads/2019/04/y-tuong-giao-duc-STEM.png"
-							alt="logo"
-							className="logo"
-						/>
-					</div>
-					<h2>Đăng ký</h2>
+				<div
+					style={{
+						display: 'flex',
+						borderBottom: '1px solid black',
+						justifyContent: 'space-between',
+						flex: 10,
+					}}
+				>
+					<h2 style={{ flex: 8, textAlign: 'end' }}>Đăng ký tài khoản cho học sinh</h2>
+					<button
+						style={{ flex: 3, height: '72.5px', backgroundColor: 'aliceblue	', textAlign: 'end' }}
+						onClick={props.onCancel}
+					>
+						<CloseOutlined style={{ color: 'black', fontSize: '30px' }}></CloseOutlined>
+					</button>
+				</div>
+					
 					<Form name="register" onFinish={handleNext} scrollToFirstError>
-						<Form.Item
-							name="email"
-							rules={[
-								{
-									type: 'email',
-									message: 'Email không hợp lệ!',
-								},
-								{
-									required: true,
-									message: 'Vui lòng nhập email của bạn!',
-								},
-							]}
-						>
-							<Input placeholder="Email" style={{ width: '100%' }} />
-						</Form.Item>
-						<Form.Item
-							name="password"
-							rules={[
-								{
-									required: true,
-									message: 'vui lòng nhập mật khẩu!',
-								},
-								{
-									min: 8,
-									message: 'Mật khẩu phải có ít nhất 8 kí tự',
-								},
-							]}
-							hasFeedback
-						>
-							<Input.Password placeholder="Mật khẩu" style={{ width: '100%' }} />
-						</Form.Item>
-						<Form.Item
-							name="confirm"
-							dependencies={['password']}
-							hasFeedback
-							rules={[
-								{
-									required: true,
-									message: 'Vui lòng xác nhận lại mật khẩu!',
-								},
-								({ getFieldValue }) => ({
-									validator(_, value) {
-										if (!value || getFieldValue('password') === value) {
-											return Promise.resolve();
-										}
-										return Promise.reject(new Error('Mật khẩu xác thực không đúng!'));
+						<h3 style={{ color: 'blue' }}>Thông tin tài khoản:</h3>
+						<div className="information-account">
+							<Form.Item
+								name="email"
+								rules={[
+									{
+										type: 'email',
+										message: 'Email không hợp lệ!',
 									},
-								}),
-							]}
-						>
-							<Input.Password
-								placeholder="Nhập lại mật khẩu"
-								style={{ width: '100%', marginLeft: '0px' }}
-							/>
-						</Form.Item>
-						<Form.Item
-							label="Vai trò"
-							name="roles"
-							rules={[
-								{
-									required: true,
-									message: 'Chọn vai trò của bạn!',
-								},
-							]}
-						>
-							<Radio.Group defaultValue="STUDENT">
-								<Tooltip title="Giáo viên">
-								<Radio.Button value="TEACHER" style={{ padding: '0px', marginLeft: '25px' ,padding:'0 20px 0 20px'}}>
-									<LiaChalkboardTeacherSolid />
-								</Radio.Button>
-								</Tooltip>
-								<Tooltip title="Học sinh">
-								<Radio.Button
-									value="STUDENT"
-									style={{ padding: '0px', marginLeft: '10px', marginRight: '10px',padding:'0 20px 0 20px' }}
+									{
+										required: true,
+										message: 'Vui lòng nhập email của bạn!',
+									},
+								]}
+								className="form-item-register"
+							>
+								<Input placeholder="Email" style={{ width: '180px' }} />
+							</Form.Item>
+							<Form.Item
+								name="password"
+								rules={[
+									{
+										required: true,
+										message: 'vui lòng nhập mật khẩu!',
+									},
+									{
+										min: 8,
+										message: 'Mật khẩu phải có ít nhất 8 kí tự',
+									},
+								]}
+								hasFeedback
+								className="form-item-register"
+							>
+								<Input.Password placeholder="Mật khẩu" style={{ width: '180px' }} />
+							</Form.Item>
+							<Form.Item
+								name="confirm"
+								dependencies={['password']}
+								hasFeedback
+								rules={[
+									{
+										required: true,
+										message: 'Vui lòng xác nhận lại mật khẩu!',
+									},
+									({ getFieldValue }) => ({
+										validator(_, value) {
+											if (!value || getFieldValue('password') === value) {
+												return Promise.resolve();
+											}
+											return Promise.reject(new Error('Mật khẩu xác thực không đúng!'));
+										},
+									}),
+								]}
+								className="form-item-register"
+							>
+								<Input.Password
+									placeholder="Nhập lại mật khẩu"
+									style={{ width: '180px' }}
+								/>
+							</Form.Item>
+						</div>
+						<h3 style={{ color: 'blue' }}>Thông tin cá nhân:</h3>
+						<div className="information-profile">
+							<Form.Item
+								name="firstName"
+								rules={[{ required: true, message: 'Vui lòng nhập tên của bạn!' }]}
+								className="form-item-register"
+							>
+								<Input placeholder="Tên" style={{ width: '180px' }} />
+							</Form.Item>
+							<Form.Item
+								name="lastName"
+								rules={[{ required: true, message: 'Vui lòng nhập họ của bạn!' }]}
+								className="form-item-register"
+							>
+								<Input placeholder="Họ" style={{ width: '180px' }} />
+							</Form.Item>
+							<Form.Item
+								label="Gender"
+								name="gender"
+								defaultValue="MALE"
+								rules={[
+									{
+										required: true,
+										message: 'Chọn giới tính',
+									},
+								]}
+								className="form-item-register"
+							>
+								<Radio.Group defaultValue="MALE" style={{ width: '180px' }}>
+									<Tooltip title="Nam">
+										<Radio.Button value="MALE">
+											<FcManager />
+										</Radio.Button>
+									</Tooltip>
+									<Tooltip title="Nữ">
+										<Radio.Button value="FEMALE">
+											<FcBusinesswoman />
+										</Radio.Button>
+									</Tooltip>
+									<Tooltip title="Khác">
+										<Radio.Button value="OTHER">
+											<AiFillQuestionCircle />
+										</Radio.Button>
+									</Tooltip>
+								</Radio.Group>
+							</Form.Item>
+							<Form.Item
+								name="phone"
+								className="form-item-register"
+								rules={[
+									{
+										required: true,
+										message: 'Vui lòng nhập số điện thoại!',
+										whitespace: true,
+									},
+
+									{
+										pattern: /^0\d{10,10}$/, // Sử dụng biểu thức chính quy để kiểm tra số điện thoại bắt đầu bằng 0 và có tổng cộng từ 10 đến 11 ký tự
+										message: 'Số điện thoại không hợp lệ!',
+									},
+								]}
+							>
+								<Input placeholder="Số điện thoại" style={{ width: '180px' }} />
+							</Form.Item>
+							<Form.Item name="date_picker" {...config} className='form-item-register'>
+								<DatePicker
+									format="DD-MM-YYYY"
+									style={{ width: '180px' }}
+									placeholder="Ngày tháng năm sinh"
+
+								/>
+							</Form.Item>
+							<Form.Item
+							className='form-item-register'
+								name="province"
+								rules={[{ required: true, message: 'Vui lòng chọn tỉnh thành!' }]}
+							>
+								<Select
+									showSearch
+									style={{ width: '180px' }}
+									placeholder="Tỉnh thành"
+									optionFilterProp="children"
+									onChange={handleChange}
+									filterOption={(input, option) =>
+										option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+									}
 								>
-									<PiStudentBold />
-								</Radio.Button>
-								</Tooltip>
-								<Tooltip title="Phụ huynh">
-								<Radio.Button value="PARENT" style={{ padding:'0 20px 0 20px'}}>
-									<RiParentLine  />
-								</Radio.Button>
-								</Tooltip>
-							</Radio.Group>
+									{provinces.map((province) => (
+										<Option value={province.id} key={province.id}>
+											{province.name}
+										</Option>
+									))}
+								</Select>
+							</Form.Item>
+							<Form.Item
+							className='form-item-register'
+								name="district"
+								rules={[{ required: true, message: 'Vui lòng chọn quận huyện!' }]}
+							>
+								<Select
+									showSearch
+									style={{ width: '180px' }}
+									placeholder="Quận huyện"
+									optionFilterProp="children"
+									onChange={handleChange}
+									filterOption={(input, option) =>
+										option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+									}
+								>
+									{districts.map((district) => (
+										<Option value={district.id} key={district.id}>
+											{district.name}
+										</Option>
+									))}
+								</Select>
+							</Form.Item>
+							<Form.Item name="school" rules={[{ required: true, message: 'Vui lòng chọn trường học!' }]} className='form-item-register'>
+								<Select
+									showSearch
+									style={{ width: '180px' }}
+									placeholder="Trường học"
+									optionFilterProp="children"
+									onChange={handleChange}
+									filterOption={(input, option) =>
+										option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+									}
+								>
+									{schools.map((school) => (
+										<Option value={school.id} key={school.id}>
+											{school.name}
+										</Option>
+									))}
+								</Select>
+							</Form.Item>
+							<Form.Item name="grade" rules={[{ required: true, message: 'Vui lòng chọn khối lớp!' }]} className='form-item-register'>
+								<Select
+									showSearch
+									style={{ width: '180px' }}
+									placeholder="Khối lớp"
+									optionFilterProp="children"
+									onChange={handleChange}
+									filterOption={(input, option) =>
+										option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+									}
+								></Select>
+							</Form.Item>
+						</div>
+						<div style={{ color: 'blue', backgroundColor:'aliceblue',padding:'0'}} onClick={RegisterForParent}><h3>Thêm tài khoản phụ huynh</h3></div>
+						{isRegisterForParent ? (<div className="information-profile">
+						<Form.Item
+								name="email-parent"
+								rules={[
+									{
+										type: 'email',
+										message: 'Email không hợp lệ!',
+									},
+									{
+										required: true,
+										message: 'Vui lòng nhập email 	!',
+									},
+								]}
+								className="form-item-register"
+							>
+								<Input placeholder="Email" style={{ width: '180px' }} />
+							</Form.Item>
+							<Form.Item
+								name="password-parent"
+								rules={[
+									{
+										required: true,
+										message: 'vui lòng nhập mật khẩu!',
+									},
+									{
+										min: 8,
+										message: 'Mật khẩu phải có ít nhất 8 kí tự',
+									},
+								]}
+								hasFeedback
+								className="form-item-register"
+							>
+								<Input.Password placeholder="Mật khẩu" style={{ width: '180px' }} />
+							</Form.Item>
+							<Form.Item
+								name="confirm-parent"
+								dependencies={['password']}
+								hasFeedback
+								rules={[
+									{
+										required: true,
+										message: 'Vui lòng xác nhận lại mật khẩu!',
+									},
+									({ getFieldValue }) => ({
+										validator(_, value) {
+											if (!value || getFieldValue('password') === value) {
+												return Promise.resolve();
+											}
+											return Promise.reject(new Error('Mật khẩu xác thực không đúng!'));
+										},
+									}),
+								]}
+								className="form-item-register"
+							>
+								<Input.Password
+									placeholder="Nhập lại mật khẩu"
+									style={{ width: '180px' }}
+								/>
+							</Form.Item>
+							<Form.Item
+								name="firstName-parent"
+								rules={[{ required: true, message: 'Vui lòng nhập tên !' }]}
+								className="form-item-register"
+							>
+								<Input placeholder="Tên" style={{ width: '180px' }} />
+							</Form.Item>
+							<Form.Item
+								name="lastName-parent"
+								rules={[{ required: true, message: 'Vui lòng nhập họ !' }]}
+								className="form-item-register"
+							>
+								<Input placeholder="Họ" style={{ width: '180px' }} />
+							</Form.Item>
+							<Form.Item
+								label="Gender"
+								name="gender-parent"
+								defaultValue="MALE"
+								rules={[
+									{
+										required: true,
+										message: 'Chọn giới tính',
+									},
+								]}
+								className="form-item-register"
+							>
+								<Radio.Group defaultValue="MALE" style={{ width: '180px' }}>
+									<Tooltip title="Nam">
+										<Radio.Button value="MALE">
+											<FcManager />
+										</Radio.Button>
+									</Tooltip>
+									<Tooltip title="Nữ">
+										<Radio.Button value="FEMALE">
+											<FcBusinesswoman />
+										</Radio.Button>
+									</Tooltip>
+									<Tooltip title="Khác">
+										<Radio.Button value="OTHER">
+											<AiFillQuestionCircle />
+										</Radio.Button>
+									</Tooltip>
+								</Radio.Group>
+							</Form.Item>
+							<Form.Item
+								name="phone-parent"
+								className="form-item-register"
+								rules={[
+									{
+										required: true,
+										message: 'Vui lòng nhập số điện thoại!',
+										whitespace: true,
+									},
+
+									{
+										pattern: /^0\d{10,10}$/, // Sử dụng biểu thức chính quy để kiểm tra số điện thoại bắt đầu bằng 0 và có tổng cộng từ 10 đến 11 ký tự
+										message: 'Số điện thoại không hợp lệ!',
+									},
+								]}
+							>
+								<Input placeholder="Số điện thoại" style={{ width: '180px' }} />
+							</Form.Item>
+							<Form.Item name="date_picker-parent" {...config} className='form-item-register'>
+								<DatePicker
+									format="DD-MM-YYYY"
+									style={{ width: '180px' }}
+									placeholder="Ngày tháng năm sinh"
+
+								/>
+							</Form.Item>
 							
-						</Form.Item>
+							
+								
+							
+						</div>):null}
+						
 						<Form.Item>
 							<Button
 								type="primary"
@@ -200,7 +520,6 @@ export default function Register() {
 					</Form>
 				</div>
 				<ToastContainer />
-			
 			</div>
 		</>
 	);
