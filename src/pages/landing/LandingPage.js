@@ -188,9 +188,9 @@ const LandingPage = () => {
 			<div className="info-container">
 				<div className="info-header-container">
 					<div className="info-header-content">
-						<h1>Bạn học được những gì trên ViettelStudy?</h1>
+						<h1>Bạn học được những gì trên STEM?</h1>
 						<h4>
-							ViettelStudy là Mạng xã hội học tập trực tuyến, được xây dựng nhằm mục tiêu đồng hành cùng
+							STEM là Mạng xã hội học tập trực tuyến, được xây dựng nhằm mục tiêu đồng hành cùng
 							các bạn học sinh trong quá trình học tập, trau dồi kiến thức, kỹ năng.
 						</h4>
 					</div>

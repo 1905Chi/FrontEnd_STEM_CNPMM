@@ -5,10 +5,9 @@ const Footer = () => {
 	return (
 		<div className="footer-container">
 			<div className="item-footer">
-				<h4>
-					Tổng Công ty Giải pháp doanh nghiệp Viettel Chi nhánh Tập đoàn Công nghiệp - Viễn thông Quân đội Số
-					1 đường Trần Hữu Dực, P. Mỹ Đình 2, Q. Nam Từ Liêm, TP. Hà Nộ
-				</h4>
+				<h1>Giới thiệu</h1>			
+				<h4>Đội ngũ phát triển</h4>
+				<h4>Đối tác</h4>
 			</div>
 			<div className="item-footer">
 				<h1>Liên kết</h1>
@@ -21,8 +20,8 @@ const Footer = () => {
 			<div className="item-footer">
 				<h1>18008000 nhánh 2</h1>
 				<h4>Hotline: 19001009</h4>
-				<h4>viettelstudy@viettel.com.vn</h4>
-				<h4>https://viettelstudy.vn</h4>
+				<h4></h4>
+				<h4></h4>
 			</div>
 		</div>
 	);

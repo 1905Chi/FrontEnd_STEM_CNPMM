@@ -16,8 +16,9 @@ import Profile from '../pages/profile/Profile';
 import RightProfile from '../../src/pages/profile/layouts/RightProfile';
 import EditPost from '../pages/home/components/EditPost';
 import LandingPage from '../pages/landing/LandingPage';
+import RegisterParent from '../pages/auth/register/RegisterParent';
 const privateRoutes = [
-	{ path: '/', component: Home, Left: Left, Right: Right },
+	{ path: '/home', component: Home, Left: Left, Right: Right },
 	{ path: '/groups', component: Home, Left: LeftsGroup, Right: Right },
 	{ path: '/groups/create', component: CreateGroup, Left: LeftCreateGroup, Right: Right },
 	{ path: '/groups/:uuid', component: MainGroup, Left: LeftItemGroup, Right: Right },
@@ -26,7 +27,7 @@ const privateRoutes = [
 
 const publicRoutes = [
 	{ path: '/login', component: Login },
-	{ path: '/register', component: Register },
+	{ path: '/register', component: RegisterParent },
 	{ path: '/forgot-password/', component: ForgotPassword },
 	{ path: '/forgot-password/:uuid', component: ForgotPassword },
 	{ path: '/verify/:uuid', component: Verify },

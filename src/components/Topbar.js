@@ -2,29 +2,31 @@ import React, { useState } from 'react';
 import './Topbar.css';
 import { MegaMenu } from 'primereact/megamenu';
 import { InputText } from 'primereact/inputtext';
+import {useNavigate} from 'react-router-dom';
 
 const Topbar = () => {
 	const [activeIndex, setActiveIndex] = useState(1);
+	const navigate = useNavigate();
 	const items = [
 		{
 			label: 'Trang chủ',
 			icon: 'pi pi-fw pi-home',
 			command: () => {
-				window.location = '/';
+				navigate('/home');
 			},
 		},
 		{
 			label: 'Lớp học',
 			icon: 'pi pi-fw pi-users',
 			command: () => {
-				window.location = '/documents';
+				navigate('/classes');
 			},
 		},
 		{
 			label: 'Nhóm',
 			icon: 'pi pi-fw pi-users',
 			command: () => {
-				window.location = '/groups';
+				navigate('/groups');
 			},
 		},
 	];
