@@ -3,7 +3,6 @@ import anh_logo_1 from '../../../src/assets/images/anh_logo_1.jpg';
 import Post from './components/Post';
 import PostItem from './components/PostItem';
 import { ToastContainer, toast } from 'react-toastify';
-import InputWrite from './components/InputWrite';
 import Editor from './components/Editor';
 
 function Home() {

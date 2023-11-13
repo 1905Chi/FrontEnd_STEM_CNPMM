@@ -8,6 +8,7 @@ import EditAvatar from './component/EditAvatar';
 import EditCover from './component/EditCover';
 import Post from '../home/components/Post';
 import PostItem from '../home/components/PostItem';
+
 export default function Profile() {
 	const [isEdit, setIsEdit] = useState(false);
 	const [isEditAvatar, setIsEditAvatar] = useState(false);
@@ -17,13 +18,13 @@ export default function Profile() {
 
 	useEffect(() => {
 		const profile = JSON.parse(localStorage.getItem('user'));
-		if (profile.profileImageUrl) {
-			setAvatar(profile.profileImageUrl);
+		if (profile.avatarUrl) {
+			setAvatar(profile.avatarUrl);
 		} else {
 			setAvatar(anhlogo1);
 		}
-		if (profile.coverImageUrl) {
-			setCoverPhoto(profile.coverImageUrl);
+		if (profile.avatarUrl) {
+			setCoverPhoto(profile.coverUrl);
 		} else {
 			setCoverPhoto(anhlogo1);
 		}

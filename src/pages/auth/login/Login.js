@@ -15,7 +15,7 @@ function Login() {
 	const notify = (string) => toast(string); // Hàm hiển thị thông báo
 	const [loading, setLoading] = useState(false); // Trạng thái loading
 	const register = () => {
-		navigate('/register');
+		navigate('/landing');
 	};
 
 	const onFinish = (values) => {
