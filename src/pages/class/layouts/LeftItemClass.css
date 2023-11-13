@@ -2,6 +2,8 @@
     border-top: 2px solid #1890ff;
     border-bottom: 2px solid #1890ff;
     margin-bottom: 30px;
+    margin-right: 15px;
+    position: relative;
 }
 .overlay-event-create{
   position: fixed;
@@ -17,7 +19,7 @@
 }
 .overlay-event{
   position: absolute;
-    bottom: 5px; 
+    top: 5px; 
     background-color: white;   
     /* display: flex; */
     width: 350px;
@@ -73,4 +75,32 @@
 .calendar-custom{
   margin-top: 30px;
   margin-bottom: 30px;
+}
+.file-all{
+  position: fixed;
+  top:43px;
+  left:0;
+  width: 30%;
+  height: 100%;
+  z-index: 2;
+  background-color: white;
+
+  border: 3px solid #1890ff;
+  border-radius: 10px;
+  
+
+}
+.document-class-content-allfile{
+  overflow: scroll;
+  height: 50vh;
+}
+.search-file{
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.document-class-search{
+  border-bottom: 3px solid #1890ff;
+  margin-top: 15px;
 }

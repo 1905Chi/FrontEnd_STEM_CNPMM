@@ -38,7 +38,7 @@ export default function Editor(props) {
 			console.log(img.src);
 		});
 		props.cancel(false);
-	};  
+	};
 
 	const imageHandler = useCallback(() => {
 		const input = document.createElement('input');
@@ -59,65 +59,70 @@ export default function Editor(props) {
 	}, []);
 
 	return (
-		<>
-			<div
-				style={{
-					display: 'flex',
-					borderBottom: '1px solid black',
-					justifyContent: 'space-between',
-					flex: 10,
-				}}
-			>
-				<button style={{ height: '72.5px', backgroundColor: 'aliceblue', textAlign: 'end' }} onClick={cancel}>
-					<GiCancel style={{ color: 'black', fontSize: '30px' }}></GiCancel>
+	
+			<div className="Editor" style={{position:'fixed',width:'50%',position:'fixed',zIndex:'150',backgroundColor:'aliceblue',border:'1px solid',top:'25%'}}>
+				<div
+					style={{
+						display: 'flex',
+						borderBottom: '1px solid black',
+						justifyContent: 'space-between',
+						flex: 10,
+					}}
+				>
+					<button
+						style={{ height: '72.5px', backgroundColor: 'aliceblue', textAlign: 'end' }}
+						onClick={cancel}
+					>
+						<GiCancel style={{ color: 'black', fontSize: '30px' }}></GiCancel>
+					</button>
+				</div>
+				<ReactQuill
+					ref={reactQuillRef}
+					theme="snow"
+					placeholder="Start writing..."
+					modules={{
+						toolbar: {
+							container: [
+								[{ header: '1' }, { header: '2' }, { font: [] }],
+								[{ size: [] }],
+								['bold', 'italic', 'underline', 'strike', 'blockquote'],
+								[{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+								['link', 'image', 'video'],
+								['code-block'],
+								['clean'],
+							],
+							handlers: {
+								image: imageHandler,
+							},
+						},
+						clipboard: {
+							matchVisual: false,
+						},
+					}}
+					formats={[
+						'header',
+						'font',
+						'size',
+						'bold',
+						'italic',
+						'underline',
+						'strike',
+						'blockquote',
+						'list',
+						'bullet',
+						'indent',
+						'link',
+						'image',
+						'video',
+						'code-block',
+					]}
+					value={value}
+					onChange={onChange}
+				/>
+				<button style={{ width: '90%', margin: '5px 32px', borderRadius: '10px' }} onClick={Save}>
+					Lưu
 				</button>
 			</div>
-			<ReactQuill
-				ref={reactQuillRef}
-				theme="snow"
-				placeholder="Start writing..."
-				modules={{
-					toolbar: {
-						container: [
-							[{ header: '1' }, { header: '2' }, { font: [] }],
-							[{ size: [] }],
-							['bold', 'italic', 'underline', 'strike', 'blockquote'],
-							[{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-							['link', 'image', 'video'],
-							['code-block'],
-							['clean'],
-						],
-						handlers: {
-							image: imageHandler,
-						},
-					},
-					clipboard: {
-						matchVisual: false,
-					},
-				}}
-				formats={[
-					'header',
-					'font',
-					'size',
-					'bold',
-					'italic',
-					'underline',
-					'strike',
-					'blockquote',
-					'list',
-					'bullet',
-					'indent',
-					'link',
-					'image',
-					'video',
-					'code-block',
-				]}
-				value={value}
-				onChange={onChange}
-			/>
-			<button style={{ width: '90%', margin: '5px 32px', borderRadius: '10px' }} onClick={Save}>
-				Lưu
-			</button>
-		</>
+	
 	);
 }

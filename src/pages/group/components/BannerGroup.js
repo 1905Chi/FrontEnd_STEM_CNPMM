@@ -14,7 +14,7 @@ export default function BannerGroup() {
                     <button style={{ margin:'0px',borderRadius:'0px',backgroundColor:'white'}}> <h3>Bài Viết</h3></button>
                     <button style={{ margin:'0px',borderRadius:'0px',backgroundColor:'white'}}> <h3>Thành viên</h3></button>
                     <button style={{ margin:'0px',borderRadius:'0px',backgroundColor:'white'}}><h3>Sự kiện</h3></button>
-       
+					<button style={{ margin:'0px',borderRadius:'0px',backgroundColor:'white'}}><h3>Thắc mắc /Trợ giúp</h3></button>  
                 </div>
 			</div>
 		</>
