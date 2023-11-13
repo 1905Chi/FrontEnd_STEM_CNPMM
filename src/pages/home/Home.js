@@ -3,8 +3,7 @@ import anh_logo_1 from '../../../src/assets/images/anh_logo_1.jpg';
 import Post from './components/Post';
 import PostItem from './components/PostItem';
 import { ToastContainer, toast } from 'react-toastify';
-import InputWrite from './components/InputWrite';
-
+import Editor from './components/Editor';
 
 function Home() {
   
@@ -98,7 +97,7 @@ const openInput=()=>{
     <>
       <div className="home-page">
       <button className="btn btn-primary" onClick={openInput}>Đăng</button>
-      {ispost && <InputWrite cancel={openInput}/>}
+      {ispost && <Editor cancel={openInput} />}
       {post.map((post, index) => {
         return (
           <PostItem

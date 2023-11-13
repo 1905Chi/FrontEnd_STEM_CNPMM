@@ -15,48 +15,47 @@ import { url } from '../../../constants/Constant';
 import Loading from '../../../components/Loading';
 import { GiCancel } from 'react-icons/gi';
 
-export default function Register(props) {
+export default function RegisterParent(props) {
+	const roles = ['STUDENT', 'TEACHER', 'PARENT'];
 	const navigate = useNavigate();
-	const [provinces, setProvinces] = useState(['Quảng Nam', 'Đà Nẵng', 'Quảng Ngãi', 'Quảng Trị', 'Huế', 'Hà Nội']);
-	const [districts, setDistricts] = useState(['Hải Châu', 'Cẩm Lệ', 'Thanh Khê', 'Liên Chiểu', 'Ngũ Hành Sơn', 'Sơn Trà', 'Hòa Vang']);
-	const [schools, setSchools] = useState(['Trường THPT Nguyễn Khuyến', 'Trường THPT Nguyễn Hiền', 'Trường THPT Nguyễn Trãi', 'Trường THPT Nguyễn Du', 'Trường THPT Nguyễn Thị Minh Khai', 'Trường THPT Nguyễn Thị Định']);
-	const [grade, setGrade] = useState(['1', '2', '3', '4', '5', '6', '7', '8', '9','10', '11', '12']);
-	const [isRegisterForParent, setIsRegisterForParent] = useState(false);
+	const [provinces, setProvinces] = useState([]);
+	const [districts, setDistricts] = useState([]);
+	const [schools, setSchools] = useState([]);
+	const [grade, setGrade] = useState([]);
+	
 
-	// useEffect(() => {
-	// 	axios
-	// 		.get(url + 'api/v1/locations/provinces')
-	// 		.then((response) => {
-	// 			setProvinces(response.data.data);
-	// 		})
-	// 		.catch((error) => {
-	// 			console.log(error);
-	// 		});
-	// }, []);
-	// const handleChangeProvince = (value) => {
-	// 	axios
-	// 		.get(url + `api/v1/locations/districts?provinceId=${value}`)
-	// 		.then((response) => {
-	// 			setDistricts(response.data.data);
-	// 		})
-	// 		.catch((error) => {
-	// 			console.log(error);
-	// 		});
-	// };
-	// const handleChangeDistrict = (value) => {
-	// 	axios
-	// 		.get(url + `api/v1/locations/schools?districtId=${value}`)
-	// 		.then((response) => {
-	// 			setSchools(response.data.data);
-	// 		})
-	// 		.catch((error) => {
-	// 			console.log(error);
-	// 		});
-	// };
-	const { Option } = Select;
-	const RegisterForParent = () => {
-		setIsRegisterForParent(!isRegisterForParent);
+	useEffect(() => {
+		axios
+			.get(url + 'api/v1/locations/provinces')
+			.then((response) => {
+				setProvinces(response.data.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}, []);
+	const handleChangeProvince = (value) => {
+		axios
+			.get(url + `api/v1/locations/districts?provinceId=${value}`)
+			.then((response) => {
+				setDistricts(response.data.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	};
+	const handleChangeDistrict = (value) => {
+		axios
+			.get(url + `api/v1/locations/schools?districtId=${value}`)
+			.then((response) => {
+				setSchools(response.data.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+	const { Option } = Select;
+	
 
 	const login = () => {
 		navigate('/login');
@@ -73,39 +72,24 @@ export default function Register(props) {
 	const [loading, setLoading] = useState(false); // Trạng thái loading
 	const handleNext = (values) => {
 		setLoading(true);
-
 		const data = {
-			student: {
-				email: values.email,
-				password: values.password,
-				firstName: values.firstName,
-				lastName: values.lastName,
-				gender: values.gender,
-				phone: values.phone,
-				dob: values.date_picker.format('DD-MM-YYYY'),
-				province: values.province,
-				district: values.district,
-				school: values.school,
-				grade: values.grade,
-
-			},
-			parent: {
-			}
-		}
-		
+			email: values.email,
+			password: values.password,
+			role: values.roles,
+		};
 		const config = {
 			headers: {
 				'Content-Type': 'application/json',
 			},
 		};
 		axios
-			.post(url + 'api/v1/auth/register-student', data, config)
+			.post(url + 'api/v1/auth/register', data, config)
 			.then((response) => {
 				// Xử lý kết quả sau khi gửi thành công
 				if (response.data.statusCode === 200) {
 					toast.success(response.data.message);
 					setTimeout(() => {
-						navigate('/login');
+						navigate('*');
 					}, 2000);
 				} else {
 					toast.error(response.data.message);
@@ -159,7 +143,7 @@ export default function Register(props) {
 							flex: 10,
 						}}
 					>
-						<h2 style={{ flex: 8, textAlign: 'end' }}>Đăng ký tài khoản cho học sinh</h2>
+						<h2 style={{ flex: 8, textAlign: 'end' }}>Đăng ký tài khoản cho phụ huynh</h2>
 						<button
 							style={{ flex: 3, height: '72.5px', backgroundColor: 'aliceblue	', textAlign: 'end' }}
 							onClick={props.cancelRegister}
@@ -269,25 +253,7 @@ export default function Register(props) {
 									placeholder="Ngày tháng năm sinh"
 								/>
 							</Form.Item>
-							<Form.Item
-								className="form-item-register"
-								name="province"
-								rules={[{ required: true, message: 'Vui lòng chọn tỉnh thành!' }]}
-							>
-								<Select
-									showSearch
-									style={{ width: '180px' }}
-									placeholder="Tỉnh thành"									
-									onChange={handleChange}
-									
-								>
-									{grade.map((grade) => (
-										<Option value={grade} key={grade} style={{color:'black'}}>
-											{grade}
-										</Option>
-									))}
-								</Select>
-							</Form.Item>
+							
 							<Form.Item
 								className="form-item-register"
 								name="district"
@@ -297,58 +263,21 @@ export default function Register(props) {
 									showSearch
 									style={{ width: '180px' }}
 									placeholder="Quận huyện"
-									
+									optionFilterProp="children"
 									onChange={handleChange}
-									
+									filterOption={(input, option) =>
+										option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+									}
 								>
-									{grade.map((grade) => (
-										<Option value={grade} key={grade} style={{color:'black'}}>
-											{grade}
+									{districts.map((district) => (
+										<Option value={district.id} key={district.id}>
+											{district.name}
 										</Option>
 									))}
 								</Select>
 							</Form.Item>
-							<Form.Item
-								name="school"
-								rules={[{ required: true, message: 'Vui lòng chọn trường học!' }]}
-								className="form-item-register"
-							>
-								<Select
-									showSearch
-									style={{ width: '180px' }}
-									placeholder="Trường học"
-									
-									onChange={handleChange}
-									
-								>
-								{grade.map((grade) => (
-										<Option value={grade} key={grade} style={{color:'black'}}>
-											{grade}
-										</Option>
-									))}
-								</Select>
-							</Form.Item>
-							<Form.Item
-								name="grade"
-								rules={[{ required: true, message: 'Vui lòng chọn khối lớp!' }]}
-								className="form-item-register"
-							>
-								<Select
-									showSearch
-									style={{ width: '180px' }}
-									placeholder="Khối lớp"
-									
-
-									
-									onChange={handleChange}									
-								>
-									{grade.map((grade) => (
-										<Option value={grade} key={grade} style={{color:'black'}}>
-											{grade}
-										</Option>
-									))}
-								</Select>
-							</Form.Item>
+						
+						
 							<Form.Item
 								
 								name="gender"
@@ -383,141 +312,7 @@ export default function Register(props) {
 								</div>
 							</Form.Item>
 						</div>
-						<div
-							style={{ color: 'blue', backgroundColor: 'aliceblue', padding: '0' }}
-							onClick={RegisterForParent}
-						>
-							<h3>Thêm tài khoản phụ huynh</h3>
-						</div>
-						{isRegisterForParent ? (
-							<div className="information-profile">
-								<Form.Item
-									name="email-parent"
-									rules={[
-										{
-											type: 'email',
-											message: 'Email không hợp lệ!',
-										},
-										{
-											required: true,
-											message: 'Vui lòng nhập email 	!',
-										},
-									]}
-									className="form-item-register"
-								>
-									<Input placeholder="Email" style={{ width: '180px' }} />
-								</Form.Item>
-								<Form.Item
-									name="password-parent"
-									rules={[
-										{
-											required: true,
-											message: 'vui lòng nhập mật khẩu!',
-										},
-										{
-											min: 8,
-											message: 'Mật khẩu phải có ít nhất 8 kí tự',
-										},
-									]}
-									hasFeedback
-									className="form-item-register"
-								>
-									<Input.Password placeholder="Mật khẩu" style={{ width: '180px' }} />
-								</Form.Item>
-								<Form.Item
-									name="confirm-parent"
-									dependencies={['password']}
-									hasFeedback
-									rules={[
-										{
-											required: true,
-											message: 'Vui lòng xác nhận lại mật khẩu!',
-										},
-										({ getFieldValue }) => ({
-											validator(_, value) {
-												if (!value || getFieldValue('password') === value) {
-													return Promise.resolve();
-												}
-												return Promise.reject(new Error('Mật khẩu xác thực không đúng!'));
-											},
-										}),
-									]}
-									className="form-item-register"
-								>
-									<Input.Password placeholder="Nhập lại mật khẩu" style={{ width: '180px' }} />
-								</Form.Item>
-								<Form.Item
-									name="firstName-parent"
-									rules={[{ required: true, message: 'Vui lòng nhập tên !' }]}
-									className="form-item-register"
-								>
-									<Input placeholder="Tên" style={{ width: '180px' }} />
-								</Form.Item>
-								<Form.Item
-									name="lastName-parent"
-									rules={[{ required: true, message: 'Vui lòng nhập họ !' }]}
-									className="form-item-register"
-								>
-									<Input placeholder="Họ" style={{ width: '180px' }} />
-								</Form.Item>
-								<Form.Item
-									label="Gender"
-									name="gender-parent"
-									defaultValue="MALE"
-									rules={[
-										{
-											required: true,
-											message: 'Chọn giới tính',
-										},
-									]}
-									className="form-item-register"
-								>
-									<Radio.Group defaultValue="MALE" style={{ width: '180px' }}>
-										<Tooltip title="Nam">
-											<Radio.Button value="MALE">
-												<FcManager />
-											</Radio.Button>
-										</Tooltip>
-										<Tooltip title="Nữ">
-											<Radio.Button value="FEMALE">
-												<FcBusinesswoman />
-											</Radio.Button>
-										</Tooltip>
-										<Tooltip title="Khác">
-											<Radio.Button value="OTHER">
-												<AiFillQuestionCircle />
-											</Radio.Button>
-										</Tooltip>
-									</Radio.Group>
-								</Form.Item>
-								<Form.Item
-									name="phone-parent"
-									className="form-item-register"
-									rules={[
-										{
-											required: true,
-											message: 'Vui lòng nhập số điện thoại!',
-											whitespace: true,
-										},
-
-										{
-											pattern: /^0\d{10,10}$/, // Sử dụng biểu thức chính quy để kiểm tra số điện thoại bắt đầu bằng 0 và có tổng cộng từ 10 đến 11 ký tự
-											message: 'Số điện thoại không hợp lệ!',
-										},
-									]}
-								>
-									<Input placeholder="Số điện thoại" style={{ width: '180px' }} />
-								</Form.Item>
-								<Form.Item name="date_picker-parent" {...config} className="form-item-register">
-									<DatePicker
-										format="DD-MM-YYYY"
-										style={{ width: '180px' }}
-										placeholder="Ngày tháng năm sinh"
-									/>
-								</Form.Item>
-							</div>
-						) : null}
-
+						
 						<Form.Item>
 							<Button
 								type="primary"

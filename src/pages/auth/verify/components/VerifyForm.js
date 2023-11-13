@@ -1,18 +1,23 @@
 import { FcManager } from 'react-icons/fc';
 import { FcBusinesswoman } from 'react-icons/fc';
 import { AiFillQuestionCircle } from 'react-icons/ai';
-import React, { useEffect,useState } from 'react';
-import { Button, Form, Input, Radio, DatePicker ,Spin,Tooltip} from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Form, Input, Radio, DatePicker, Tooltip ,Select} from 'antd';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+
 import './VerifyForm.css';
 import axios from 'axios';
-import Loading from '../../../../components/Loading';	
+import Loading from '../../../../components/Loading';
 import { url } from '../../../../constants/Constant';
 export default function VerifyForm(props) {
 	const { uuid } = useParams();
 	const navigate = useNavigate();
-	const role=props.role;
+const { Option } = Select;
+    const [provinces, setProvinces] = useState([]);
+	const [districts, setDistricts] = useState([]);
+	const [schools, setSchools] = useState([]);
+	const [grade, setGrade] = useState([]);
 	const [loading, setLoading] = useState(false); // Trạng thái loading
 	const config = {
 		rules: [
@@ -22,6 +27,9 @@ export default function VerifyForm(props) {
 				message: 'Chọn ngày tháng năm sinh!',
 			},
 		],
+	};
+    const handleChange = (value) => {
+		console.log(`selected ${value}`);
 	};
 
 	const onFinish = (values) => {
@@ -54,7 +62,7 @@ export default function VerifyForm(props) {
 			.catch((error) => {
 				toast.error(error.response.data.message);
 			})
-			.finally(() => {	
+			.finally(() => {
 				setLoading(false);
 			});
 	};
@@ -71,144 +79,170 @@ export default function VerifyForm(props) {
 				}}
 				onFinish={onFinish}
 			>
-					<img
-						src="https://in3ds.com/wp-content/uploads/2019/04/y-tuong-giao-duc-STEM.png"
-						alt="logo"
-						className="logo"
-					/>
-				<Form.Item>
-					<h2> Xác thực tài khoản </h2>
-				</Form.Item>
-				<Form.Item
-					name="firstname"
-					rules={[
-						{
-							required: true,
-							message: 'Nhập tên!',
-							whitespace: true,
-						},
-					]}
-				>
-					<Input  style={{width:'280px' , marginLeft:'8px'}} placeholder="Tên"/>
-				</Form.Item>
-				<Form.Item
-					name="lastname"
-					rules={[
-						{
-							required: true,
-							message: 'Nhập họ !',
-							whitespace: true,
-						},
-					]}
-				>
-					<Input  style={{width:'280px' , marginLeft:'8px'}} placeholder="Họ và tên đệm"/>
-				</Form.Item>
-				<Form.Item name="date_picker" {...config}>
-					<DatePicker format="DD-MM-YYYY" style={{width:'280px', marginLeft:'8px'}} placeholder="Ngày tháng năm sinh" />
-				</Form.Item>
-				{
-					role==='TEACHER'?
+				<img
+					src="https://in3ds.com/wp-content/uploads/2019/04/y-tuong-giao-duc-STEM.png"
+					alt="logo"
+					className="logo"
+				/>
+				<h2> Xác thực tài khoản </h2>
+				<h3 style={{ color: 'blue' }}>Thông tin cá nhân:</h3>
+				<div className="information-profile">
 					<Form.Item
-					name="workAt"
-					rules={[
-						{
-							required: true,
-							message: 'Nhập tên trường!',
-							whitespace: true,
-						},
-					]}
-				>
-					<Input  style={{width:'280px' , marginLeft:'8px'}} placeholder="Tên trường"/>
-				</Form.Item>:null
-				}
-				{
-					role ==='STUDENT'?
+						name="firstName"
+						rules={[{ required: true, message: 'Vui lòng nhập tên của bạn!' }]}
+						className="form-item-register"
+					>
+						<Input placeholder="Tên" style={{ width: '180px' }} />
+					</Form.Item>
 					<Form.Item
-					name="workAt"
-					rules={[
-						{
-							required: true,
-							message: 'Nhập tên trường!',
-							whitespace: true,
-						},
-					]}
-				>
-					<Input  style={{width:'280px' , marginLeft:'8px'}} placeholder="Tên trường"/>
-				</Form.Item>:null
+						name="lastName"
+						rules={[{ required: true, message: 'Vui lòng nhập họ của bạn!' }]}
+						className="form-item-register"
+					>
+						<Input placeholder="Họ" style={{ width: '180px' }} />
+					</Form.Item>
 
-				}
-				{
-					role==='PARENT'?
 					<Form.Item
-					name="workAt"
-					rules={[
-						{
-							required: true,
-							message: 'Vui lòng nhập nơi làm việc!',
-							whitespace: true,
-						},
-					]}
-				>
-					<Input  style={{width:'280px' , marginLeft:'8px'}} placeholder="Làm việc tại"/>
-				</Form.Item>:null
-				}
-				<Form.Item
-					name="phone"
-					
-					rules={[
-						{
-							required: true,
-							message: 'Vui lòng nhập số điện thoại!',
-							whitespace: true,
-						},
-						{
-							min: 10,
-							message: 'Số điện thoại phải đủ 10 ký tự',
-						},
-						{
-							max: 10,
-							message: 'Số điện thoại phải 10 ký tự',
-						},
+						name="phone"
+						className="form-item-register"
+						rules={[
+							{
+								required: true,
+								message: 'Vui lòng nhập số điện thoại!',
+								whitespace: true,
+							},
 
-						{
-							pattern: /^0\d{9,10}$/, // Sử dụng biểu thức chính quy để kiểm tra số điện thoại bắt đầu bằng 0 và có tổng cộng từ 10 đến 11 ký tự
-							message: 'Số điện thoại không hợp lệ!',
-						},
-					]}
-				>
-					<Input  placeholder="Số điện thoại" style={{width:'280px', marginLeft:'8px'}}/>
-				</Form.Item>
-				<Form.Item
-					label="Gender"
-					name="gender"
-					defaultValue="MALE"
-					rules={[
-						{
-							required: true,
-							message: 'Chọn giới tính',
-						},
-					]}
-				>
-					<Radio.Group defaultValue="MALE">
-						<Tooltip title="Nam" >
-						<Radio.Button value="MALE">
-							<FcManager />
-						</Radio.Button>
-						</Tooltip>
-						<Tooltip title="Nữ">
-						<Radio.Button value="FEMALE">
-							<FcBusinesswoman />
-							
-						</Radio.Button>
-						</Tooltip>
-						<Tooltip title="Khác">
-						<Radio.Button value="OTHER">
-							<AiFillQuestionCircle />
-							
-						</Radio.Button>
-						</Tooltip>
-					</Radio.Group>
-				</Form.Item>
+							{
+								pattern: /^0\d{10,10}$/, // Sử dụng biểu thức chính quy để kiểm tra số điện thoại bắt đầu bằng 0 và có tổng cộng từ 10 đến 11 ký tự
+								message: 'Số điện thoại không hợp lệ!',
+							},
+						]}
+					>
+						<Input placeholder="Số điện thoại" style={{ width: '180px' }} />
+					</Form.Item>
+					<Form.Item name="date_picker" {...config} className="form-item-register">
+						<DatePicker format="DD-MM-YYYY" style={{ width: '180px' }} placeholder="Ngày tháng năm sinh" />
+					</Form.Item>
+					<Form.Item
+						className="form-item-register"
+						name="province"
+						rules={[{ required: true, message: 'Vui lòng chọn tỉnh thành!' }]}
+					>
+						<Select
+							showSearch
+							style={{ width: '180px' }}
+							placeholder="Tỉnh thành"
+							optionFilterProp="children"
+							onChange={handleChange}
+							filterOption={(input, option) =>
+								option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+							}
+						>
+							{provinces.map((province) => (
+								<Option value={province.id} key={province.id}>
+									{province.name}
+								</Option>
+							))}
+						</Select>
+					</Form.Item>
+					<Form.Item
+						className="form-item-register"
+						name="district"
+						rules={[{ required: true, message: 'Vui lòng chọn quận huyện!' }]}
+					>
+						<Select
+							showSearch
+							style={{ width: '180px' }}
+							placeholder="Quận huyện"
+							optionFilterProp="children"
+							onChange={handleChange}
+							filterOption={(input, option) =>
+								option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+							}
+						>
+							{districts.map((district) => (
+								<Option value={district.id} key={district.id}>
+									{district.name}
+								</Option>
+							))}
+						</Select>
+					</Form.Item>
+					<Form.Item
+						name="school"
+						rules={[{ required: true, message: 'Vui lòng chọn trường học!' }]}
+						className="form-item-register"
+					>
+						<Select
+							showSearch
+							style={{ width: '180px' }}
+							placeholder="Trường học"
+							optionFilterProp="children"
+							onChange={handleChange}
+							filterOption={(input, option) =>
+								option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+							}
+						>
+							{schools.map((school) => (
+								<Option value={school.id} key={school.id}>
+									{school.name}
+								</Option>
+							))}
+						</Select>
+					</Form.Item>
+					<Form.Item
+						name="grade"
+						rules={[{ required: true, message: 'Vui lòng chọn khối lớp!' }]}
+						className="form-item-register"
+					>
+						<Select
+							showSearch
+							style={{ width: '180px' }}
+							placeholder="Khối lớp"
+							optionFilterProp="children"
+							onChange={handleChange}
+							filterOption={(input, option) =>
+								option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+							}
+						>
+                            {grade.map((grade) => (
+                                <Option value={grade.id} key={grade.id}>
+                                    {grade.name}
+                                </Option>
+                            ))}
+                        </Select>
+					</Form.Item>
+					<Form.Item
+						name="gender"
+						defaultValue="MALE"
+						rules={[
+							{
+								required: true,
+								message: 'Chọn giới tính',
+							},
+						]}
+						className="form-item-register"
+					>
+						<div>
+							<Radio.Group defaultValue="MALE" style={{ width: '180px' }}>
+								<Tooltip title="Nam">
+									<Radio.Button value="MALE">
+										<FcManager />
+									</Radio.Button>
+								</Tooltip>
+								<Tooltip title="Nữ">
+									<Radio.Button value="FEMALE">
+										<FcBusinesswoman />
+									</Radio.Button>
+								</Tooltip>
+								<Tooltip title="Khác">
+									<Radio.Button value="OTHER">
+										<AiFillQuestionCircle />
+									</Radio.Button>
+								</Tooltip>
+							</Radio.Group>
+						</div>
+					</Form.Item>
+				</div>
 				<Form.Item>
 					<Button type="primary" htmlType="submit" className="login-form-button">
 						Xác thực

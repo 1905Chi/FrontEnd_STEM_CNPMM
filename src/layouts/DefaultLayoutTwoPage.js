@@ -1,9 +1,7 @@
-import Header from './Header';
 import React from 'react';
-import { Layout } from 'antd';
 import './DefaultLayout.css';
-const { Sider, Content } = Layout;
-export default function DefaultLayout({ Left, Right, children }) {
+
+export default function DefaultLayoutTwoPage({ Left, children }) {
 	return (
 		<>
 			<div>
@@ -13,10 +11,7 @@ export default function DefaultLayout({ Left, Right, children }) {
 						{Left}
 					</div>
 					<div className="content-main"> {children} </div>
-					<div theme="light" className="sider-right">
-						{' '}
-						{Right}{' '}
-					</div>
+				
 				</div>
 			</div>
 		</>
