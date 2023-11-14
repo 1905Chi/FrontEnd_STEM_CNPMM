@@ -60,7 +60,7 @@ export default function Editor(props) {
 
 	return (
 	
-			<div className="Editor" style={{position:'fixed',width:'50%',position:'fixed',zIndex:'150',backgroundColor:'aliceblue',border:'1px solid',top:'25%'}}>
+			<div className="Editor" style={{position:'fixed',width:'50%',position:'fixed',zIndex:'150',backgroundColor:'aliceblue',border:'1px solid',top:'25%',overFlow:'scroll'}}>
 				<div
 					style={{
 						display: 'flex',

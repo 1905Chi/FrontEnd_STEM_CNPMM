@@ -97,7 +97,7 @@ const openInput=()=>{
     <>
       <div className="home-page">
       <button className="btn btn-primary" onClick={openInput}>Đăng</button>
-      {ispost && <Editor cancel={openInput} />}
+      {ispost && <div className=""> <Editor cancel={openInput} /></div>}
       {post.map((post, index) => {
         return (
           <PostItem
