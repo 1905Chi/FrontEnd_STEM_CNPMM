@@ -10,49 +10,8 @@ import Loading from '../../../components/Loading';
 import "./Register.css"
 
 export default function RegisterTeacher(props) {
-	const roles = ['STUDENT', 'TEACHER', 'PARENT'];
+
 	const navigate = useNavigate();
-	const [provinces, setProvinces] = useState([]);
-	const [districts, setDistricts] = useState([]);
-	const [schools, setSchools] = useState([]);
-	const [grade, setGrade] = useState([]);
-	const [isRegisterForParent, setIsRegisterForParent] = useState(false);
-
-	useEffect(() => {
-		axios
-			.get(url + 'api/v1/locations/provinces')
-			.then((response) => {
-				setProvinces(response.data.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, []);
-	const handleChangeProvince = (value) => {
-		axios
-			.get(url + `api/v1/locations/districts?provinceId=${value}`)
-			.then((response) => {
-				setDistricts(response.data.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
-	const handleChangeDistrict = (value) => {
-		axios
-			.get(url + `api/v1/locations/schools?districtId=${value}`)
-			.then((response) => {
-				setSchools(response.data.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
-	const { Option } = Select;
-	const RegisterForParent = () => {
-		setIsRegisterForParent(!isRegisterForParent);
-	};
-
 	const login = () => {
 		navigate('/login');
 	};
@@ -71,7 +30,7 @@ export default function RegisterTeacher(props) {
 		const data = {
 			email: values.email,
 			password: values.password,
-			role: values.roles,
+			
 		};
 		const config = {
 			headers: {
@@ -79,13 +38,13 @@ export default function RegisterTeacher(props) {
 			},
 		};
 		axios
-			.post(url + 'api/v1/auth/register', data, config)
+			.post(url + 'api/v1/auth/register-teacher', data, config)
 			.then((response) => {
 				// Xử lý kết quả sau khi gửi thành công
 				if (response.data.statusCode === 200) {
 					toast.success(response.data.message);
 					setTimeout(() => {
-						navigate('*');
+						navigate('/');
 					}, 2000);
 				} else {
 					toast.error(response.data.message);

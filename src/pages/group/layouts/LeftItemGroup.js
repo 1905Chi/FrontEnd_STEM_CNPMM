@@ -9,35 +9,51 @@ import { MdEventNote } from 'react-icons/md';
 import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 import { url } from './../../../constants/Constant';
 import UseTheme from './../../../layouts/UseTheme';
-
+import Api from './../../../api/Api';
+import { useParams } from 'react-router-dom';
+import { toast,ToastContainer } from 'react-toastify';
 export default function LeftItemGroup() {
 	const { theme } = UseTheme();
-	const [isAdmin, setIsAdmin] = useState(false);
-	const [isMember, setIsMember] = useState(false);
-	const [isPrivate, setIsPrivate] = useState(false);
+	const [role, setRole] = useState('GUEST');
+	const [group, setGroup] = useState({});
+	const { uuid } = useParams();
 
-	const apifake = {
-		isAdmin: true,
-		isMember: true,
-		isPrivate: true,
+
+	const headers = {
+		Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+		'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
 	};
 	
 	useEffect(() => {
-		
+		Api.get(url + 'api/v1/groups/'+uuid,{headers:headers})
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					if(response.data.result.user)
+					{
+						setRole(response.data.result.user.role);
+					}
+					
+					setGroup(response.data.result.group);
+				} else {
+					toast.error(response.data.result.message);
+				}
+			})
+			.catch((error) => {
+				toast.error(error.response.data.result.message);
+			});
+
 	}, []);
 
-	const mygroup = {
-		image: 'https://in3ds.com/wp-content/uploads/2019/04/y-tuong-giao-duc-STEM.png',
-		name: 'Nhóm 4',
-	};
+	
+
 	return (
 		<>
 			<div style={{ position: 'relative',borderRight:'0.2px solid black' }}>
 				<div className="header-item-group">
-					<LableGroup image={mygroup.image} name={mygroup.name} />
+					<LableGroup image={group.avatarUrl} name={group.name} />
 					<div className="button-add-member">
-						{isMember ? (
-							<div>
+						{role ==='GROUP_ADMIN' ||  role ==='GROUP_MEMBER' || role==='GROUP_OWNER'  ? (
+							<div style={{marginRight:'15px'}}>
 								<Button
 									type="primary"
 									style={{
@@ -83,7 +99,7 @@ export default function LeftItemGroup() {
 					</div>
 				</div>
 				<div style={{ overflow: 'auto', color: theme.foreground, background: theme.background }}>
-					{isMember ? (
+					{role ==='GROUP_ADMIN' ||  role ==='GROUP_MEMBER' || role==='GROUP_OWNER' ? (
 						<div>
 							{' '}
 							<div className="custom-option-group">
@@ -102,7 +118,7 @@ export default function LeftItemGroup() {
 								<MdEventNote className="icon-option-group" size={20} />
 								<span className="option-label-group">Sự kiện</span>
 							</div>
-							{isAdmin ? (
+							{role ==='GROUP_ADMIN' || role==='GROUP_OWNER' ? (
 								<div>
 									<div className="custom-option-group">
 										<AiOutlineUsergroupAdd className="icon-option-group" size={20} />
@@ -117,6 +133,7 @@ export default function LeftItemGroup() {
 						</div>
 					) : null}
 				</div>
+				<ToastContainer/>
 			</div>
 		</>
 	);
