@@ -2,6 +2,9 @@
   "name": "stem_frontend",
   "version": "0.1.0",
   "private": true,
+  "resolutions": {
+    "path": "path-browserify"
+  },
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -15,7 +18,13 @@
     "antd": "^5.9.4",
     "axios": "^1.5.1",
     "fullcalendar": "^6.1.9",
-    "moment": "^2.29.4",  
+"html-docx-js": "^0.3.1",
+    "https-browserify": "^1.0.0",
+    "mammoth": "^1.6.0",
+    "moment": "^2.29.4",
+    "path-browserify": "^1.0.1",
+    "pdf-parse": "^1.1.1",
+"pizzip": "^3.1.4",
     "primereact": "^10.0.9",
     "react": "^18.2.0",
     "react-big-calendar": "^1.8.5",
@@ -31,6 +40,7 @@
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
     "remark-stringify": "^11.0.0",
+    "util": "^0.12.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -38,6 +48,12 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "fallbacks": {
+    "https": "https-browserify",
+    "url": "url/",
+    "http": "stream-http",
+    "fs": false
   },
   "eslintConfig": {
     "extends": [

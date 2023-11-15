@@ -23,6 +23,7 @@ import Class from '../pages/class/Class';
 import LeftItemClass from '../pages/class/layouts/LeftItemClass';
 import RightClass from '../pages/class/layouts/RightClass';
 import MainClass from '../pages/class/itemclass/MainClass';
+import CreateQuiz from '../pages/class/exam/CreateQuiz ';
 const privateRoutes = [
 	{ path: '/home', component: Home, Left: Left, Right: Right },
 	{ path: '/groups', component: Home, Left: LeftsGroup, Right: Right },
@@ -35,6 +36,7 @@ const privateRoutes = [
 
 const privateRoutes2page = [
 	{ path: '/classes/:uuid', component: MainClass, Left: LeftItemClass },
+	{ path: '/classes/:uuid/exam/createquiz', component: CreateQuiz, Left: LeftItemClass },
 ];
 const publicRoutes = [
 	{ path: '/login', component: Login },
