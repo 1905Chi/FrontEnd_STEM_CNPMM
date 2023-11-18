@@ -8,6 +8,8 @@ import LabelFile from '../../profile/component/LabelFile';
 import { DownOutlined } from '@ant-design/icons';
 import ReadQuestion from '../components/ReadQuestion';
 import CalendarC from '../../../components/CalendarC';
+import CalendarAntd from '../../../components/CalendarAntd';
+import AddFile from '../components/AddFile';
 export default function LeftItemClass() {
 
 	const [isShowAllFile, setIsShowAllFile] = useState(false);
@@ -15,6 +17,10 @@ export default function LeftItemClass() {
 	const { Search } = Input;
 	const { RangePicker } = DatePicker;
 	const [visible, setVisible] = useState(false);
+	const [isopenAddFile, setIsopenAddFile] = useState(false);
+	const openAddFile = () => {
+		setIsopenAddFile(!isopenAddFile);
+	};
 	
 	const handleFile = () => {
 		setIsShowAllFile(!isShowAllFile);
@@ -55,6 +61,7 @@ export default function LeftItemClass() {
 	);
 	return (
 		<div style={{}}>
+			{isopenAddFile ? ( <AddFile onCancel={openAddFile}></AddFile>) : null}
 			
 			{isShowAllFile ? (
 				<div className="file-all">
@@ -108,11 +115,13 @@ export default function LeftItemClass() {
 				<h4>Giáo viên:</h4>
 				<h4>Chủ đề:</h4>
 			</div>
-			<CalendarC></CalendarC>
+			<div style={{width:'80%',marrginLeft:'20px'}}	>
+			<CalendarAntd ></CalendarAntd>
+			</div>
 			<div className="document-class">
 				<div className="document-class-title">
 					<h4>Tài liệu</h4>
-					<button>Thêm tài liệu </button>
+					<button onClick={openAddFile}>Thêm tài liệu </button>
 				</div>
 				<div className="document-class-content">
 					<LabelFile type="word" filename="Bài tập về nhà.docx"></LabelFile>

@@ -12,12 +12,14 @@ import UseTheme from './../../../layouts/UseTheme';
 import Api from './../../../api/Api';
 import { useParams } from 'react-router-dom';
 import { toast,ToastContainer } from 'react-toastify';
+import { useDispatch } from "react-redux";
+import {selectGroup} from './../../../redux/GetItemGroup'
 export default function LeftItemGroup() {
 	const { theme } = UseTheme();
 	const [role, setRole] = useState('GUEST');
 	const [group, setGroup] = useState({});
 	const { uuid } = useParams();
-
+const dispatch = useDispatch();
 
 	const headers = {
 		Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
@@ -34,6 +36,7 @@ export default function LeftItemGroup() {
 					}
 					
 					setGroup(response.data.result.group);
+					dispatch(selectGroup(response.data.result.group));
 				} else {
 					toast.error(response.data.result.message);
 				}
@@ -53,7 +56,7 @@ export default function LeftItemGroup() {
 					<LableGroup image={group.avatarUrl} name={group.name} />
 					<div className="button-add-member">
 						{role ==='GROUP_ADMIN' ||  role ==='GROUP_MEMBER' || role==='GROUP_OWNER'  ? (
-							<div style={{marginRight:'15px'}}>
+							<div >
 								<Button
 									type="primary"
 									style={{

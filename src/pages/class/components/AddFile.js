@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './EditAvatar.css';
+import './AddFile.css';
 import anhlogo1 from '../../../assets/images/anh_logo_1.jpg';
 import { GiCancel } from 'react-icons/gi';
 import axios from 'axios';
@@ -7,21 +7,22 @@ import { useNavigate } from 'react-router-dom';
 import { url } from '../../../constants/Constant';
 import { toast, ToastContainer } from 'react-toastify';
 import Api from '../../../../src/api/Api';
-export default function EditAvatar(props) {
-	const [AvatarPicture, setAvatarPicture] = useState(props.avatar);
-	const [selectedFile, setSelectedFile] = useState(null);
+import LabelFile from '../../profile/component/LabelFile';
+export default function AddFile(props) {
+	
+	const [selectedFile, setSelectedFile] = useState([]);
 	const navigate = useNavigate();
 	
 
-	const handleAvatarPictureChange = (event) => {
+	const handelfileSelect = (event) => {
 		// Xử lý khi người dùng chọn hình ảnh đại diện
 		const file = event.target.files[0];
 		if (file) {
 			const reader = new FileReader();
 
 			reader.onload = () => {
-				setAvatarPicture(reader.result);
-				setSelectedFile(file);
+				
+				setSelectedFile([...selectedFile,file]);
 			};
 			reader.readAsDataURL(file);
 		}
@@ -73,13 +74,13 @@ export default function EditAvatar(props) {
 			
 		}else
 		{
-			toast.error('Vui lòng chọn ảnh đại diện');
+			toast.error('Vui lòng chọn file');
 		}
 	};
 
 	return (
-		<div className="edit-Avatar">
-			<div className="form-edit-Avatar">
+		<div className="add-file">
+			<div className="form-add-file">
 				<div
 					style={{
 						display: 'flex',
@@ -88,7 +89,7 @@ export default function EditAvatar(props) {
 						flex: 10,
 					}}
 				>
-					<h2 style={{ flex: 8, textAlign: 'end' }}>Thay đổi ảnh đại diện</h2>
+					<h2 style={{ flex: 8, textAlign: 'end' }}>Thêm Tài liệu cho lớp học</h2>
 					<button
 						style={{ flex: 3, height: '72.5px', backgroundColor: 'white', textAlign: 'end' }}
 						onClick={props.onCancel}
@@ -96,9 +97,9 @@ export default function EditAvatar(props) {
 						<GiCancel style={{ color: 'black', fontSize: '30px' }}></GiCancel>
 					</button>
 				</div>
-				<div className="anhdaidien">
+				<div className="file">
 					<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-						<h3 style={{ textAlign: 'start', margin: '0 0 0 10px' }}>Ảnh đại diện</h3>
+						<h3 style={{ textAlign: 'start', margin: '0 0 0 10px' }}>Tài liệu học học</h3>
 						<button
 							style={{ textAlign: 'end', margin: '0 10px 0 0', color: 'blue', backgroundColor: 'white' }}
 							onClick={openAvatarPictureDialog}
@@ -106,16 +107,31 @@ export default function EditAvatar(props) {
 							Thêm
 						</button>
 					</div>
-					<div className="Avatar-picture-edit">
-						<img src={AvatarPicture} alt="Avatar Picture" />
-					</div>
+                    <div className="file-list">
+                        {selectedFile.map((item, index) => {
+                            return (
+                                <div className="file-item" key={index}>
+                                   
+                                    <p>{item.name}</p>
+                                    <p>{item.size}</p>
+                                    <p>{item.type}</p>
+                                    <GiCancel
+                                        style={{ color: 'black', fontSize: '20px' }}
+                                        onClick={() => {
+                                            setSelectedFile(selectedFile.filter((item, i) => i !== index));
+                                        }}
+                                    ></GiCancel>
+                                </div>
+                            );
+                        })}		
+                        </div>	
 				</div>
 				<div>
 					<input
 						style={{ display: 'none' }}
 						type="file"
-						accept="image/*"
-						onChange={handleAvatarPictureChange}
+						accept="image/*, application/pdf , .doc, .docx, application/vnd.ms-powerpoint, .ppt, .pptx"
+						onChange={handelfileSelect}
 						id="AvatarPictureInput"
 					/>
 					<button style={{ margin: '30px 30px', width: '92%' }} onClick={Save}>

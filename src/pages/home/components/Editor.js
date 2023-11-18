@@ -5,10 +5,12 @@ import 'react-quill/dist/quill.snow.css';
 import { htmlToMarkdown, markdownToHtml } from './Parser';
 import uploadToCloudinary from './upload';
 import { GiCancel } from 'react-icons/gi';
-
+import Api from '../../../api/Api';
+import { useParams } from 'react-router-dom';
+import { url } from '../../../constants/Constant';
 export default function Editor(props) {
 	const [value, setValue] = useState(props.data || '');
-
+	const { uuid } = useParams();
 	const reactQuillRef = useRef(null);
 	const onChange = (content) => {	
 		setValue(content);
@@ -25,11 +27,35 @@ export default function Editor(props) {
 		if (props.editcontent != null) {
 			props.editcontent(value);
 		} else {
-			console.log(value);
+		
+			const stringValue = value.toString();
+			console.log(stringValue);
+			const data = {
+				content: stringValue,
+				groupId: uuid,
+				postType:'ASK',
+			};
+			const headers = {
+				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+				'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
+			};
+			Api.post(url + 'api/v1/posts', data, { headers: headers })
+				.then((response) => {
+					if (response.data.statusCode === 200) {
+						console.log(response.data.result);
+					} else {
+						console.log(response.data.result.message);
+					}
+				})
+				.catch((error) => {
+					console.log(error.response.data.result.message);
+				});
+
 		}
 		const parser = new DOMParser();
 		const doc = parser.parseFromString(value, 'text/html');
 
+		
 		// Lấy tất cả các thẻ img trong DOM
 		const images = doc.querySelectorAll('img');
 

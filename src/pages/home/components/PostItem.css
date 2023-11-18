@@ -3,6 +3,8 @@
   margin-top: 20px;
   margin-right: 15px;
   background-color: aliceblue;
+  border-radius: 15px;
+  border-bottom: 10px solid #c4bebe;
 }
 .post-content{
   max-height: 500px;
