@@ -14,6 +14,7 @@ import { useParams } from 'react-router-dom';
 import { toast,ToastContainer } from 'react-toastify';
 import { useDispatch } from "react-redux";
 import {selectGroup} from './../../../redux/GetItemGroup'
+import {selectMemberGroup} from './../../../redux/MemberGroup'
 export default function LeftItemGroup() {
 	const { theme } = UseTheme();
 	const [role, setRole] = useState('GUEST');
@@ -44,7 +45,17 @@ const dispatch = useDispatch();
 			.catch((error) => {
 				toast.error(error.response.data.result.message);
 			});
-
+		Api.get(url + 'api/v1/group-members?groupId='+uuid ,{headers:headers})
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					dispatch(selectMemberGroup(response.data.result));
+				} else {
+					toast.error(response.data.result.message);
+				}
+			})
+			.catch((error) => {
+				toast.error(error.response.data.result.message);
+			});
 	}, []);
 
 	

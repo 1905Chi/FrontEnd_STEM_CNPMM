@@ -24,11 +24,12 @@ import LeftItemClass from '../pages/class/layouts/LeftItemClass';
 import RightClass from '../pages/class/layouts/RightClass';
 import MainClass from '../pages/class/itemclass/MainClass';
 import CreateQuiz from '../pages/class/exam/CreateQuiz ';
+import RightItemGroup from '../pages/group/layouts/RightItemGroup';
 const privateRoutes = [
 	{ path: '/home', component: Home, Left: Left, Right: Right },
 	{ path: '/groups', component: Home, Left: LeftsGroup, Right: Right },
 	{ path: '/groups/create', component: CreateGroup, Left: LeftCreateGroup, Right: Right },
-	{ path: '/groups/:uuid', component: MainGroup, Left: LeftItemGroup, Right: Right },
+	{ path: '/groups/:uuid', component: MainGroup, Left: LeftItemGroup, Right: RightItemGroup },
 	{ path: '/profile', component: Profile, Left: Left, Right: RightProfile },
 	{ path: '/classes', component: Class, Left: LeftClass, Right: RightClass },
 	

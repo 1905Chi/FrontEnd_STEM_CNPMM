@@ -146,7 +146,7 @@ const CalendarAntd = () => {
           padding: 8,
         }}
       >
-        <Typography.Title level={4}>Lịch</Typography.Title>
+        <Typography.Title level={4} style={{margin:'8px'}}>Lịch</Typography.Title>
         <Row gutter={8}>
           <Col>
             <Radio.Group

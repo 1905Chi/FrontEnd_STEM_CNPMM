@@ -15,9 +15,6 @@ import EventGroup from '../components/EventGroup';
 export default function MainGroup() {
   const selectedOption = useSelector(selectSelectedOption);
   const inforGroup = useSelector(selectselectGroup);
-
-  console.log(inforGroup);
-
   const { uuid } = useParams();
   const anh =
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwoon_hT7QiYmBsL0F9ydjogk-wzvXtwp0Ef_1M6E-Kw&s';

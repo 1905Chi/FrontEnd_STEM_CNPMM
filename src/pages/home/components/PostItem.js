@@ -7,13 +7,17 @@ import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { MdBugReport } from 'react-icons/md';
 import CommentPost from './CommentPost';
 import { EditOutlined } from '@ant-design/icons';
-
+import Api from '../../../api/Api';
+import { url } from '../../../constants/Constant';
 import Editor from './Editor';
-function PostItem({ user, content, likes, index }) {
+function PostItem({ user, content, likes, index, type }) {
 	const [isLiked, setIsLiked] = useState(false); // Trạng thái ban đầu là "không thích"
 	const [isEditPost, setisEditPost] = useState(false); // Trạng thái ban đầu là "không chỉnh sửa"
 	const [contentPost, setContentPost] = useState(content);
-
+	const [typeOfPosst, settypeOfPosst] = useState('');
+	if (type === 'QUESTIOM') settypeOfPosst('Câu hỏi');
+	else if (type === 'POST') settypeOfPosst('Bài viết');
+	else if (type === 'DISCUSSION') settypeOfPosst('Thảo luận');
 	function EditContentPost(value) {
 		setContentPost(value);
 	}
@@ -21,6 +25,24 @@ function PostItem({ user, content, likes, index }) {
 	function handleLike() {
 		setIsLiked(!isLiked); // Đảo ngược trạng thái khi nút "like" được nhấn
 	}
+	const deletePost = () => {
+		const headers = {
+			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+			conttentType: 'application/json',
+		};
+		Api.delete(url + 'api/v1/posts/' + index, { headers: headers })
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					console.log(response.data.result);
+				} else {
+					console.log(response.error);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
 
 	function EditPost() {
 		setisEditPost(!isEditPost); //
@@ -41,8 +63,8 @@ function PostItem({ user, content, likes, index }) {
 		{
 			key: '1',
 			label: (
-				<div style={{ font: '15px' }} onClick={null}>
-					{{ user } ? (
+				<div style={{ font: '15px' }} onClick={deletePost}>
+					{user.id === JSON.parse(localStorage.getItem('user')).id ? (
 						<div>
 							<RiDeleteBin6Fill style={{ color: 'red', fontSize: '15px' }} />{' '}
 							<span style={{ fontSize: '15px' }}>Xóa bài đăng</span>
@@ -60,7 +82,7 @@ function PostItem({ user, content, likes, index }) {
 			key: '2',
 			label: (
 				<div style={{ font: '15px' }} onClick={EditPost}>
-					{{ user } ? (
+					{user.id === JSON.parse(localStorage.getItem('user')).id ? (
 						<div>
 							<EditOutlined style={{ color: 'red', fontSize: '15px' }} />{' '}
 							<span style={{ fontSize: '15px' }}>Chỉnh sửa bài đăng</span>
@@ -74,12 +96,19 @@ function PostItem({ user, content, likes, index }) {
 	const likeButtonStyle = isLiked ? { color: 'blue' } : {}; // Đổi màu của biểu tượng "like"
 	return (
 		<div className="post-item">
-			{isEditPost ?(<Editor cancel={EditPost} data={contentPost} editcontent={EditContentPost}> </Editor>) : null}
+			{isEditPost ? (
+				<Editor cancel={EditPost} data={contentPost} editcontent={EditContentPost} index={index}>
+					{' '}
+				</Editor>
+			) : null}
 			<div className="user-info">
 				<div className="avatarPost">
-					<Avatar src={user.avatar} />
+					<Avatar src={user.avatarUrl} />
 				</div>
-				<p className="user-name"> {user.name} </p>
+				<div style={{display:'flex',flexDirection:'row'}}>
+					<a href='' style={{textDecoration:'none', color:'black'}} ><p className="user-name"> {user.firstName + ' ' + user.lastName} </p></a>
+					<p className="user-name" style={{display:'block'}}> đã đăng {typeOfPosst} trong nhóm </p>
+				</div>
 				<Dropdown
 					menu={{
 						items,
@@ -90,7 +119,7 @@ function PostItem({ user, content, likes, index }) {
 					}}
 					style={{ border: 'none' }}
 				>
-					<Button style={{ color: 'black', backgroundColor: 'aliceblue', border: 'none' }}>...</Button>
+					<Button style={{ color: 'black', backgroundColor: 'aliceblue', border: 'none',textAlign:'end' }}>...</Button>
 				</Dropdown>
 			</div>
 			<div className={'content-container content' + index}>
