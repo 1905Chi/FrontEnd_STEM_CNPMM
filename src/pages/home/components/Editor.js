@@ -24,7 +24,31 @@ export default function Editor(props) {
 	const Save = (e) => {
 		
 		e.preventDefault();
-		if (props.editcontent != null) {
+		if(props.idPost){
+			const stringValue = value.toString();
+			console.log(stringValue);
+			const data = {
+				postId: props.idPost,
+				content: stringValue,
+				
+			}
+			const headers = {
+				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+				'Content-Type': 'multipart/form-data', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
+			};
+			Api.post(url + 'api/v1/comments', data, { headers: headers })
+				.then((response) => {
+					if (response.data.statusCode === 200) {
+						console.log(response.data.result.message);
+					} else {
+						console.log(response.error);
+					}
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		}
+		else if (props.editcontent != null) {
 			props.editcontent(value);
 			const stringValue = value.toString();
 			

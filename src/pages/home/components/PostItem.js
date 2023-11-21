@@ -165,7 +165,7 @@ function PostItem({ user, content, likes, index, type }) {
 					<BiSolidShare />
 				</button>
 			</div>
-			<CommentPost user={user} />
+			<CommentPost user={user} idPost={index} />
 		</div>
 	);
 }

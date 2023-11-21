@@ -34,56 +34,14 @@ export default function MemberGroup() {
 	};
 
 
-	const [memberrequest, setmemberrequest] = useState([
-		{
-			avatarUrl: localStorage.getItem('user').avatarUrl,
-			name:
-				JSON.parse(localStorage.getItem('user')).firstName +
-				' ' +
-				JSON.parse(localStorage.getItem('user')).lastName,
-		},
-		{
-			avatarUrl: localStorage.getItem('user').avatarUrl,
-			name:
-				JSON.parse(localStorage.getItem('user')).firstName +
-				' ' +
-				JSON.parse(localStorage.getItem('user')).lastName,
-		},
-		{
-			avatarUrl: localStorage.getItem('user').avatarUrl,
-			name:
-				JSON.parse(localStorage.getItem('user')).firstName +
-				' ' +
-				JSON.parse(localStorage.getItem('user')).lastName,
-		},
-	]);
+	
 
 	return (
 		<div>
 			<div className="member-group">
 				<div className="member-group-request">
 					<h3>Yêu cầu tham gia</h3>
-					{memberrequest &&
-						memberrequest.map((item, index) => (
-							<div className="member-group-request__item" key={index}>
-								<div style={{ display: 'flex', flex: '1' }}>
-									<div className="member-group-request__item__avatar">
-										<Avatar src={item.avatarUrl} alt="" />
-									</div>
-								</div>
-								<div className="member-group-request__item__button">
-									<div className="member-group-request__item__name">
-										<p>{item.name}</p>
-									</div>
-									<div style={{ textAlign: 'start' }}>
-										<button className="btn btn-primary" style={{ backgroundColor: '#1677ff' }}>
-											Chấp nhận
-										</button>
-										<button className="btn btn-danger">Xóa</button>
-									</div>
-								</div>
-							</div>
-						))}
+					
 						{memberGroupRequest && memberGroupRequest.map((item, index) => (
 							<div className="member-group-request__item" key={item.id}>
 							<div style={{ display: 'flex', flex: '1' }}>
