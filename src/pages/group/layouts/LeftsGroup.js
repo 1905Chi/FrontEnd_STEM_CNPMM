@@ -41,9 +41,7 @@ const LeftsGroup = () => {
 			.catch(async (error) => {
 				if (error.response) {
 					// lỗi khi access token hết hạn
-					toast.error(error.request.data.message);
-					
-					
+					toast.error(error.response.data.message);					
 				} else if (error.request) {
 					// Lỗi không có phản hồi từ máy chủ
 					toast.error(error.request.data.message);

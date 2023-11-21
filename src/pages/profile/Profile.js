@@ -8,6 +8,7 @@ import EditAvatar from './component/EditAvatar';
 import EditCover from './component/EditCover';
 import Post from '../home/components/Post';
 import PostItem from '../home/components/PostItem';
+import { json } from 'react-router-dom';
 
 export default function Profile() {
 	const [isEdit, setIsEdit] = useState(false);
@@ -144,7 +145,7 @@ export default function Profile() {
 						<AiFillCamera style={{ fontSize: '30px', color: 'white' }}></AiFillCamera>
 					</button>
 					<div className="usename-button">
-						<span>Quốc Chí</span>
+						<span style={{fontSize:'35px'}}>{JSON.parse(localStorage.getItem('user')).firstName +' '+ JSON.parse(localStorage.getItem('user')).lastName}</span>
 						<button className="edit-profile__button" style={{ height: '40px' }} onClick={setEditProfile}>
 							<BsPencilFill
 								style={{ fontSize: '30px', margin: '0 0 0 5px', color: 'white' }}

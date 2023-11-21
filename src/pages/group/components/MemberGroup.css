@@ -4,6 +4,7 @@
     border-bottom: 2px solid #e6e6e6;   
     border-radius: 15px;
     background-color: aliceblue;
+    width: 95%;
 
 
     
@@ -45,7 +46,7 @@ margin: 15px;
 }
 
 .member-group-request__item__button{
-    margin: 20  px ;
+    
     text-align: end;
     flex: auto;
 
@@ -68,7 +69,20 @@ margin: 15px;
     margin-top: 10px;
     display: flex;
 }
+.member-group-request__item__name p{
+    text-align: start;
+}
 .member-group__item__name__role{
     margin-top: 15px;
     margin-left: 15px;
+}
+.member-group-request__item__button{
+    flex: 8;
+}
+.member-group-request__item__button button{
+    height: 80%;
+    width: 35%;
+    margin-left: 0px;
+    border-radius: 5px;
+    margin-bottom: 5px
 }

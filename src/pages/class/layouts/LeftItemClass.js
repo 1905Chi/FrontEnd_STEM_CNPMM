@@ -7,7 +7,6 @@ import { CloseOutlined } from '@ant-design/icons';
 import LabelFile from '../../profile/component/LabelFile';
 import { DownOutlined } from '@ant-design/icons';
 import ReadQuestion from '../components/ReadQuestion';
-import CalendarC from '../../../components/CalendarC';
 import CalendarAntd from '../../../components/CalendarAntd';
 import AddFile from '../components/AddFile';
 export default function LeftItemClass() {

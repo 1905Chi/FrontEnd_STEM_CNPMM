@@ -16,57 +16,11 @@ export default function MainGroup() {
   const selectedOption = useSelector(selectSelectedOption);
   const inforGroup = useSelector(selectselectGroup);
   const { uuid } = useParams();
-  const anh =
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwoon_hT7QiYmBsL0F9ydjogk-wzvXtwp0Ef_1M6E-Kw&s';
-  const post = [
-    {
-      user: {
-        name: 'John Doe',
-        avatar: anh,
-      },
-      content: 'Đây là bài viết mẫu về ReactJS.',
-      image: anh,
-      likes: 42,
-    },
-    {
-      user: {
-        name: 'John Doe',
-        avatar: anh,
-      },
-      content: 'Đây là bài viết mẫu về ReactJS.',
-      image: anh,
-      likes: 42,
-    },
-    {
-      user: {
-        name: 'John Doe',
-        avatar: anh,
-      },
-      content: 'Đây là bài viết mẫu về ReactJS.',
-      image: anh,
-      likes: 42,
-    },
-  ];
-  const [isAdmin1, setisAdmin1] = useState(false);
-  const [isMember1, setisMember1] = useState(false);
-  const [isprivate1, setisprivate1] = useState(false);
 
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const apifake1 = localStorage.getItem('apifake');
-    if (apifake1) {
-      const apifakeparse = JSON.parse(apifake1);
-      setisAdmin1(apifakeparse.isAdmin);
-      setisMember1(apifakeparse.isMember);
-      setisprivate1(apifakeparse.isPrivate);
-    }
-    setLoading(false);
-  }, []);
 
   return (
     <>
-      {loading ? <Loading /> : null}
+    
       <div>
         <BannerGroup />
 
@@ -89,19 +43,9 @@ export default function MainGroup() {
         {selectedOption === 'event' ? <EventGroup /> : null}
         {selectedOption === 'question' ? <QuestionGroup /> : null}
 
-        {isMember1 ? <Post /> : null}
+       
 
-        {isMember1 || !isprivate1
-          ? post.map((post, index) => (
-              <PostItem
-                key={index}
-                user={post.user}
-                content={post.content}
-                image={post.image}
-                likes={post.likes}
-              />
-            ))
-          : null}
+       
       </div>
     </>
   );

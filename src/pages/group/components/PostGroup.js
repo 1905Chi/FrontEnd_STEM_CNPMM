@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import './PostGroup.css';
 import Editor from "../../home/components/Editor"
 import { useParams } from 'react-router-dom';
@@ -13,7 +13,7 @@ export default function PostGroup() {
         setOpen(!open);
     }
 	const { uuid } = useParams();
-	useState(() => {
+	useEffect(() => {
 		const headers = {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			conttentType: 'application/json'

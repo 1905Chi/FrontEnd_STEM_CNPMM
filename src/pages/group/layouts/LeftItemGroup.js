@@ -11,63 +11,101 @@ import { url } from './../../../constants/Constant';
 import UseTheme from './../../../layouts/UseTheme';
 import Api from './../../../api/Api';
 import { useParams } from 'react-router-dom';
-import { toast,ToastContainer } from 'react-toastify';
-import { useDispatch } from "react-redux";
-import {selectGroup} from './../../../redux/GetItemGroup'
-import {selectMemberGroup} from './../../../redux/MemberGroup'
+import { toast, ToastContainer } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { selectGroup } from './../../../redux/GetItemGroup';
+import { selectselectMemberGroup } from './../../../redux/MemberGroup';
+import { selecteventGroup } from './../../../redux/EventGroup';
+import { selectMemberGroup } from './../../../redux/MemberGroup';
+import{selectMemberGroupRequest} from './../../../redux/MemberGroup'
+
 export default function LeftItemGroup() {
 	const { theme } = UseTheme();
 	const [role, setRole] = useState('GUEST');
 	const [group, setGroup] = useState({});
 	const { uuid } = useParams();
-const dispatch = useDispatch();
+	
+	const dispatch = useDispatch();
 
 	const headers = {
 		Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 		'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
 	};
-	
-	useEffect(() => {
-		Api.get(url + 'api/v1/groups/'+uuid,{headers:headers})
+	const RequestJoinGroup = () => {
+		Api.post(url + 'api/v1/group-members/request', { groupId: uuid }, { headers: headers })
 			.then((response) => {
 				if (response.data.statusCode === 200) {
-					if(response.data.result.user)
-					{
-						setRole(response.data.result.user.role);
-					}
-					
-					setGroup(response.data.result.group);
-					dispatch(selectGroup(response.data.result.group));
+					toast.success(response.data.message);
 				} else {
-					toast.error(response.data.result.message);
+					toast.error(response.data.message);
 				}
 			})
 			.catch((error) => {
-				toast.error(error.response.data.result.message);
+				toast.error(error);
 			});
-		Api.get(url + 'api/v1/group-members?groupId='+uuid ,{headers:headers})
+	};
+
+	useEffect(() => {
+		Api.get(url + 'api/v1/groups/' + uuid, { headers: headers })
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					if (response.data.result.user) {
+						setRole(response.data.result.user.role);
+					
+					}
+
+					setGroup(response.data.result.group);
+					dispatch(selectGroup(response.data.result.group));
+				} else {
+					toast.error(response.data.message);
+				}
+			})
+			.catch((error) => {
+				toast.error(error);
+			});
+		Api.get(url + 'api/v1/group-members?groupId=' + uuid, { headers: headers })
 			.then((response) => {
 				if (response.data.statusCode === 200) {
 					dispatch(selectMemberGroup(response.data.result));
 				} else {
-					toast.error(response.data.result.message);
+					toast.error(response.data.message);
 				}
 			})
 			.catch((error) => {
-				toast.error(error.response.data.result.message);
+				toast.error(error);
+			});
+		Api.get(url + 'api/v1/events?groupId=' + uuid, { headers: headers })
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					dispatch(selecteventGroup(response.data.result));
+				} else {
+					toast.error(response.data.message);
+				}
+			})
+			.catch((error) => {
+				toast.error(error);
+			});
+		Api.get(url + 'api/v1/group-member-requests?groupId=' + uuid, { headers: headers })
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					dispatch(selectMemberGroupRequest(response.data.result));
+				} else {
+					//toast.error(response.data.message);
+				}
+			})
+			.catch((error) => {
+				//toast.error(error);
 			});
 	}, []);
 
-	
-
 	return (
 		<>
-			<div style={{ position: 'relative',borderRight:'0.2px solid black' }}>
+			<div style={{ position: 'relative', borderRight: '0.2px solid black' }}>
 				<div className="header-item-group">
 					<LableGroup image={group.avatarUrl} name={group.name} />
 					<div className="button-add-member">
-						{role ==='GROUP_ADMIN' ||  role ==='GROUP_MEMBER' || role==='GROUP_OWNER'  ? (
-							<div >
+						{role && role === 'GROUP_ADMIN' || role === 'GROUP_MEMBER' || role === 'GROUP_OWNER' ? (
+							<div>
 								<Button
 									type="primary"
 									style={{
@@ -77,7 +115,7 @@ const dispatch = useDispatch();
 										alignItems: 'center',
 									}}
 								>
-									<span style={{ fontSize: '15px', fontWeight: '500' }}>Thoát nhóm</span>
+									<span style={{ fontSize: '15px', fontWeight: '500' }}>Thoát nhóm </span>
 								</Button>
 								<Button
 									type="primary"
@@ -105,7 +143,8 @@ const dispatch = useDispatch();
 						) : (
 							<Button
 								type="primary"
-								style={{ width: '95%', margin: '5px 0 0 7px', height: '50px', alignItems: 'center' }}
+								style={{ width: '95%', margin: '5px 0 12px 7px', height: '50px', alignItems: 'center' }}
+								onClick={RequestJoinGroup}
 							>
 								<span style={{ fontSize: '15px', fontWeight: '500' }}>Tham gia nhóm</span>
 							</Button>
@@ -113,9 +152,9 @@ const dispatch = useDispatch();
 					</div>
 				</div>
 				<div style={{ overflow: 'auto', color: theme.foreground, background: theme.background }}>
-					{role ==='GROUP_ADMIN' ||  role ==='GROUP_MEMBER' || role==='GROUP_OWNER' ? (
+					{role === 'GROUP_ADMIN' || role === 'GROUP_MEMBER' || role === 'GROUP_OWNER' ? (
 						<div>
-							{' '}
+							
 							<div className="custom-option-group">
 								<QuestionCircleOutlined className="icon-option-group" size={20} />
 								<span className="option-label-group">Câu hỏi</span>
@@ -132,7 +171,7 @@ const dispatch = useDispatch();
 								<MdEventNote className="icon-option-group" size={20} />
 								<span className="option-label-group">Sự kiện</span>
 							</div>
-							{role ==='GROUP_ADMIN' || role==='GROUP_OWNER' ? (
+							{role === 'GROUP_ADMIN' || role === 'GROUP_OWNER' ? (
 								<div>
 									<div className="custom-option-group">
 										<AiOutlineUsergroupAdd className="icon-option-group" size={20} />
@@ -147,7 +186,7 @@ const dispatch = useDispatch();
 						</div>
 					) : null}
 				</div>
-				<ToastContainer/>
+				<ToastContainer />
 			</div>
 		</>
 	);
