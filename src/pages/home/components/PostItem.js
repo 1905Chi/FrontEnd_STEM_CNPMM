@@ -14,10 +14,8 @@ function PostItem({ user, content, likes, index, type }) {
 	const [isLiked, setIsLiked] = useState(false); // Trạng thái ban đầu là "không thích"
 	const [isEditPost, setisEditPost] = useState(false); // Trạng thái ban đầu là "không chỉnh sửa"
 	const [contentPost, setContentPost] = useState(content);
-	const [typeOfPosst, settypeOfPosst] = useState('');
-	if (type === 'QUESTIOM') settypeOfPosst('Câu hỏi');
-	else if (type === 'POST') settypeOfPosst('Bài viết');
-	else if (type === 'DISCUSSION') settypeOfPosst('Thảo luận');
+
+
 	function EditContentPost(value) {
 		setContentPost(value);
 	}
@@ -107,7 +105,7 @@ function PostItem({ user, content, likes, index, type }) {
 				</div>
 				<div style={{display:'flex',flexDirection:'row'}}>
 					<a href='' style={{textDecoration:'none', color:'black'}} ><p className="user-name"> {user.firstName + ' ' + user.lastName} </p></a>
-					<p className="user-name" style={{display:'block'}}> đã đăng {typeOfPosst} trong nhóm </p>
+					<p className="user-name" style={{display:'block'}}> đã đăng {} trong nhóm </p>
 				</div>
 				<Dropdown
 					menu={{

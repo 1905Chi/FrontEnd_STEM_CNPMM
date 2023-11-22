@@ -18,6 +18,7 @@ import { selectselectMemberGroup } from './../../../redux/MemberGroup';
 import { selecteventGroup } from './../../../redux/EventGroup';
 import { selectMemberGroup } from './../../../redux/MemberGroup';
 import{selectMemberGroupRequest} from './../../../redux/MemberGroup'
+import { selectOption } from "../../../redux/Group";
 
 export default function LeftItemGroup() {
 	const { theme } = UseTheme();
@@ -159,8 +160,8 @@ export default function LeftItemGroup() {
 								<QuestionCircleOutlined className="icon-option-group" size={20} />
 								<span className="option-label-group">Câu hỏi</span>
 							</div>
-							<div className="custom-option-group">
-								<HiOutlineClipboardDocumentList className="icon-option-group" size={20} />
+							<div className="custom-option-group" onClick={()=>{dispatch(selectOption('document'))}}>
+								<HiOutlineClipboardDocumentList className="icon-option-group" size={20}  />
 								<span className="option-label-group">Tài liệu học tập</span>
 							</div>
 							<div className="custom-option-group">

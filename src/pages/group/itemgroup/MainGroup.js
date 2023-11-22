@@ -11,6 +11,7 @@ import PostGroup from '../components/PostGroup';
 import QuestionGroup from '../components/QuestionGroup';
 import MemberGroup from '../components/MemberGroup';
 import EventGroup from '../components/EventGroup';
+import DocumentGroup from '../components/DocumentGroup';
 
 export default function MainGroup() {
   const selectedOption = useSelector(selectSelectedOption);
@@ -42,6 +43,7 @@ export default function MainGroup() {
         {selectedOption === 'member' ? <MemberGroup /> : null}
         {selectedOption === 'event' ? <EventGroup /> : null}
         {selectedOption === 'question' ? <QuestionGroup /> : null}
+        {selectedOption === 'document' ? <DocumentGroup /> : null}
 
        
 

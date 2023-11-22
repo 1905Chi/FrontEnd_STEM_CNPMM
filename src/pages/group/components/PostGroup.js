@@ -42,7 +42,7 @@ export default function PostGroup() {
 				</button>
 			</div>
 			<div className="post-group__list">
-				{post.map((item, index) => (
+				{post && post.map((item, index) => (
 					<PostItem index={item.id} content={item.content} user={item.author} likes={item.reactions} type={item.type} />
 				))}
 				</div>
