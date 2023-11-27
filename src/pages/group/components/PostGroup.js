@@ -21,7 +21,7 @@ export default function PostGroup() {
 		Api.get(url + 'api/v1/posts?' + 'groupId=' + uuid, { headers: headers })
 			.then((response) => {
 				if (response.data.statusCode === 200) {
-					setPost(response.data.result);
+					setPost(response.data.result.posts);
 				} else {
 					console.log(response.error);
 				}
@@ -36,14 +36,14 @@ export default function PostGroup() {
 				<h2 style={{ textAlign: 'start', margin: '15px', borderBottom: '3px solid', padding: '15px' }}>
 					Bài viết{' '}
 				</h2>
-				{open && <Editor cancel={openEdttor} />}
+				{open && <Editor cancel={openEdttor}  type="post"/>}
 				<button className="question-group__button" onClick={openEdttor} cancel={openEdttor}>
 					Bài viết mới
 				</button>
 			</div>
 			<div className="post-group__list">
 				{post && post.map((item, index) => (
-					<PostItem index={item.id} content={item.content} user={item.author} likes={item.reactions} type={item.type} />
+					<PostItem index={item.post.id} content={item.post.content} user={item.post.author} likes={item.post.reactions} type={item.post.type}  />
 				))}
 				</div>
 		</div>

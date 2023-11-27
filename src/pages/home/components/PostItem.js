@@ -95,15 +95,15 @@ function PostItem({ user, content, likes, index, type }) {
 	return (
 		<div className="post-item">
 			{isEditPost ? (
-				<Editor cancel={EditPost} data={contentPost} editcontent={EditContentPost} index={index}>
+				<Editor cancel={EditPost} data={contentPost} editcontent={EditContentPost} index={index} type={type}>
 					{' '}
 				</Editor>
 			) : null}
 			<div className="user-info">
-				<div className="avatarPost">
+				<div className="avatarPost" style={{flex:1}}>
 					<Avatar src={user.avatarUrl} />
 				</div>
-				<div style={{display:'flex',flexDirection:'row'}}>
+				<div style={{display:'flex',flexDirection:'row', flex: 9}}>
 					<a href='' style={{textDecoration:'none', color:'black'}} ><p className="user-name"> {user.firstName + ' ' + user.lastName} </p></a>
 					<p className="user-name" style={{display:'block'}}> đã đăng {} trong nhóm </p>
 				</div>
@@ -111,11 +111,11 @@ function PostItem({ user, content, likes, index, type }) {
 					menu={{
 						items,
 					}}
-					placement="bottomLeft"
+					placement="bottomRight"
 					arrow={{
 						pointAtCenter: true,
 					}}
-					style={{ border: 'none' }}
+					style={{ border: 'none' , flex:1}}
 				>
 					<Button style={{ color: 'black', backgroundColor: 'aliceblue', border: 'none',textAlign:'end' }}>...</Button>
 				</Dropdown>

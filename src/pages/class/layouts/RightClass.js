@@ -20,7 +20,7 @@ const RightClass = () => {
 	};
 	
 	const create = () => {
-		navigate('/groups/create');
+		navigate('/classes/create');
 	};
 	const [mygroup, setMygroup] = useState([]);
 	const [group, setGroup] = useState([]);

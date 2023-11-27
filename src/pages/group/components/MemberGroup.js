@@ -73,7 +73,7 @@ export default function MemberGroup() {
 						</button>
 					</div>
 
-					{memberGroup.map((item, index) => (
+					{ memberGroup && memberGroup.map((item, index) => (
 						<div className="member-group__item" key={index}>
 							<div className="member-group__item__avatar">
 								<Avatar src={item.user.avatarUrl} alt="" />

@@ -186,7 +186,7 @@ export default function RegisterTeacher(props) {
 						</div>
 					</Form>
 				</div>
-				<ToastContainer />
+				<ToastContainer style={{zIndex:1000}}/>
 			</div>
 		</>
 	);

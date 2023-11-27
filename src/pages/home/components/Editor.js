@@ -55,7 +55,7 @@ export default function Editor(props) {
 			const data = {
 				content: stringValue,
 				postId: props.index,
-				postType:'question',
+				postType:props.type,
 				mediaFiles:[],
 			};
 			const headers = {
@@ -81,7 +81,7 @@ export default function Editor(props) {
 			const data = {
 				content: stringValue,
 				groupId: uuid,
-				TypeCode:'question',
+				TypeCode:props.type,
 				mediaFiles:[],
 			};
 			const headers = {

@@ -25,19 +25,28 @@ import RightClass from '../pages/class/layouts/RightClass';
 import MainClass from '../pages/class/itemclass/MainClass';
 import CreateQuiz from '../pages/class/exam/CreateQuiz ';
 import RightItemGroup from '../pages/group/layouts/RightItemGroup';
+import LeftFriend from '../pages/friend/layouts/LeftFriend';
+import MainFriend from '../pages/friend/MainFriend';
+import  ProfileUser from '../pages/profile/ProfileUser/Profile';
+
 const privateRoutes = [
 	{ path: '/home', component: Home, Left: Left, Right: Right },
 	{ path: '/groups', component: Home, Left: LeftsGroup, Right: Right },
-	{ path: '/groups/create', component: CreateGroup, Left: LeftCreateGroup, Right: Right },
 	{ path: '/groups/:uuid', component: MainGroup, Left: LeftItemGroup, Right: RightItemGroup },
-	{ path: '/profile', component: Profile, Left: Left, Right: RightProfile },
+	
 	{ path: '/classes', component: Class, Left: LeftClass, Right: RightClass },
+
 	
 ];
 
 const privateRoutes2page = [
 	{ path: '/classes/:uuid', component: MainClass, Left: LeftItemClass },
 	{ path: '/classes/:uuid/exam/createquiz', component: CreateQuiz, Left: LeftItemClass },
+	{ path: '/groups/create', component: CreateGroup, Left: LeftCreateGroup },
+	{ path: '/classes/create', component: CreateGroup, Left: LeftCreateGroup },
+	{path:'/friends',component:MainFriend,Left:LeftFriend},
+	{ path: '/profile', component: Profile, Left: Left },
+	{ path: '/profile/:uuid', component: ProfileUser, Left: Left },
 ];
 const publicRoutes = [
 	{ path: '/login', component: Login },

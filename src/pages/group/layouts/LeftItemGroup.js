@@ -164,21 +164,18 @@ export default function LeftItemGroup() {
 								<HiOutlineClipboardDocumentList className="icon-option-group" size={20}  />
 								<span className="option-label-group">Tài liệu học tập</span>
 							</div>
-							<div className="custom-option-group">
-								<BsFillCalendar2WeekFill className="icon-option-group" size={20} />
-								<span className="option-label-group">Lịch học</span>
-							</div>
-							<div className="custom-option-group">
+
+							<div className="custom-option-group" onClick={()=>{dispatch(selectOption('event'))}}>
 								<MdEventNote className="icon-option-group" size={20} />
 								<span className="option-label-group">Sự kiện</span>
 							</div>
 							{role === 'GROUP_ADMIN' || role === 'GROUP_OWNER' ? (
 								<div>
-									<div className="custom-option-group">
+									<div className="custom-option-group" onClick={()=>{dispatch(selectOption('manager-member'))}}>
 										<AiOutlineUsergroupAdd className="icon-option-group" size={20} />
 										<span className="option-label-group">Quản lý thành viên</span>
 									</div>
-									<div className="custom-option-group">
+									<div className="custom-option-group" onClick={()=>{dispatch(selectOption('manager-group'))}}>
 										<HiInformationCircle className="icon-option-group" size={20} />
 										<span className="option-label-group">Quản lý nhóm</span>
 									</div>

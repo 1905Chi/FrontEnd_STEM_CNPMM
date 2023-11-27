@@ -1,74 +1,57 @@
 import React, { useEffect, useState } from 'react';
 import './Profile.css';
-import EditProfile from './component/EditProfile';
-import anhlogo1 from '../../assets/images/anh_logo_1.jpg';
-import { AiFillCamera } from 'react-icons/ai';
-import { BsPencilFill } from 'react-icons/bs';
-import EditAvatar from './component/EditAvatar';
-import EditCover from './component/EditCover';
-import Post from '../home/components/Post';
-import PostItem from '../home/components/PostItem';
-import { json } from 'react-router-dom';
+import anhlogo1 from '../../../assets/images/anh_logo_1.jpg';
+import PostItem from '../../home/components/PostItem';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectOptionProfile } from '../../redux/Group';
-import { selectSelectedOptionProfile } from '../../redux/Group';
+import { selectOptionProfile } from '../../../redux/Group';
+import { selectSelectedOptionProfile } from '../../../redux/Group';
 import { BsGenderTrans } from 'react-icons/bs';
 import { CiLocationOn } from 'react-icons/ci';
 import { TbBuildingFactory } from 'react-icons/tb';
 import { AiFillPhone } from 'react-icons/ai';
 import { LiaBirthdayCakeSolid } from 'react-icons/lia';
-
-export default function Profile() {
-	const [isEdit, setIsEdit] = useState(false);
-
-	const [isEditAvatar, setIsEditAvatar] = useState(false);
-	const [isEditCoverPhoto, setIsEditCoverPhoto] = useState(false);
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+export default function Profile(props) {
 	const [avatar, setAvatar] = useState();
 	const [coverPhoto, setCoverPhoto] = useState();
 	const dispatch = useDispatch();
 	const selectedOption = useSelector(selectSelectedOptionProfile);
-	dispatch(selectOptionProfile('introduce'));
-
+	const navigate = useNavigate();
+	const { uuid } = useParams();
 	useEffect(() => {
 		const profile = JSON.parse(localStorage.getItem('user'));
-	
-		if (profile.avatarUrl) {
-			setAvatar(profile.avatarUrl);
-		} else {
-			setAvatar(anhlogo1);
+		if ( uuid && uuid === JSON.parse(localStorage.getItem('user')).id) {
+			navigate('/profile');
 		}
-		if (profile.avatarUrl) {
-			setCoverPhoto(profile.coverUrl);
-		} else {
-			setCoverPhoto(anhlogo1);
+		else if (uuid && uuid !== JSON.parse(localStorage.getItem('user')).id){
+			dispatch(selectOptionProfile('introduce'));
+			if (profile.avatarUrl) {
+				setAvatar(profile.avatarUrl);
+			} else {
+				setAvatar(anhlogo1);
+			}
+			if (profile.avatarUrl) {
+				setCoverPhoto(profile.coverUrl);
+			} else {
+				setCoverPhoto(anhlogo1);
+			}
+		}
+		 else {
+			console.log(props.id)
+			dispatch(selectOptionProfile('introduce'));
+			if (profile.avatarUrl) {
+				setAvatar(profile.avatarUrl);
+			} else {
+				setAvatar(anhlogo1);
+			}
+			if (profile.avatarUrl) {
+				setCoverPhoto(profile.coverUrl);
+			} else {
+				setCoverPhoto(anhlogo1);
+			}
 		}
 	}, [avatar, coverPhoto]);
-	const changeAvatar = (values) => {
-		setAvatar(values);
-	};
-	const changeCoverPhoto = (values) => {
-		setCoverPhoto(values);
-	};
-
-	const setEditAvatar = () => {
-		setIsEditAvatar(true);
-	};
-	const setEditCoverPhoto = () => {
-		setIsEditCoverPhoto(true);
-	};
-	const setEditProfile = () => {
-		setIsEdit(true);
-	};
-
-	const cancel = () => {
-		setIsEdit(false);
-	};
-	const cancelFormAvatar = () => {
-		setIsEditAvatar(false);
-	};
-	const cancelFormCoverPhoto = () => {
-		setIsEditCoverPhoto(false);
-	};
 
 	const anh = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwoon_hT7QiYmBsL0F9ydjogk-wzvXtwp0Ef_1M6E-Kw&s';
 	const post = [
@@ -129,48 +112,23 @@ export default function Profile() {
 	];
 	return (
 		<>
-			{isEdit ? <EditProfile onCancel={cancel}></EditProfile> : null}
-			{isEditAvatar ? (
-				<EditAvatar onCancel={cancelFormAvatar} changeAvatar={changeAvatar} avatar={avatar}></EditAvatar>
-			) : null}
-			{isEditCoverPhoto ? (
-				<EditCover
-					onCancel={cancelFormCoverPhoto}
-					changeCoverPhoto={changeCoverPhoto}
-					coverPhoto={coverPhoto}
-				></EditCover>
-			) : null}
 			<div>
 				<div>
 					<div className="cover-photo">
 						<img src={coverPhoto} alt="Cover Photo" />
 					</div>
-					<button className="cover-picture__button" style={{ height: '40px' }} onClick={setEditCoverPhoto}>
-						<AiFillCamera style={{ fontSize: '30px', margin: '0 0 0 5px', color: 'white' }}></AiFillCamera>{' '}
-						<span style={{ fontSize: '15px', color: 'white', margin: '0 5px 0 0' }}>Chỉnh sửa ảnh bìa</span>
-					</button>
 				</div>
 				<div>
 					<div className="profile-picture">
 						<img src={avatar} alt="Profile Picture" />
 					</div>
-					<button className="profile-picture__button" style={{ height: '40px' }} onClick={setEditAvatar}>
-						<AiFillCamera style={{ fontSize: '30px', color: 'white' }}></AiFillCamera>
-					</button>
+
 					<div className="usename-button">
 						<span style={{ fontSize: '35px' }}>
 							{JSON.parse(localStorage.getItem('user')).firstName +
 								' ' +
 								JSON.parse(localStorage.getItem('user')).lastName}
 						</span>
-						<button className="edit-profile__button" style={{ height: '40px' }} onClick={setEditProfile}>
-							<BsPencilFill
-								style={{ fontSize: '30px', margin: '0 0 0 5px', color: 'white' }}
-							></BsPencilFill>{' '}
-							<span style={{ fontSize: '15px', color: 'white', margin: '0 5px 0 0' }}>
-								Chỉnh sửa thông tin cá nhân
-							</span>
-						</button>
 					</div>
 				</div>
 				<div

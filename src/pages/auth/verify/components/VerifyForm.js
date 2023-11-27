@@ -129,7 +129,7 @@ export default function VerifyForm(props) {
 								},
 
 								{
-									pattern: /^0\d{10,10}$/, // Sử dụng biểu thức chính quy để kiểm tra số điện thoại bắt đầu bằng 0 và có tổng cộng từ 10 đến 11 ký tự
+									pattern: /^0\d{9,9}$/, // Sử dụng biểu thức chính quy để kiểm tra số điện thoại bắt đầu bằng 0 và có tổng cộng từ 10 đến 11 ký tự
 									message: 'Số điện thoại không hợp lệ!',
 								},
 							]}

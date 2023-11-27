@@ -9,9 +9,13 @@ import Loading from '../../../components/Loading';
 import { useNavigate } from 'react-router-dom';
 import { url } from '../../../constants/Constant';
 import Api from '../../../api/Api';
+import { selectGroup } from '../../../redux/GetItemGroup';
+import { useDispatch } from 'react-redux';
+
 export default function LeftCreateGroup() {
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const options = [
 		{
 			value: 'Khang',
@@ -47,6 +51,11 @@ export default function LeftCreateGroup() {
 			);
 		}
 	};
+	const setNameGroup = (e) => {
+		dispatch(selectGroup({
+			name:e.target.value
+		}));
+	}
 	const create = (values) => {
 		setLoading(true);
 		const headers = {
@@ -121,7 +130,7 @@ export default function LeftCreateGroup() {
 								},
 							]}
 						>
-							<Input placeholder="Tên nhóm" />
+							<Input placeholder="Tên nhóm" onChange={setNameGroup}/>
 						</Form.Item>
 						<Form.Item
 							name="descriptionGroup"
