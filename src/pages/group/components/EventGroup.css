@@ -19,6 +19,9 @@
     text-align: end;
 
 }
+.header-envent-title button:hover{
+    background-color: white;
+}
 .header-envent-title button h3{
     width: 70%;
 }

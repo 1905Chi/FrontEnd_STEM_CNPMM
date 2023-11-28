@@ -8,6 +8,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import anh_logo_1 from '../../../assets/images/anh_logo_1.jpg';
 import Loading from '../../../components/Loading';
 import Api from './../../../api/Api';
+import { selectSelectedGroupOwner,selectGroupOwner,selectGroupMember,selectSelectedGroupMember } from '../../../redux/Group';
+import { useSelector,useDispatch } from 'react-redux';
+
 
 const { Search } = Input;
 const LeftsGroup = () => {
@@ -22,8 +25,10 @@ const LeftsGroup = () => {
 	const create = () => {
 		navigate('/groups/create');
 	};
-	const [mygroup, setMygroup] = useState([]);
-	const [group, setGroup] = useState([]);
+	const mygroup = useSelector(selectSelectedGroupOwner);
+	const group = useSelector(selectSelectedGroupMember);
+	
+	const dispatch = useDispatch();
 	const getGroup = async () => {
 		const headers = {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
@@ -33,9 +38,29 @@ const LeftsGroup = () => {
 			.get(url + 'api/v1/groups', { headers })
 			.then(async (response) => {
 				if (response.data.statusCode === 200) {
-					setMygroup(response.data.result.GROUP_OWNER);
-					setGroup(response.data.result.GROUP_MEMBER);
-					setGroup(...group, response.data.result.GROUP_ADMIN);
+					let MYGROUP=[]
+					let GROUP=[]
+					response.data.result.GROUP_OWNER.map((item) => {
+						
+						if(!item.subject){
+							MYGROUP=[...MYGROUP, item]
+							
+						}
+					});
+					response.data.result.GROUP_ADMIN.map((item) => {
+						if(!item.subject){
+							MYGROUP=[...MYGROUP, item]
+						}
+					});
+					response.data.result.GROUP_MEMBER.map((item) => {
+						if(!item.subject){
+							GROUP=[...GROUP, item]
+
+						}
+					});
+				
+					dispatch(selectGroupOwner(MYGROUP));
+					dispatch(selectGroupMember(GROUP));
 				}
 			})
 			.catch(async (error) => {
@@ -48,7 +73,7 @@ const LeftsGroup = () => {
 					
 				} else {
 					// Lỗi trong quá trình thiết lập yêu cầu
-					toast('Lỗi khi thiết lập yêu cầu.');
+				
 					
 				}
 			})
@@ -89,12 +114,8 @@ const LeftsGroup = () => {
 						<h4>Nhóm do bạn quản lý</h4>
 						<h4 style={{ color: 'blue' }}>Xem thêm</h4>
 					</div>
-					{mygroup.map((mygroup, index) => {
-						{
-							mygroup.avatarUrl === null
-								? (mygroup.avatarUrl = anh_logo_1)
-								: (mygroup.avatarUrl = mygroup.avatarUrl);
-						}
+					{	mygroup && mygroup.map((mygroup, index) => {
+						
 						return <LableGroup key={index} image={mygroup.avatarUrl} name={mygroup.name} id={mygroup.id} />;
 					})}
 				</div>
@@ -103,7 +124,7 @@ const LeftsGroup = () => {
 						<h4>Nhóm do tham gia</h4>
 						<h4 style={{ color: 'blue' }}>Xem thêm</h4>
 					</div>
-					{group.map((group, index) => {
+					{group &&group.map((group, index) => {
 						{
 							group.groupImage === null
 								? (group.avatarUrl = anh_logo_1)

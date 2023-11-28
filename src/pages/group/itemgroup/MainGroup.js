@@ -12,7 +12,7 @@ import QuestionGroup from '../components/QuestionGroup';
 import MemberGroup from '../components/MemberGroup';
 import EventGroup from '../components/EventGroup';
 import DocumentGroup from '../components/DocumentGroup';
-
+import Exam from '../../class/exam/Exam';
 export default function MainGroup() {
   const selectedOption = useSelector(selectSelectedOption);
   const inforGroup = useSelector(selectselectGroup);
@@ -44,6 +44,8 @@ export default function MainGroup() {
         {selectedOption === 'event' ? <EventGroup /> : null}
         {selectedOption === 'question' ? <QuestionGroup /> : null}
         {selectedOption === 'document' ? <DocumentGroup /> : null}
+        {selectedOption === 'exam' ? <Exam /> : null} 
+
 
        
 

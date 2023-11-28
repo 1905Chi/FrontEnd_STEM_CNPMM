@@ -33,14 +33,14 @@ const privateRoutes = [
 	{ path: '/home', component: Home, Left: Left, Right: Right },
 	{ path: '/groups', component: Home, Left: LeftsGroup, Right: Right },
 	{ path: '/groups/:uuid', component: MainGroup, Left: LeftItemGroup, Right: RightItemGroup },
-	
+	{ path: '/classes/:uuid', component: MainGroup, Left: LeftItemGroup, Right: RightItemGroup },
 	{ path: '/classes', component: Class, Left: LeftClass, Right: RightClass },
 
 	
 ];
 
 const privateRoutes2page = [
-	{ path: '/classes/:uuid', component: MainClass, Left: LeftItemClass },
+	
 	{ path: '/classes/:uuid/exam/createquiz', component: CreateQuiz, Left: LeftItemClass },
 	{ path: '/groups/create', component: CreateGroup, Left: LeftCreateGroup },
 	{ path: '/classes/create', component: CreateGroup, Left: LeftCreateGroup },

@@ -12,6 +12,9 @@ import { AiFillPhone } from 'react-icons/ai';
 import { LiaBirthdayCakeSolid } from 'react-icons/lia';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { selectUser, selectselectUser } from '../../../redux/MemberGroup';
+import Api from '../../../../src/api/Api';
+import { url } from '../../../constants/Constant';
 export default function Profile(props) {
 	const [avatar, setAvatar] = useState();
 	const [coverPhoto, setCoverPhoto] = useState();
@@ -19,39 +22,34 @@ export default function Profile(props) {
 	const selectedOption = useSelector(selectSelectedOptionProfile);
 	const navigate = useNavigate();
 	const { uuid } = useParams();
+	const user = useSelector(selectselectUser);
+
 	useEffect(() => {
 		const profile = JSON.parse(localStorage.getItem('user'));
-		if ( uuid && uuid === JSON.parse(localStorage.getItem('user')).id) {
+		if (uuid && uuid === JSON.parse(localStorage.getItem('user')).id) {
 			navigate('/profile');
-		}
-		else if (uuid && uuid !== JSON.parse(localStorage.getItem('user')).id){
+		} else if (uuid && uuid !== JSON.parse(localStorage.getItem('user')).id) {
 			dispatch(selectOptionProfile('introduce'));
-			if (profile.avatarUrl) {
-				setAvatar(profile.avatarUrl);
-			} else {
-				setAvatar(anhlogo1);
-			}
-			if (profile.avatarUrl) {
-				setCoverPhoto(profile.coverUrl);
-			} else {
-				setCoverPhoto(anhlogo1);
-			}
-		}
-		 else {
-			console.log(props.id)
+			Api.get(url + 'api/v1/users/' + uuid)
+				.then((res) => {
+					dispatch(selectUser(res.data));
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		} else {
+			console.log(props.id);
 			dispatch(selectOptionProfile('introduce'));
-			if (profile.avatarUrl) {
-				setAvatar(profile.avatarUrl);
-			} else {
-				setAvatar(anhlogo1);
-			}
-			if (profile.avatarUrl) {
-				setCoverPhoto(profile.coverUrl);
-			} else {
-				setCoverPhoto(anhlogo1);
-			}
+			Api.get(url + 'api/v1/users/' + props.id)
+				.then((res) => {
+					dispatch(selectUser(res.data));
+					
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 		}
-	}, [avatar, coverPhoto]);
+	}, []);
 
 	const anh = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwoon_hT7QiYmBsL0F9ydjogk-wzvXtwp0Ef_1M6E-Kw&s';
 	const post = [
@@ -112,130 +110,125 @@ export default function Profile(props) {
 	];
 	return (
 		<>
-			<div>
+			{' '}
+			{ user && 
 				<div>
-					<div className="cover-photo">
-						<img src={coverPhoto} alt="Cover Photo" />
-					</div>
-				</div>
-				<div>
-					<div className="profile-picture">
-						<img src={avatar} alt="Profile Picture" />
-					</div>
-
-					<div className="usename-button">
-						<span style={{ fontSize: '35px' }}>
-							{JSON.parse(localStorage.getItem('user')).firstName +
-								' ' +
-								JSON.parse(localStorage.getItem('user')).lastName}
-						</span>
-					</div>
-				</div>
-				<div
-					style={{
-						display: 'flex',
-						justifyContent: 'start',
-						position: 'relative',
-						top: '118px',
-						borderTop: '1px solid #e6e6e6',
-						borderBottom: '1px solid #e6e6e6',
-					}}
-					className="group-menu"
-				>
-					<button
-						style={{ margin: '0px', borderRadius: '0px', backgroundColor: 'white' }}
-						onClick={() => {
-							dispatch(selectOptionProfile('introduce'));
-						}}
-					>
-						{' '}
-						<h3>Giới thiệu</h3>
-					</button>
-					<button
-						style={{ margin: '0px', borderRadius: '0px', backgroundColor: 'white' }}
-						onClick={() => {
-							dispatch(selectOptionProfile('post'));
-						}}
-					>
-						{' '}
-						<h3>Bài Viết</h3>
-					</button>
-					<button
-						style={{ margin: '0px', borderRadius: '0px', backgroundColor: 'white' }}
-						onClick={() => {
-							dispatch(selectOptionProfile('member'));
-						}}
-					>
-						{' '}
-						<h3>Bạn bè</h3>
-					</button>
-					<button
-						style={{ margin: '0px', borderRadius: '0px', backgroundColor: 'white' }}
-						onClick={() => {
-							dispatch(selectOptionProfile('event'));
-						}}
-					>
-						<h3>Ảnh</h3>
-					</button>
-				</div>
-				{selectedOption === 'introduce' ? (
-					<div style={{ margin: '125px 0 0 0' }}>
-						<div className="introduce">
-							<h3>Giới thiệu</h3>
-							{JSON.parse(localStorage.getItem('user')).phone ? (
-								<div style={{ width: '100%', margin: '5px 0' }}>
-									<AiFillPhone className="icon-profile"></AiFillPhone>:{' '}
-									{JSON.parse(localStorage.getItem('user')).phone}
-								</div>
-							) : null}
-							{JSON.parse(localStorage.getItem('user')).date ? (
-								<div style={{ width: '100%', margin: '5px 0' }}>
-									<LiaBirthdayCakeSolid className="icon-profile"></LiaBirthdayCakeSolid>:{' '}
-									{JSON.parse(localStorage.getItem('user')).date}
-								</div>
-							) : null}
-
-							{JSON.parse(localStorage.getItem('user')).gender ? (
-								<div style={{ width: '100%', margin: '5px 0' }}>
-									<BsGenderTrans className="icon-profile"></BsGenderTrans>:{' '}
-									{JSON.parse(localStorage.getItem('user')).gender}
-								</div>
-							) : null}
-
-							{JSON.parse(localStorage.getItem('user')).workAt ? (
-								<div style={{ width: '100%', margin: '5px 0' }}>
-									<TbBuildingFactory className="icon-profile"></TbBuildingFactory>:{' '}
-									{JSON.parse(localStorage.getItem('user')).workAt}
-								</div>
-							) : null}
-							{JSON.parse(localStorage.getItem('user')).address ? (
-								<div style={{ width: '100%', margin: '5px 0' }}>
-									<CiLocationOn className="icon-profile"></CiLocationOn>:{' '}
-									{JSON.parse(localStorage.getItem('user')).address}
-								</div>
-							) : null}
+					<div>
+						<div className="cover-photo">
+							<img src={user.coverUrl === null ? user.coverUrl : anhlogo1} alt="Cover Photo" />
 						</div>
 					</div>
-				) : (
-					''
-				)}
+					<div>
+						<div className="profile-picture">
+							<img src={user.avatarUrl === null ? user.avatarUrl : anhlogo1} alt="Profile Picture" />
+						</div>
 
-				{selectedOption === 'post' ? (
-					<div style={{ margin: '125px 0 0 0' }}>
-						{post.map((post, index) => {
-							return (
-								<PostItem
-									key={index}
-									user={post.user}
-									content={post.content}
-									image={post.image}
-									likes={post.likes}
-								/>
-							);
-						})}
+						<div className="usename-button">
+							<span style={{ fontSize: '35px' }}>{user.firstName + ' ' + user.lastName}</span>
+						</div>
 					</div>
-				) : null}
-			</div>
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'start',
+							position: 'relative',
+							top: '118px',
+							borderTop: '1px solid #e6e6e6',
+							borderBottom: '1px solid #e6e6e6',
+						}}
+						className="group-menu"
+					>
+						<button
+							style={{ margin: '0px', borderRadius: '0px', backgroundColor: 'white' }}
+							onClick={() => {
+								dispatch(selectOptionProfile('introduce'));
+							}}
+						>
+							{' '}
+							<h3>Giới thiệu</h3>
+						</button>
+						<button
+							style={{ margin: '0px', borderRadius: '0px', backgroundColor: 'white' }}
+							onClick={() => {
+								dispatch(selectOptionProfile('post'));
+							}}
+						>
+							{' '}
+							<h3>Bài Viết</h3>
+						</button>
+						<button
+							style={{ margin: '0px', borderRadius: '0px', backgroundColor: 'white' }}
+							onClick={() => {
+								dispatch(selectOptionProfile('member'));
+							}}
+						>
+							{' '}
+							<h3>Bạn bè</h3>
+						</button>
+						<button
+							style={{ margin: '0px', borderRadius: '0px', backgroundColor: 'white' }}
+							onClick={() => {
+								dispatch(selectOptionProfile('event'));
+							}}
+						>
+							<h3>Ảnh</h3>
+						</button>
+					</div>
+					{selectedOption === 'introduce' ? (
+						<div style={{ margin: '125px 0 0 0' }}>
+							<div className="introduce">
+								<h3>Giới thiệu</h3>
+								{user.phone ? (
+									<div style={{ width: '100%', margin: '5px 0' }}>
+										<AiFillPhone className="icon-profile"></AiFillPhone>: {user.phone}
+									</div>
+								) : null}
+								{user.dob ? (
+									<div style={{ width: '100%', margin: '5px 0' }}>
+										<LiaBirthdayCakeSolid className="icon-profile"></LiaBirthdayCakeSolid>:{' '}
+										{user.dob}
+									</div>
+								) : null}
+
+								{user.gender ? (
+									<div style={{ width: '100%', margin: '5px 0' }}>
+										<BsGenderTrans className="icon-profile"></BsGenderTrans>: {user.gender}
+									</div>
+								) : null}
+
+								{user.workAt ? (
+									<div style={{ width: '100%', margin: '5px 0' }}>
+										<TbBuildingFactory className="icon-profile"></TbBuildingFactory>: {user.workAt}
+									</div>
+								) : null}
+								{user.address ? (
+									<div style={{ width: '100%', margin: '5px 0' }}>
+										<CiLocationOn className="icon-profile"></CiLocationOn>: {user.address}
+									</div>
+								) : null}
+							</div>
+						</div>
+					) : (
+						''
+					)}
+
+					{selectedOption === 'post' ? (
+						<div style={{ margin: '125px 0 0 0' }}>
+							{post.map((post, index) => {
+								return (
+									<PostItem
+										key={index}
+										user={post.user}
+										content={post.content}
+										image={post.image}
+										likes={post.likes}
+									/>
+								);
+							})}
+						</div>
+					) : null}
+				</div>
+			}
 		</>
 	);
 }

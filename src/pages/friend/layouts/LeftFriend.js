@@ -10,41 +10,63 @@ import { selectSelectedOption } from '../../../redux/Group';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import './LeftFriend.css';
 import anh_logo_1 from '../../../assets/images/anh_logo_1.jpg';
+import { selectselectFriendRequest } from '../../../redux/Friend';
+import Api from '../../../../src/api/Api';
+import { url } from '../../../constants/Constant';
+import { selectFriendRequest } from '../../../redux/Friend';
 import { Avatar } from 'antd';
+import {toast, ToastContainer} from "react-toastify"; 
 export default function LeftFriend() {
 	const dispatch = useDispatch();
 	const selectedOption = useSelector(selectSelectedOption);
+	const friendRequest = useSelector(selectselectFriendRequest);
 	useEffect(() => {
 		dispatch(selectOption('all'));
+		if (friendRequest === null) {
+			const headers = {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+			};
+			Api.get(url + 'api/v1/users/friend-requests', { headers: headers })
+				.then((res) => {
+					console.log(res.data);
+					dispatch(selectFriendRequest(res.data.result));
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}
 	}, []);
-	const friendRequest = [
-		{
-			id: 1,
-			avartarUrl: anh_logo_1,
-			firstName: 'Chí',
-			lastName: 'Bùi',
-		},
-		{
-			id: 2,
-			avartarUrl: anh_logo_1,
-			firstName: 'Chí',
-			lastName: 'Bùi',
-		},
-		{
-			id: 3,
-			avartarUrl: anh_logo_1,
-			firstName: 'Chí',
-			lastName: 'Bùi',
-		},
-		{
-			id: 4,
-			avartarUrl: anh_logo_1,
-			firstName: 'Chí',
-			lastName: 'Bùi',
-		},
-	];
+
 	const accept = (status, id) => () => {
-		console.log(status, id);
+		if(status=== "ACCEPT"){
+            const headers = {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            };
+            Api.put(url + 'api/v1/friend-requests/accept/'+id , { headers: headers })
+                .then((res) => {
+                   toast.success("Đã chấp nhận lời mời kết bạn")
+                   dispatch(selectOption('all'));
+                })
+                .catch((err) => {
+                    toast.error("Đã xảy ra lỗi")
+                });
+        }
+        if(status=== "REJECT"){
+            const headers = {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            };
+            Api.put(url + 'api/v1/friend-requests/reject/'+id , { headers: headers })
+                .then((res) => {
+                    toast.success("Đã xóa lời mời kết bạn")
+                    dispatch(selectOption('all'));
+                })
+                .catch((err) => {
+                    toast.error("Đã xảy ra lỗi")    
+                });
+        }
 	};
 	return (
 		<div className="left-friend">
@@ -111,7 +133,7 @@ export default function LeftFriend() {
 							>
 								<div style={{ flex: '2', margin: '15px', marginTop: '18px' }}>
 									<div className="friend-request__item__avatar">
-										<Avatar src={item.avartarUrl} alt="" />
+										<Avatar src={item.avatarUrl} alt="" />
 									</div>
 								</div>
 								<div className="friend-request__item__button">
@@ -159,7 +181,7 @@ export default function LeftFriend() {
 							>
 								<div style={{ margin: '15px', marginTop: '18px' }}>
 									<div className="friend-request__item__avatar">
-										<Avatar src={item.avartarUrl} alt="" />
+										<Avatar src={item.avatarUrl} alt="" />
 									</div>
 								</div>
 								<div
@@ -220,9 +242,11 @@ export default function LeftFriend() {
 									</div>
 								</div>
 							</div>
+                             
 						))}
 				</div>
 			) : null}
+             <ToastContainer/> 
 		</div>
 	);
 }

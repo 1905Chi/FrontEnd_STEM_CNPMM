@@ -19,13 +19,15 @@ import { selecteventGroup } from './../../../redux/EventGroup';
 import { selectMemberGroup } from './../../../redux/MemberGroup';
 import{selectMemberGroupRequest} from './../../../redux/MemberGroup'
 import { selectOption } from "../../../redux/Group";
+import { useLocation } from 'react-router-dom';
 
 export default function LeftItemGroup() {
 	const { theme } = UseTheme();
 	const [role, setRole] = useState('GUEST');
 	const [group, setGroup] = useState({});
 	const { uuid } = useParams();
-	
+	const location = useLocation();
+	const isClassesPath = location.pathname.includes('classes');
 	const dispatch = useDispatch();
 
 	const headers = {
@@ -160,6 +162,10 @@ export default function LeftItemGroup() {
 								<QuestionCircleOutlined className="icon-option-group" size={20} />
 								<span className="option-label-group">Câu hỏi</span>
 							</div>
+							{isClassesPath ? (<div className="custom-option-group" onClick={()=>{dispatch(selectOption('exam'))}}>
+								<QuestionCircleOutlined className="icon-option-group" size={20} />
+								<span className="option-label-group">Bài kiểm tra</span>
+							</div>) : null}
 							<div className="custom-option-group" onClick={()=>{dispatch(selectOption('document'))}}>
 								<HiOutlineClipboardDocumentList className="icon-option-group" size={20}  />
 								<span className="option-label-group">Tài liệu học tập</span>

@@ -105,7 +105,7 @@ function PostItem({ user, content, likes, index, type }) {
 				</div>
 				<div style={{display:'flex',flexDirection:'row', flex: 9}}>
 					<a href='' style={{textDecoration:'none', color:'black'}} ><p className="user-name"> {user.firstName + ' ' + user.lastName} </p></a>
-					<p className="user-name" style={{display:'block'}}> đã đăng {} trong nhóm </p>
+					<p className="user-name" style={{display:'block'}}> đã đăng {type==="QUESTION" ? "câu hỏi": null} {type==="POST" ? "Bài viết": null} trong nhóm </p>
 				</div>
 				<Dropdown
 					menu={{

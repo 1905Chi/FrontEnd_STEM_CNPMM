@@ -4,6 +4,7 @@ const dataMemberGroup = createSlice({
   name: 'memberGroup',
   initialState: {
     value: null,
+    user: null,
     request: null,
   },
   reducers: {
@@ -13,10 +14,14 @@ const dataMemberGroup = createSlice({
     selectMemberGroupRequest: (state, action) => {
       state.request = action.payload;
     },
+    selectUser: (state, action) => {
+      state.user = action.payload;
+    },
   },
 });
 
-export const { selectMemberGroup, selectMemberGroupRequest } = dataMemberGroup.actions;
+export const { selectMemberGroup, selectMemberGroupRequest ,selectUser} = dataMemberGroup.actions;
 export const selectselectMemberGroup = (state) => state.memberGroup.value;
 export const selectselectMemberGroupRequest = (state) => state.memberGroup.request;
+export const selectselectUser = (state) => state.memberGroup.user;
 export default dataMemberGroup.reducer;

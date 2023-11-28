@@ -8,6 +8,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import anh_logo_1 from '../../../assets/images/anh_logo_1.jpg';
 import Loading from '../../../components/Loading';
 import Api from './../../../api/Api';
+import { selectSelectedGroupOwner,selectGroupOwner,selectGroupMember,selectSelectedGroupMember } from '../../../redux/Group';
+import { useSelector,useDispatch } from 'react-redux';
+
 
 const { Search } = Input;
 const RightClass = () => {
@@ -22,93 +25,63 @@ const RightClass = () => {
 	const create = () => {
 		navigate('/classes/create');
 	};
-	const [mygroup, setMygroup] = useState([]);
-	const [group, setGroup] = useState([]);
-	// const getGroup = async () => {
-	// 	const headers = {
-	// 		Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
-	// 		'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
-	// 	};
-	// 	Api
-	// 		.get(url + 'api/v1/groups', { headers })
-	// 		.then(async (response) => {
-	// 			if (response.data.statusCode === 200) {
-	// 				setMygroup(response.data.result.GROUP_ADMIN);
-	// 				setGroup(response.data.result.GROUP_MEMBER);
-	// 			}
-	// 		})
-	// 		.catch(async (error) => {
-	// 			if (error.response) {
-	// 				// lỗi khi access token hết hạn
-	// 				toast.error(error.request.data.message);
-	// 				setTimeout(() => {
-	// 					localStorage.removeItem('accessToken');
-	// 					localStorage.removeItem('refreshToken');
-	// 					navigate('/login');
-	// 				}, 5000);
-					
-	// 			} else if (error.request) {
-	// 				// Lỗi không có phản hồi từ máy chủ
-	// 				toast.error(error.request.data.message);
-	// 				setTimeout(() => {
-	// 					localStorage.removeItem('accessToken');
-	// 					localStorage.removeItem('refreshToken');
-	// 					navigate('/login');
-	// 				}, 5000);
-	// 			} else {
-	// 				// Lỗi trong quá trình thiết lập yêu cầu
-	// 				toast('Lỗi khi thiết lập yêu cầu.');
-	// 				setTimeout(() => {
-	// 					localStorage.removeItem('accessToken');
-	// 					localStorage.removeItem('refreshToken');
-	// 					navigate('/login');
-	// 				}, 5000);
-	// 			}
-	// 		})
-	// 		.finally(() => {
-	// 			setLoading(false);
-	// 		});
-	// };
+	const mygroup = useSelector(selectSelectedGroupOwner);
+
+	const dispatch = useDispatch();
+	
 
 	useEffect(() => {
-		//setLoading(true);
-		//getGroup();
-        setMygroup([{
-            groupImage:anh_logo_1,
-            groupName:'Lớp 1',
-            groupId:'1'
-        },
-        {
-            groupImage:anh_logo_1,
-            groupName:'Lớp 2',
-            groupId:'2'
-        },
-        {
-            groupImage:anh_logo_1,
-            groupName:'Lớp 3',
-            groupId:'3'
-        },
-        {
-            groupImage:anh_logo_1,
-            groupName:'Lớp 4',
-            groupId:'4'
-        },
-        {
-            groupImage:anh_logo_1,
-            groupName:'Lớp 5',
-            groupId:'5'
-        },
-        {
-            groupImage:anh_logo_1,
-            groupName:'Lớp 6',
-            groupId:'6'
-        },
-        {
-            groupImage:anh_logo_1,
-            groupName:'Lớp 7',
-            groupId:'7'
-        },
-        ]);}
+		const headers = {
+			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+			'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
+		};
+		Api
+			.get(url + 'api/v1/groups', { headers })
+			.then(async (response) => {
+				if (response.data.statusCode === 200) {
+					let MYGROUP=[]
+					
+					response.data.result.GROUP_OWNER.map((item) => {
+						
+						if(item.subject){
+							MYGROUP=[...MYGROUP, item]
+							
+						}
+					});
+					response.data.result.GROUP_ADMIN.map((item) => {
+						if(item.subject){
+							MYGROUP=[...MYGROUP, item]
+						}
+					});
+					response.data.result.GROUP_MEMBER.map((item) => {
+						if(item.subject){
+							MYGROUP=[...MYGROUP, item]
+
+						}
+					});
+				
+					dispatch(selectGroupOwner(MYGROUP));
+				
+				}
+			})
+			.catch(async (error) => {
+				if (error.response) {
+					// lỗi khi access token hết hạn
+					toast.error(error.response.data.message);					
+				} else if (error.request) {
+					// Lỗi không có phản hồi từ máy chủ
+					toast.error(error.request.data.message);
+					
+				} else {
+					// Lỗi trong quá trình thiết lập yêu cầu
+				
+					
+				}
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+	}
         , []);
 
 	
@@ -137,12 +110,8 @@ const RightClass = () => {
 						
 					</div>
 					{mygroup.map((mygroup, index) => {
-						{
-							mygroup.groupImage === null
-								? (mygroup.groupImage = anh_logo_1)
-								: (mygroup.groupImage = mygroup.groupImage);
-						}
-						return <LableGroup key={index} image={mygroup.groupImage} name={mygroup.groupName} id={mygroup.groupId} />;
+						
+						return <LableGroup key={index} image={mygroup.avatarUrl} name={mygroup.name} id={mygroup.id} />;
 					})}
 				</div>
 				
