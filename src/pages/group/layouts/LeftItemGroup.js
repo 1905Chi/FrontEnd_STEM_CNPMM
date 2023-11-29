@@ -20,6 +20,7 @@ import { selectMemberGroup } from './../../../redux/MemberGroup';
 import{selectMemberGroupRequest} from './../../../redux/MemberGroup'
 import { selectOption } from "../../../redux/Group";
 import { useLocation } from 'react-router-dom';
+import { selectPostGroup } from '../../../redux/Group';
 
 export default function LeftItemGroup() {
 	const { theme } = UseTheme();
@@ -99,6 +100,23 @@ export default function LeftItemGroup() {
 			.catch((error) => {
 				//toast.error(error);
 			});
+			Api.get(url + 'api/v1/posts?' + 'groupId=' + uuid, { headers: headers })
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					dispatch(selectPostGroup(response.data.result.posts));
+					console.log(response.data.result.posts);
+					
+				} else {
+					console.log(response.error);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+		// if(isClassesPath){
+		// 	Api.get(url + 'api/v1/group-members?groupId=' + uuid, { headers: headers })
+
+		// }
 	}, []);
 
 	return (

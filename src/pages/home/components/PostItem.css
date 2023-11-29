@@ -6,6 +6,7 @@
   border-radius: 15px;
   border-bottom: 10px solid #c4bebe;
 }
+
 .post-content{
   max-height: 500px;
 }
@@ -103,7 +104,9 @@
   font-weight: bold;
 }
 .file-post{
-  display: flex;
+  margin: 15px 0 15px 30px;
+  width: 90%;
+
 
 }
 .image-file{

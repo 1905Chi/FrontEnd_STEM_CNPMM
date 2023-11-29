@@ -1,9 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import { Input, Button, Select, Dropdown ,DatePicker} from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import LabelFile from '../../profile/component/LabelFile';
 import { DownOutlined } from '@ant-design/icons';
 import AddFile from '../../class/components/AddFile';
+import { selectSelectedPostGroup } from '../../../redux/Group';
+import { useSelector } from 'react-redux';
 import './Document.css';
 export default function DocumentGroup() {
 	const [isShowAllFile, setIsShowAllFile] = useState(false);
@@ -12,9 +14,11 @@ export default function DocumentGroup() {
     const { RangePicker } = DatePicker;
 	const [visible, setVisible] = useState(false);
 	const [isopenAddFile, setIsopenAddFile] = useState(false);
+	
 	const openAddFile = () => {
 		setIsopenAddFile(!isopenAddFile);
 	};
+	const [file, setFile] = useState([]);
 
 	const handleFile = () => {
 		setIsShowAllFile(!isShowAllFile);
@@ -23,28 +27,27 @@ export default function DocumentGroup() {
 		console.log('Selected Time: ', value);
 		console.log('Formatted Selected Time: ', dateString);
 	};
-	const file = [
-		{
-			filename: 'Bài tập về nhà.docx',
-			type: 'docx',
-		},
-		{
-			filename: 'Bài tập về nhà.zip',
-			type: 'zip',
-		},
-		{
-			filename: 'Bài tập về lớp.zip',
-			type: 'zip',
-		},
-		{
-			filename: 'bài tập bổ sung.docx',
-			type: 'docx',
-		},
-		{
-			filename: 'Bài tập về nhà.pdf',
-			type: 'pdf',
-		},
-	];
+	const post =useSelector(selectSelectedPostGroup);
+	useEffect(() => {
+		if(post.length>0){
+			post.map((item)=>{
+				if(item.post.refUrls && item.post.refUrls.length>0){
+					item.post.refUrls.map((item1)=>{
+						const indexAfterNumbers = item1.indexOf('_') + 1;
+						const truncatedFileName = item1.slice(indexAfterNumbers);
+						var files={
+							type:'docx',
+							filename:truncatedFileName
+						}
+						setFile((file)=>{
+							return [...file,files]
+						})
+					})
+				}
+			})
+		}
+	}, [post])
+
 	const dropdownMenu = (
 		<div>
 			<RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" onChange={handleDateChange} />
@@ -60,12 +63,13 @@ export default function DocumentGroup() {
 					<button onClick={openAddFile} style={{padding:'0px'}}>Thêm tài liệu </button>
 				</div>
 				<div className="document-group-content">
-					<LabelFile type="docx" filename="Bài tập về nhà.docx"></LabelFile>
-					<LabelFile type="zip" filename="Bài tập về nhà.zip"></LabelFile>
+					{file && file.length > 0 ? (<LabelFile type={file[0].type} filename={file[0].filename}></LabelFile>):null}
+					{file && file.length > 1 ? (<LabelFile type={file[1].type} filename={file[1].filename}></LabelFile>):null}
 				</div>
-				<div style={{ display: 'flex', justifyContent: 'center', marginBottom: '30px' }}>
+				{file && file.length > 2 ? (<div style={{ display: 'flex', justifyContent: 'center', marginBottom: '30px' }}>
 					<button onClick={handleFile}>{isShowAllFile ? ('Thu gọn'): 'Xem thêm'}</button>
-				</div>
+				</div>) : null}
+				
 			</div>
             {isShowAllFile ? (
 				<div className="file-show-all">

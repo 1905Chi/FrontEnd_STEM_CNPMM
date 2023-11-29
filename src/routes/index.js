@@ -41,7 +41,7 @@ const privateRoutes = [
 
 const privateRoutes2page = [
 	
-	{ path: '/classes/:uuid/exam/createquiz', component: CreateQuiz, Left: LeftItemClass },
+	{ path: '/classes/:uuid/exam/createquiz', component: CreateQuiz, Left: LeftItemGroup },
 	{ path: '/groups/create', component: CreateGroup, Left: LeftCreateGroup },
 	{ path: '/classes/create', component: CreateGroup, Left: LeftCreateGroup },
 	{path:'/friends',component:MainFriend,Left:LeftFriend},

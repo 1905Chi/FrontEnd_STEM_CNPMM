@@ -24,6 +24,12 @@ export default function Editor(props) {
 	const Save = (e) => {
 		
 		e.preventDefault();
+		if(props.isQuiz){
+			props.editcontent(value);
+			props.cancel();
+			return ;
+		}
+
 		if(props.idPost){
 			const stringValue = value.toString();
 			console.log(stringValue);

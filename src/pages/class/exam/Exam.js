@@ -8,6 +8,7 @@ export default function Exam() {
     const openEdttor = () => {
         navigate('/classes/'+uuid+'/exam/createquiz');
     }
+	
 	return (
 		<div>
 			<div className="exam-class">

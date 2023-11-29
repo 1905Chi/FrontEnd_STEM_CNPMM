@@ -109,7 +109,7 @@ const RightClass = () => {
 						<h4>Lớp học của bạn</h4>
 						
 					</div>
-					{mygroup.map((mygroup, index) => {
+					{ mygroup && mygroup.map((mygroup, index) => {
 						
 						return <LableGroup key={index} image={mygroup.avatarUrl} name={mygroup.name} id={mygroup.id} />;
 					})}

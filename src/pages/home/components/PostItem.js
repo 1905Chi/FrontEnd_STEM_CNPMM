@@ -10,11 +10,11 @@ import { EditOutlined } from '@ant-design/icons';
 import Api from '../../../api/Api';
 import { url } from '../../../constants/Constant';
 import Editor from './Editor';
-function PostItem({ user, content, likes, index, type }) {
+import LabelFile from '../../profile/component/LabelFile';
+function PostItem({ user, content, likes, index, type, refUrls }) {
 	const [isLiked, setIsLiked] = useState(false); // Trạng thái ban đầu là "không thích"
 	const [isEditPost, setisEditPost] = useState(false); // Trạng thái ban đầu là "không chỉnh sửa"
 	const [contentPost, setContentPost] = useState(content);
-
 
 	function EditContentPost(value) {
 		setContentPost(value);
@@ -40,7 +40,6 @@ function PostItem({ user, content, likes, index, type }) {
 				console.log(error);
 			});
 	};
-
 
 	function EditPost() {
 		setisEditPost(!isEditPost); //
@@ -100,12 +99,18 @@ function PostItem({ user, content, likes, index, type }) {
 				</Editor>
 			) : null}
 			<div className="user-info">
-				<div className="avatarPost" style={{flex:1}}>
+				<div className="avatarPost" style={{ flex: 1 }}>
 					<Avatar src={user.avatarUrl} />
 				</div>
-				<div style={{display:'flex',flexDirection:'row', flex: 9}}>
-					<a href='' style={{textDecoration:'none', color:'black'}} ><p className="user-name"> {user.firstName + ' ' + user.lastName} </p></a>
-					<p className="user-name" style={{display:'block'}}> đã đăng {type==="QUESTION" ? "câu hỏi": null} {type==="POST" ? "Bài viết": null} trong nhóm </p>
+				<div style={{ display: 'flex', flexDirection: 'row', flex: 9 }}>
+					<a href="" style={{ textDecoration: 'none', color: 'black' }}>
+						<p className="user-name"> {user.firstName + ' ' + user.lastName} </p>
+					</a>
+					<p className="user-name" style={{ display: 'block' }}>
+						{' '}
+						đã đăng {type === 'QUESTION' ? 'câu hỏi' : null} {type === 'POST' ? 'Bài viết' : null} trong
+						nhóm{' '}
+					</p>
 				</div>
 				<Dropdown
 					menu={{
@@ -115,9 +120,11 @@ function PostItem({ user, content, likes, index, type }) {
 					arrow={{
 						pointAtCenter: true,
 					}}
-					style={{ border: 'none' , flex:1}}
+					style={{ border: 'none', flex: 1 }}
 				>
-					<Button style={{ color: 'black', backgroundColor: 'aliceblue', border: 'none',textAlign:'end' }}>...</Button>
+					<Button style={{ color: 'black', backgroundColor: 'aliceblue', border: 'none', textAlign: 'end' }}>
+						...
+					</Button>
 				</Dropdown>
 			</div>
 			<div className={'content-container content' + index}>
@@ -129,8 +136,12 @@ function PostItem({ user, content, likes, index, type }) {
 			</div>
 
 			<div className="file-post">
-				<div className="image-file"></div>
-				<div className="name-file"></div>
+				{refUrls &&
+					refUrls.map((item, index) => {
+						const indexAfterNumbers = item.indexOf('_') + 1;
+						const truncatedFileName = item.slice(indexAfterNumbers);
+						return <LabelFile key={index} type={'docx'} filename={truncatedFileName} />;
+					})}
 			</div>
 
 			<p className="likes-count">

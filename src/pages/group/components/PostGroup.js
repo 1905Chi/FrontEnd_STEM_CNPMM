@@ -6,30 +6,17 @@ import { useState } from 'react';
 import  Api from '../../../api/Api';
 import { url } from '../../../constants/Constant'; 
 import PostItem from './../../home/components/PostItem'
+import { useSelector } from 'react-redux';
+import { selectSelectedPostGroup } from '../../../redux/Group';
 export default function PostGroup() {
     const [open, setOpen] = useState(false);
-	const [post, setPost] = useState([]);
+	const post = useSelector(selectSelectedPostGroup);
+
     const openEdttor = () => {
         setOpen(!open);
     }
 	const { uuid } = useParams();
-	useEffect(() => {
-		const headers = {
-			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
-			conttentType: 'application/json'
-		};
-		Api.get(url + 'api/v1/posts?' + 'groupId=' + uuid, { headers: headers })
-			.then((response) => {
-				if (response.data.statusCode === 200) {
-					setPost(response.data.result.posts);
-				} else {
-					console.log(response.error);
-				}
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, []);
+	
 	return (
 		<div>
 			<div className="post-group">
@@ -43,7 +30,7 @@ export default function PostGroup() {
 			</div>
 			<div className="post-group__list">
 				{post && post.map((item, index) => (
-					<PostItem index={item.post.id} content={item.post.content} user={item.post.author} likes={item.post.reactions} type={item.post.type}  />
+					<PostItem index={item.post.id} content={item.post.content} user={item.post.author} likes={item.post.reactions} type={item.post.type} refUrls={item.post.refUrls} />
 				))}
 				</div>
 		</div>
