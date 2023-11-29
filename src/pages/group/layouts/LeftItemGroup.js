@@ -104,7 +104,7 @@ export default function LeftItemGroup() {
 			.then((response) => {
 				if (response.data.statusCode === 200) {
 					dispatch(selectPostGroup(response.data.result.posts));
-					console.log(response.data.result.posts);
+					
 					
 				} else {
 					console.log(response.error);

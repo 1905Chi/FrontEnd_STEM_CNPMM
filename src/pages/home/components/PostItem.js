@@ -22,6 +22,33 @@ function PostItem({ user, content, likes, index, type, refUrls }) {
 
 	function handleLike() {
 		setIsLiked(!isLiked); // Đảo ngược trạng thái khi nút "like" được nhấn
+		const headers = {
+			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+			conttentType: 'application/json',
+		};
+		let data = {}
+		if(isLiked === false){
+		 data={
+			postId:index,
+			typeCode:"LIKE",
+		}}
+		else{
+			data={
+				postId:index,
+				typeCode:"DISLIKE",
+			}
+		}		
+		Api.put(url+'api/v1/reactions', data, { headers: headers })
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					console.log(response.data.result);
+				} else {
+					console.log(response.error);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	}
 	const deletePost = () => {
 		const headers = {
@@ -145,7 +172,7 @@ function PostItem({ user, content, likes, index, type, refUrls }) {
 			</div>
 
 			<p className="likes-count">
-				{likes}
+			
 				likes
 			</p>
 			<div className="post-actions">

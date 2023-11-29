@@ -45,7 +45,8 @@ export default function Editor(props) {
 			Api.post(url + 'api/v1/comments', data, { headers: headers })
 				.then((response) => {
 					if (response.data.statusCode === 200) {
-						console.log(response.data.result.message);
+						console.log(response.data.message);
+						setValue('');
 					} else {
 						console.log(response.error);
 					}

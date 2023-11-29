@@ -10,7 +10,8 @@ import { useSelector } from 'react-redux';
 import { selectSelectedPostGroup } from '../../../redux/Group';
 export default function PostGroup() {
     const [open, setOpen] = useState(false);
-	const post = useSelector(selectSelectedPostGroup);
+	const postgroup = useSelector(selectSelectedPostGroup);
+	
 
     const openEdttor = () => {
         setOpen(!open);
@@ -29,7 +30,7 @@ export default function PostGroup() {
 				</button>
 			</div>
 			<div className="post-group__list">
-				{post && post.map((item, index) => (
+				{postgroup && postgroup.map((item) => (
 					<PostItem index={item.post.id} content={item.post.content} user={item.post.author} likes={item.post.reactions} type={item.post.type} refUrls={item.post.refUrls} />
 				))}
 				</div>
