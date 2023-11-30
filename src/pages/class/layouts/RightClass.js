@@ -10,7 +10,7 @@ import Loading from '../../../components/Loading';
 import Api from './../../../api/Api';
 import { selectSelectedGroupOwner,selectGroupOwner,selectGroupMember,selectSelectedGroupMember } from '../../../redux/Group';
 import { useSelector,useDispatch } from 'react-redux';
-
+import { selectselectuser } from '../../../redux/User';
 
 const { Search } = Input;
 const RightClass = () => {
@@ -29,7 +29,7 @@ const RightClass = () => {
 
 	const dispatch = useDispatch();
 	
-
+	const user=useSelector(selectselectuser);
 	useEffect(() => {
 		const headers = {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
@@ -97,11 +97,12 @@ const RightClass = () => {
 
 					<Search theme={theme} placeholder="Tìm kiếm Lớp" />
 				</div>
+				{user && user.role === 'TEACHER' ? (
 				<div className="button-add" onClick={create}>
 					<Button type="primary" style={{ width: '100%', marginTop: '10px', height: '50px' }}>
 						<span style={{ fontSize: '15px', fontWeight: '500' }}>+ Tạo Lớp </span>
 					</Button>
-				</div>
+				</div>):null}
 			</div>
 			<div style={{ margin: '200px 0 0 0' }}>
 				<div className="your-group">

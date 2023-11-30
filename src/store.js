@@ -7,6 +7,7 @@ import memberGroupReducer from './redux/MemberGroup';
 import eventGroupReducer from './redux/EventGroup';
 import friendReducer from './redux/Friend';
 import ExamReducer  from './redux/Exam';
+import UserReducer  from './redux/User';
 const   store =  configureStore({
   reducer: {
     menu: menuReducer,
@@ -15,6 +16,7 @@ const   store =  configureStore({
     eventItem:eventGroupReducer,
     friend:friendReducer,
     exam:ExamReducer,
+    user:UserReducer,
 
   },
 })

@@ -7,11 +7,44 @@ import { selectselectFriendRequest } from '../redux/Friend';
 import { Avatar } from 'antd';
 import { selectFriend } from '../redux/Friend';
 import "./../pages/friend/layouts/LeftFriend.css"
+import { toast,ToastContainer } from 'react-toastify';
+import { editFriendRequest } from '../redux/Friend';
+import { selectOption } from '../redux/Group';
+
 export default function Right() {
 	const dispatch = useDispatch();
 	const friendRequest = useSelector(selectselectFriendRequest);
   const accept = (status, id) => () => {
-    console.log(status, id);
+    if(status=== "ACCEPT"){
+		const headers = {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+		};
+		Api.put(url + 'api/v1/friend-requests/accept/'+id , { headers: headers })
+			.then((res) => {
+			   toast.success("Đã chấp nhận lời mời kết bạn")
+			   dispatch(editFriendRequest(id));
+			   dispatch(selectOption('all'));
+			})
+			.catch((err) => {
+				toast.error("Đã xảy ra lỗi")
+			});
+	}
+	if(status=== "REJECT"){
+		const headers = {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+		};
+		Api.put(url + 'api/v1/friend-requests/reject/'+id , { headers: headers })
+			.then((res) => {
+				toast.success("Đã xóa lời mời kết bạn")
+				dispatch(editFriendRequest(id));
+				dispatch(selectOption('all'));
+			})
+			.catch((err) => {
+				toast.error("Đã xảy ra lỗi")    
+			});
+	}
   };
 
 	useEffect(() => {
@@ -64,6 +97,7 @@ export default function Right() {
 							</div>
 						</div>
 					))}
+					<ToastContainer/>
 			</div>
 		</>
 	);

@@ -10,12 +10,13 @@ import { selectSelectedOption } from '../../../redux/Group';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import './LeftFriend.css';
 import anh_logo_1 from '../../../assets/images/anh_logo_1.jpg';
-import { selectselectFriendRequest } from '../../../redux/Friend';
+import { selectselectFriendRequest,editFriendRequest } from '../../../redux/Friend';
 import Api from '../../../../src/api/Api';
 import { url } from '../../../constants/Constant';
 import { selectFriendRequest } from '../../../redux/Friend';
 import { Avatar } from 'antd';
 import {toast, ToastContainer} from "react-toastify"; 
+import {selectFriendOfFriend} from "../../../redux/Friend";
 export default function LeftFriend() {
 	const dispatch = useDispatch();
 	const selectedOption = useSelector(selectSelectedOption);
@@ -31,12 +32,29 @@ export default function LeftFriend() {
 				.then((res) => {
 					console.log(res.data);
 					dispatch(selectFriendRequest(res.data.result));
+					
 				})
 				.catch((err) => {
 					console.log(err);
 				});
 		}
 	}, []);
+
+	const callInformationUser = (id) => {
+		const headers = {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+
+		};
+		Api.get(url + 'api/v1/users/friends-of-user?uId=' + id, { headers: headers })
+			.then((res) => {
+				dispatch(selectFriendOfFriend(res.data));
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
+	}
 
 	const accept = (status, id) => () => {
 		if(status=== "ACCEPT"){
@@ -47,6 +65,7 @@ export default function LeftFriend() {
             Api.put(url + 'api/v1/friend-requests/accept/'+id , { headers: headers })
                 .then((res) => {
                    toast.success("Đã chấp nhận lời mời kết bạn")
+				   dispatch(editFriendRequest(id));
                    dispatch(selectOption('all'));
                 })
                 .catch((err) => {
@@ -61,6 +80,7 @@ export default function LeftFriend() {
             Api.put(url + 'api/v1/friend-requests/reject/'+id , { headers: headers })
                 .then((res) => {
                     toast.success("Đã xóa lời mời kết bạn")
+					dispatch(editFriendRequest(id));
                     dispatch(selectOption('all'));
                 })
                 .catch((err) => {
@@ -129,6 +149,7 @@ export default function LeftFriend() {
 								key={item.id}
 								onClick={() => {
 									dispatch(selectFriend(item.id));
+									callInformationUser(item.id);
 								}}
 							>
 								<div style={{ flex: '2', margin: '15px', marginTop: '18px' }}>

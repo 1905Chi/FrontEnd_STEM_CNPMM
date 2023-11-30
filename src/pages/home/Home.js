@@ -4,16 +4,19 @@ import Post from './components/Post';
 import PostItem from './components/PostItem';
 import { ToastContainer, toast } from 'react-toastify';
 import Editor from './components/Editor';
+import { useSelector ,useDispatch} from 'react-redux';
+import { selectselectuser,selectuser } from '../../redux/User';
 
 function Home() {
   
  
   const [ispost, setIspost] = useState(false);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     if (localStorage.getItem('login')) {
       toast.success('Đăng nhập thành công');
       localStorage.removeItem('login');
+      dispatch(selectuser(JSON.parse(localStorage.getItem('user'))));
       
       
     }

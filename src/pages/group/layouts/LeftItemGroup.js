@@ -21,7 +21,7 @@ import{selectMemberGroupRequest} from './../../../redux/MemberGroup'
 import { selectOption } from "../../../redux/Group";
 import { useLocation } from 'react-router-dom';
 import { selectPostGroup } from '../../../redux/Group';
-
+import {selectexam} from "../../../redux/Exam";
 export default function LeftItemGroup() {
 	const { theme } = UseTheme();
 	const [role, setRole] = useState('GUEST');
@@ -113,10 +113,19 @@ export default function LeftItemGroup() {
 			.catch((error) => {
 				console.log(error);
 			});
-		// if(isClassesPath){
-		// 	Api.get(url + 'api/v1/group-members?groupId=' + uuid, { headers: headers })
-
-		// }
+		if(isClassesPath){
+			Api.get(url + 'api/v1/exams/group/' + uuid, { headers: headers })
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					dispatch(selectexam(response.data.result));
+				} else {
+					console.log(response.error);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+		}
 	}, []);
 
 	return (

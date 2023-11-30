@@ -27,17 +27,18 @@ export default function Profile() {
 	const [coverPhoto, setCoverPhoto] = useState();
 	const dispatch = useDispatch();
 	const selectedOption = useSelector(selectSelectedOptionProfile);
-	dispatch(selectOptionProfile('introduce'));
+	console.log(selectedOption);
+	
 
 	useEffect(() => {
 		const profile = JSON.parse(localStorage.getItem('user'));
-	
+		dispatch(selectOptionProfile('introduce'));
 		if (profile.avatarUrl) {
 			setAvatar(profile.avatarUrl);
 		} else {
 			setAvatar(anhlogo1);
 		}
-		if (profile.avatarUrl) {
+		if (profile.coverUrl) {
 			setCoverPhoto(profile.coverUrl);
 		} else {
 			setCoverPhoto(anhlogo1);
@@ -146,7 +147,7 @@ export default function Profile() {
 						<img src={coverPhoto} alt="Cover Photo" />
 					</div>
 					<button className="cover-picture__button" style={{ height: '40px' }} onClick={setEditCoverPhoto}>
-						<AiFillCamera style={{ fontSize: '30px', margin: '0 0 0 5px', color: 'white' }}></AiFillCamera>{' '}
+						<AiFillCamera style={{ fontSize: '30px', margin: '0 0 0 5px', color: 'white' }}></AiFillCamera>
 						<span style={{ fontSize: '15px', color: 'white', margin: '0 5px 0 0' }}>Chỉnh sửa ảnh bìa</span>
 					</button>
 				</div>
@@ -166,7 +167,7 @@ export default function Profile() {
 						<button className="edit-profile__button" style={{ height: '40px' }} onClick={setEditProfile}>
 							<BsPencilFill
 								style={{ fontSize: '30px', margin: '0 0 0 5px', color: 'white' }}
-							></BsPencilFill>{' '}
+							></BsPencilFill>
 							<span style={{ fontSize: '15px', color: 'white', margin: '0 5px 0 0' }}>
 								Chỉnh sửa thông tin cá nhân
 							</span>
@@ -190,7 +191,7 @@ export default function Profile() {
 							dispatch(selectOptionProfile('introduce'));
 						}}
 					>
-						{' '}
+						
 						<h3>Giới thiệu</h3>
 					</button>
 					<button
@@ -199,7 +200,7 @@ export default function Profile() {
 							dispatch(selectOptionProfile('post'));
 						}}
 					>
-						{' '}
+						
 						<h3>Bài Viết</h3>
 					</button>
 					<button
@@ -208,7 +209,7 @@ export default function Profile() {
 							dispatch(selectOptionProfile('member'));
 						}}
 					>
-						{' '}
+						
 						<h3>Bạn bè</h3>
 					</button>
 					<button
@@ -226,33 +227,33 @@ export default function Profile() {
 							<h3>Giới thiệu</h3>
 							{JSON.parse(localStorage.getItem('user')).phone ? (
 								<div style={{ width: '100%', margin: '5px 0' }}>
-									<AiFillPhone className="icon-profile"></AiFillPhone>:{' '}
+									<AiFillPhone className="icon-profile"></AiFillPhone>:
 									{JSON.parse(localStorage.getItem('user')).phone}
 								</div>
 							) : null}
 							{JSON.parse(localStorage.getItem('user')).date ? (
 								<div style={{ width: '100%', margin: '5px 0' }}>
-									<LiaBirthdayCakeSolid className="icon-profile"></LiaBirthdayCakeSolid>:{' '}
+									<LiaBirthdayCakeSolid className="icon-profile"></LiaBirthdayCakeSolid>:
 									{JSON.parse(localStorage.getItem('user')).date}
 								</div>
 							) : null}
 
 							{JSON.parse(localStorage.getItem('user')).gender ? (
 								<div style={{ width: '100%', margin: '5px 0' }}>
-									<BsGenderTrans className="icon-profile"></BsGenderTrans>:{' '}
+									<BsGenderTrans className="icon-profile"></BsGenderTrans>:
 									{JSON.parse(localStorage.getItem('user')).gender}
 								</div>
 							) : null}
 
 							{JSON.parse(localStorage.getItem('user')).workAt ? (
 								<div style={{ width: '100%', margin: '5px 0' }}>
-									<TbBuildingFactory className="icon-profile"></TbBuildingFactory>:{' '}
+									<TbBuildingFactory className="icon-profile"></TbBuildingFactory>:
 									{JSON.parse(localStorage.getItem('user')).workAt}
 								</div>
 							) : null}
 							{JSON.parse(localStorage.getItem('user')).address ? (
 								<div style={{ width: '100%', margin: '5px 0' }}>
-									<CiLocationOn className="icon-profile"></CiLocationOn>:{' '}
+									<CiLocationOn className="icon-profile"></CiLocationOn>:
 									{JSON.parse(localStorage.getItem('user')).address}
 								</div>
 							) : null}

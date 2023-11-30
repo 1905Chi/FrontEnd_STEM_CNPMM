@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { selectUser, selectselectUser } from '../../../redux/MemberGroup';
 import Api from '../../../../src/api/Api';
 import { url } from '../../../constants/Constant';
+import { selectselectFriendOfFriend } from '../../../redux/Friend';
 export default function Profile(props) {
 	const [avatar, setAvatar] = useState();
 	const [coverPhoto, setCoverPhoto] = useState();
@@ -23,9 +24,10 @@ export default function Profile(props) {
 	const navigate = useNavigate();
 	const { uuid } = useParams();
 	const user = useSelector(selectselectUser);
+	const friendOfFriend = useSelector(selectselectFriendOfFriend);
 
 	useEffect(() => {
-		const profile = JSON.parse(localStorage.getItem('user'));
+		
 		if (uuid && uuid === JSON.parse(localStorage.getItem('user')).id) {
 			navigate('/profile');
 		} else if (uuid && uuid !== JSON.parse(localStorage.getItem('user')).id) {
@@ -38,7 +40,7 @@ export default function Profile(props) {
 					console.log(err);
 				});
 		} else {
-			console.log(props.id);
+			
 			dispatch(selectOptionProfile('introduce'));
 			Api.get(url + 'api/v1/users/' + props.id)
 				.then((res) => {
@@ -211,6 +213,23 @@ export default function Profile(props) {
 					) : (
 						''
 					)}
+					{selectedOption === 'member' ? (
+						<div style={{ margin: '125px 0 0 0' }}>
+							{ friendOfFriend.lenght>0 && friendOfFriend.map((item, index) => {
+								return (
+									<div key={index} className="friend">
+										<div className="friend-avatar">
+											<img src={item.avatarUrl === null ? item.avatarUrl : anhlogo1} alt="" />
+										</div>
+										<div className="friend-name">
+											<span>{item.firstName + ' ' + item.lastName}</span>
+										</div>
+									</div>
+								);
+							})}
+						</div>
+					) : null}
+
 
 					{selectedOption === 'post' ? (
 						<div style={{ margin: '125px 0 0 0' }}>

@@ -7,6 +7,8 @@ import axios from 'axios';
 import { url } from '../../../constants/Constant';
 import { Link, useNavigate } from 'react-router-dom';
 import Loading from '../../../components/Loading';
+import { useDispatch,useSelector } from 'react-redux';
+import { selectuser,selectselectuser} from '../../../redux/User';
 
 import './Login.css';
 
@@ -17,8 +19,8 @@ function Login() {
 	const register = () => {
 		navigate('/');
 	};
-
-	const onFinish = (values) => {
+	const dispatch = useDispatch();
+	const onFinish  =  (values) => {
 		// Thực hiện kiểm tra đăng nhập tại đây
 		setLoading(true);
 		const data = { email: values.email, password: values.password };
@@ -40,10 +42,10 @@ function Login() {
 							'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
 						},
 					})
-						.then((response) => {
+						.then(async (response) => {
 							if (response.data.statusCode === 200) {
-								localStorage.setItem('user', JSON.stringify(response.data.result));
-								console.log(response.data.result);
+								 localStorage.setItem('user', JSON.stringify(response.data.result))
+								 
 								window.location.href = '/home';
 							} else {
 								toast.error(response.data.message);

@@ -1,6 +1,7 @@
 import { Button, Divider, List, Space, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import UseTheme from './UseTheme';
+import { FaUserFriends } from "react-icons/fa";
 import './Left.css'
 import { useNavigate } from 'react-router-dom';
 import {
@@ -47,9 +48,11 @@ const Left = () =>{
 			href: '/settings',
 		},
 		{
-			title: 'Trợ giúp',
-			icon: FcCustomerSupport,
-			href: '/help',
+			title: 'Bạn bè',
+			icon: FaUserFriends,
+			onClick: () => {
+				navigate('/friends');
+			},
 		},
 		{
 			title: 'Báo lỗi',
