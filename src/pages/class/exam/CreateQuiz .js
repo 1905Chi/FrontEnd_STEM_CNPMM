@@ -9,9 +9,12 @@ import Api from '../../../api/Api';
 import { url } from '../../../constants/Constant';
 import Loading from '../../../components/Loading';
 import { useNavigate } from 'react-router-dom';
+import { Select } from 'antd';
+
 const CreateQuiz = () => {
 	const [form] = Form.useForm();
 	const navigate = useNavigate();
+	const { Option } = Select;
 	const [answerTypes, setAnswerTypes] = useState(['single']); // 'single' or 'multiple'
 	const [editingIndex, setEditingIndex] = useState(-1);
 	const { uuid } = useParams();
@@ -31,6 +34,7 @@ const CreateQuiz = () => {
 			endedAt: values.endedAt.format('DD-MM-YYYY HH:mm:ss:SSSSSS'),
 			isEnabled: true,
 			level: values.level,
+			numberOfQuestion: Number(values.numberOfQuestion),
 			maxScore: 100,
 			questions: [],
 		};
@@ -139,8 +143,16 @@ const CreateQuiz = () => {
 					<Input placeholder="Nhập thời gian làm bài" style={{ width: '60%' }} />
 				</Form.Item>
 				<Form.Item name="level" rules={[{ required: true, message: 'Vui lòng nhập mức độ bài kiểm tra!' }]}>
-					<Input placeholder="Nhập mức độ bài kiểm tra" style={{ width: '60%' }} />
+					<Select placeholder="Chọn mức độ bài kiểm tra" style={{ width: '60%' }}>
+						<Option value="Easy">Dễ</Option>
+						<Option value="Medium">Trung bình</Option>
+						<Option value="Hard">Khó</Option>
+					</Select>
 				</Form.Item>
+				<Form.Item name="numberOfQuestion" rules={[{ required: true, message: 'Nhập số lượng câu hỏi mỗi bài kiểm tra' }]}>
+					<Input placeholder="Nhập số lượng câu hỏi mỗi bài kiểm tra" style={{ width: '60%' }} />
+				</Form.Item>
+						
 				<Form.Item name="staredAt" rules={[{ required: true, message: 'Vui lòng nhập thời gian bắt đầu!' }]}>
 					<DatePicker placeholder="Chọn thời gian bắt đầu" showTime />
 				</Form.Item>

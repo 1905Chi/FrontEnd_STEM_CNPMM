@@ -64,6 +64,9 @@ export default function Right() {
 	return (
 		<>
 			<div className="friend-request">
+				<div className="friend-request__title">
+					<p>Lời mời kết bạn</p>
+				</div>
 				{friendRequest &&
 					friendRequest.map((item, index) => (
 						<div
@@ -75,12 +78,12 @@ export default function Right() {
 						>
 							<div style={{ flex: '2', margin: '15px', marginTop: '18px' }}>
 								<div className="friend-request__item__avatar">
-									<Avatar src={item.avartarUrl} alt="" />
+									<Avatar src={item.sender.avartarUrl} alt="" />
 								</div>
 							</div>
 							<div className="friend-request__item__button">
 								<div className="friend-request__item__name">
-									<p>{item.firstName + ' ' + item.lastName}</p>
+									<p>{item.sender.firstName + ' ' + item.sender.lastName}</p>
 								</div>
 								<div style={{ textAlign: 'start' }}>
 									<button

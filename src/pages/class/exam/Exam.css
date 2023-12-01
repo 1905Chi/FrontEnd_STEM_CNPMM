@@ -18,8 +18,7 @@
     margin:15px 15px 0 15px;
     padding: 15px;
     background-color: white;
-    border-radius: 10px;
-    border: 2px solid #c4bebe;
+ 
 }
 
 .exam-class__item__title button {
@@ -28,7 +27,16 @@
 .exam-class__item__title button:hover {
     background-color: white;
 }
+.exam-class__item{
+    border-radius: 10px;
+    border: 2px solid #c4bebe;
+    margin-bottom: 10px;
+    padding: 10px;
+}
 
 .exam-class__create button:hover{
     background-color: white;
+}
+.exam-class__item__content__item{
+    text-align: center;
 }

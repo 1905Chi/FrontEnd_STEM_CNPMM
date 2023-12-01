@@ -74,6 +74,7 @@ export default function RegisterTeacher(props) {
 			})
 			.finally(() => {
 				setLoading(false);
+				props.cancelRegister();
 			});
 
 		// Xử lý logic xác thực email ở đây (gửi email xác thực, kiểm tra địa chỉ email, vv.)
@@ -185,8 +186,9 @@ export default function RegisterTeacher(props) {
 							</Button>
 						</div>
 					</Form>
+					<ToastContainer style={{zIndex:999}} />
 				</div>
-				<ToastContainer style={{zIndex:1000}}/>
+				
 			</div>
 		</>
 	);

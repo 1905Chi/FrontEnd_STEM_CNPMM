@@ -17,6 +17,7 @@ const RightClass = () => {
 	const [theme, setTheme] = useState('dark');
 	const [current, setCurrent] = useState('1');
 	const [loading, setLoading] = useState(false);
+	const [listClass, setListClass] = useState([]);
 	const navigate = useNavigate();
 	const changeTheme = (value) => {
 		setTheme(value ? 'dark' : 'light');
@@ -28,7 +29,10 @@ const RightClass = () => {
 	const mygroup = useSelector(selectSelectedGroupOwner);
 
 	const dispatch = useDispatch();
+	const searchClass = (e) => {
 	
+		console.log(e.target.value);
+	}
 	const user=useSelector(selectselectuser);
 	useEffect(() => {
 		const headers = {
@@ -95,7 +99,7 @@ const RightClass = () => {
 				<div className="header-left">
 					<h1 style={{ textAlign: 'center' }}>Lớp</h1>
 
-					<Search theme={theme} placeholder="Tìm kiếm Lớp" />
+					<Search theme={theme} placeholder="Tìm kiếm Lớp" onChange={searchClass} />
 				</div>
 				{user && user.role === 'TEACHER' ? (
 				<div className="button-add" onClick={create}>
@@ -104,7 +108,7 @@ const RightClass = () => {
 					</Button>
 				</div>):null}
 			</div>
-			<div style={{ margin: '200px 0 0 0' }}>
+			<div style={{ margin: '133px 0 0 0' }}>
 				<div className="your-group">
 					<div style={{ display: 'flex', justifyContent: 'space-around' }}>
 						<h4>Lớp học của bạn</h4>

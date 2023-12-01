@@ -56,8 +56,8 @@ const Topbar = () => {
 
 	const end = () => {
 		return (
-			<div className="end-topbar">
-				{user && user.avatarUrl ? (<div className="avatar-topbar" onClick={toProfile}>
+			<div className="end-topbar" onClick={toProfile}>
+				{user && user.avatarUrl ? (<div className="avatar-topbar" >
 					<img
 						alt="avatar"
 						src={user.avatarUrl}

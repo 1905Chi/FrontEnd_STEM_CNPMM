@@ -13,12 +13,12 @@ import MemberGroup from '../components/MemberGroup';
 import EventGroup from '../components/EventGroup';
 import DocumentGroup from '../components/DocumentGroup';
 import Exam from '../../class/exam/Exam';
+import { selectselectMemberGroup } from '../../../redux/MemberGroup';
 export default function MainGroup() {
   const selectedOption = useSelector(selectSelectedOption);
   const inforGroup = useSelector(selectselectGroup);
   const { uuid } = useParams();
-
-
+  const memberGroup = useSelector(selectselectMemberGroup);
   return (
     <>
     
@@ -29,8 +29,8 @@ export default function MainGroup() {
           <div>
             <div style={{ margin: '25px', borderRadius: '10px', padding: '5px', background: 'aliceblue' }}>
               <h3 style={{ borderBottom: '0.5px solid black' }}>Giới thiệu về nhóm này</h3>
-              <h4>Đây là nhóm: {inforGroup.config.accessibility ==='PUBLIC'? ('Công Khai') : 'Riêng tư'}</h4>
-              <h4>Thành viên: 100</h4>
+              <h4>Đây là nhóm: {  inforGroup && inforGroup.config.accessibility ==='PUBLIC'? ('Công Khai') : 'Riêng tư'}</h4>
+              <h4>Thành viên: { memberGroup && memberGroup.length}</h4>
               <h4>Ngày tạo: {inforGroup.createdAt}</h4>
             </div>
             <div style={{ margin: '25px', borderRadius: '10px', padding: '5px', background: 'aliceblue' }}>

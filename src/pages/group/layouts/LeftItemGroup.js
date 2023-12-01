@@ -18,6 +18,7 @@ import { selectselectMemberGroup } from './../../../redux/MemberGroup';
 import { selecteventGroup } from './../../../redux/EventGroup';
 import { selectMemberGroup } from './../../../redux/MemberGroup';
 import{selectMemberGroupRequest} from './../../../redux/MemberGroup'
+import { selectUser,selectselectUser } from './../../../redux/MemberGroup';
 import { selectOption } from "../../../redux/Group";
 import { useLocation } from 'react-router-dom';
 import { selectPostGroup } from '../../../redux/Group';
@@ -60,6 +61,7 @@ export default function LeftItemGroup() {
 
 					setGroup(response.data.result.group);
 					dispatch(selectGroup(response.data.result.group));
+					dispatch(selectUser(response.data.result.user));
 				} else {
 					toast.error(response.data.message);
 				}
