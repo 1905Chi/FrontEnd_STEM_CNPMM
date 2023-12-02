@@ -5,12 +5,13 @@
 }
 .login-container {
   margin: 0;
-  width: 25%;
+  width: 74%;
   padding: 16px;
-  max-width: 320px;
+  max-width: 617px;
   border-radius: 12px;
   background-color: #f8f8f8;
   border: 3px solid #007bff;
+  display: flex;
 
 
 }
@@ -97,6 +98,7 @@ button:hover {
 }
 
 .logo{
-  width: 330px;
-  height: 110px;
+  width: 100%;
+  height: auto;
+  padding-top: 71px;
 }

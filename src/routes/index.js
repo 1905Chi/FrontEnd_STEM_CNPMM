@@ -29,6 +29,8 @@ import LeftFriend from '../pages/friend/layouts/LeftFriend';
 import MainFriend from '../pages/friend/MainFriend';
 import  ProfileUser from '../pages/profile/ProfileUser/Profile';
 import ExamItem from '../pages/class/exam/ExamItem/ExamItem';
+import Submit from '../pages/class/exam/ExamItem/Submit';
+import LeftSubmit from '../pages/class/layouts/LeftSubmit';
 const privateRoutes = [
 	{ path: '/home', component: Home, Left: Left, Right: Right },
 	{ path: '/groups', component: Home, Left: LeftsGroup, Right: Right },
@@ -48,6 +50,7 @@ const privateRoutes2page = [
 	{ path: '/profile', component: Profile, Left: Left },
 	{ path: '/profile/:uuid', component: ProfileUser, Left: Left },
 	{ path: '/classes/:uuid/exam/:id', component: ExamItem, Left: LeftItemClass },
+	{ path: '/exam/:id/submit/:submissionId', component: Submit, Left: LeftSubmit },
 ];
 const publicRoutes = [
 	{ path: '/login', component: Login },

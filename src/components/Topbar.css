@@ -98,3 +98,7 @@ span {
     align-items: center;
     justify-content: center;
 }
+
+.name-topbar{
+    display: flex;
+}

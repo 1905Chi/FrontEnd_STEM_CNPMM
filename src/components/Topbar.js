@@ -5,13 +5,14 @@ import { InputText } from 'primereact/inputtext';
 import {useNavigate} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectselectuser } from '../redux/User';
-const Topbar = () => {
+const Topbar = (props) => {
 	const [activeIndex, setActiveIndex] = useState(1);
 	const navigate = useNavigate();
 	const user=useSelector(selectselectuser);
 	const toProfile = () => {
 		navigate('/profile');
 	}
+	const [isLogin, setIsLogin] = useState(localStorage.getItem('accessToken') ? true : false);
 	const items = [
 		{
 			label: 'Trang chủ',
@@ -56,22 +57,29 @@ const Topbar = () => {
 
 	const end = () => {
 		return (
-			<div className="end-topbar" onClick={toProfile}>
-				{user && user.avatarUrl ? (<div className="avatar-topbar" >
+			<div className="end-topbar" >
+				{!isLogin  ?<div className="name-topbar" >
+
+					<button className="login-topbar" onClick={() => navigate('/login')}>Đăng nhập</button>
+					<button className="register-topbar" onClick={props.scrollToSection}>Đăng ký</button>
+				</div> : null
+				}
+				{ isLogin && user && user.avatarUrl ? (<div className="avatar-topbar" onClick={toProfile} >
 					<img
 						alt="avatar"
 						src={user.avatarUrl}
 						height="40"
 						className="mr-2"
 					></img>
-				</div>): <div className="avatar-topbar">
+				</div>): null }
+				{ isLogin && !user.avatarUrl ? (<div className="avatar-topbar" onClick={toProfile}>
 					<img
 						alt="avatar"
-						src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
+						src="https://www.w3schools.com/howto/img_avatar.png"
 						height="40"
 						className="mr-2"
 					></img>
-				</div> }
+					</div>): null}
 				
 			</div>
 		);

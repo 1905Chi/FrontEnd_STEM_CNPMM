@@ -11,6 +11,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { selectselectuser } from '../../../../redux/User';
 import { selectsubmition } from '../../../../redux/Exam';
 import { useDispatch } from 'react-redux';
+import { selectexam, selectselectexam } from '../../../../redux/Exam';
 export default function ExamItem(props) {
 	const { id } = useParams();
     const navigate = useNavigate();
@@ -18,6 +19,7 @@ export default function ExamItem(props) {
 	const [examId, setExamId] = useState();
 	const user = useSelector(selectselectuser);
 	const [isWithinTimeRange, setIsWithinTimeRange] = useState(false);
+
 const CreateSubmit = () => {
         const headers = {
             Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
@@ -50,13 +52,14 @@ const CreateSubmit = () => {
 				if (response.data.statusCode === 200) {
 					setExamId(response.data.result);
 					const startTime = new Date(examId.exam.staredAt).getTime();
-					console.log('start ', startTime);
+	
 
 					const endTime = new Date(examId.exam.endedAt).getTime();
-					console.log('end ', endTime);
+					
+					dispatch(selectexam(response.data.result));
 
 					const now = new Date();
-					console.log('now ', now);
+					
 					const nowTime =
 						now.getDate() +
 						'-' +
@@ -69,9 +72,9 @@ const CreateSubmit = () => {
 						now.getMinutes() +
 						':' +
 						now.getSeconds();
-					console.log('now ', nowTime);
+
 					const nowDate = new Date(nowTime).getTime();
-					console.log('now ', nowDate);
+				
 
 					if (nowDate >= startTime && nowDate <= endTime) {
 						setIsWithinTimeRange(true);
@@ -122,7 +125,7 @@ const CreateSubmit = () => {
 					) : null}
 					{user.role === 'STUDENT' && examId && examId.submission !== null  && examId.submission.endedAt === null? (
 						<div className="exam-item__button">
-							<button className="exam-item__button__start" onClick={() => {}}>
+							<button className="exam-item__button__start" onClick={CreateSubmit}>
 								Tiếp tục làm bài
 							</button>
 						</div>

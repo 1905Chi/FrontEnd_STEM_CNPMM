@@ -97,13 +97,14 @@ function Login() {
 			}
 			<div className="body-login">
 				<div className="login-container">
-					<div style={{ overflow: 'hidden' }}>
+					<div style={{ overflow: 'hidden', width:'75%' }}>
 						<img
 							src="https://in3ds.com/wp-content/uploads/2019/04/y-tuong-giao-duc-STEM.png"
 							alt="logo"
 							className="logo"
 						/>
 					</div>
+					<div style={{width:'75%'}}>
 					<h2> Đăng nhập </h2>
 					<Form name="basic" onFinish={onFinish} onFinishFailed={onFinishFailed}>
 						<Form.Item
@@ -149,6 +150,7 @@ function Login() {
 							</div>
 						</Form.Item>
 					</Form>
+					
 					<div className="login-footer">
 						<Link to="/forgot-password" style={{ textDecoration: 'none', color: 'blue' }}>
 							Quên mật khẩu ?{' '}
@@ -162,6 +164,8 @@ function Login() {
 								Đăng ký
 							</Button>
 						</div>
+						
+					</div>
 					</div>
 				</div>
 				<ToastContainer />
