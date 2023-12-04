@@ -92,14 +92,14 @@ const RightClass = () => {
 
 	return (
 		<>
-			<div style={{ position: 'fixed', top: '60px', zIndex: '999', width: '280px', backgroundColor: 'white' }}>
+			<div style={{ position: 'fixed', top: '60px', zIndex: '700', width: '25%', backgroundColor: 'white', marginLeft:'15px' }}>
 				{loading ? ( // Nếu đang loading thì hiển thị component loading
 					<Loading Loading={loading}></Loading>
 				) : null}
-				<div className="header-left">
+				<div className="header-left" style={{}}>
 					<h1 style={{ textAlign: 'center' }}>Lớp</h1>
 
-					<Search theme={theme} placeholder="Tìm kiếm Lớp" onChange={searchClass} />
+					<Search theme={theme} placeholder="Tìm kiếm Lớp" onChange={searchClass}  style={{textAlign: 'center'}}/>
 				</div>
 				{user && user.role === 'TEACHER' ? (
 				<div className="button-add" onClick={create}>
@@ -108,7 +108,7 @@ const RightClass = () => {
 					</Button>
 				</div>):null}
 			</div>
-			<div style={{ margin: '133px 0 0 0' }}>
+			<div style={{ margin: '190px 0 0 0' }}>
 				<div className="your-group">
 					<div style={{ display: 'flex', justifyContent: 'space-around' }}>
 						<h4>Lớp học của bạn</h4>

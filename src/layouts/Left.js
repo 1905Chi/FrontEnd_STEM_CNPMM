@@ -18,8 +18,8 @@ import {
 const Left = () =>{
     const { theme } = UseTheme();
 	const navigate = useNavigate();
-    const openReport = () => {
-        // openModal(<ReportModal />);
+    const openMessager = () => {
+		navigate('/messenger');
     };
 
 	//Đăng xuất
@@ -55,9 +55,9 @@ const Left = () =>{
 			},
 		},
 		{
-			title: 'Báo lỗi',
+			title: 'Tin nhắn',
 			icon: FcFeedback,
-			onClick: openReport,
+			onClick: openMessager,
 		},
 		{
 			title: 'Giới thiệu',

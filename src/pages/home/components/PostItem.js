@@ -126,12 +126,12 @@ function PostItem({ user, content, likes, index, type, refUrls }) {
 				</Editor>
 			) : null}
 			<div className="user-info">
-				<div className="avatarPost" style={{ flex: 1 }}>
+				<div className="avatarPost" style={{ flex: 1 , marginTop:'15px'}}>
 					<Avatar src={user.avatarUrl} />
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'row', flex: 9 }}>
-					<a href="" style={{ textDecoration: 'none', color: 'black' }}>
-						<p className="user-name"> {user.firstName + ' ' + user.lastName} </p>
+					<a  style={{ textDecoration: 'none', color: 'black' }}>
+						<p className="user-name" style={{fontWeight:'bold'}}> {user.firstName + ' ' + user.lastName} </p>
 					</a>
 					<p className="user-name" style={{ display: 'block' }}>
 						{' '}

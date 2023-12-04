@@ -93,22 +93,22 @@ const LeftsGroup = () => {
 
 	return (
 		<>
-			<div style={{ position: 'fixed', top: '60px', zIndex: '999', width: '280px', backgroundColor: 'white' }}>
+			<div style={{ position: 'fixed', top: '60px', zIndex: '700', width: '25%', backgroundColor: 'white', marginLeft:"35px" }}>
 				{loading ? ( // Nếu đang loading thì hiển thị component loading
 					<Loading Loading={loading}></Loading>
 				) : null}
 				<div className="header-left">
-					<h1 style={{ textAlign: 'start' }}>Nhóm</h1>
+					<h1 style={{ textAlign: 'center' }}>Nhóm</h1>
 
 					<Search theme={theme} placeholder="Tìm kiếm nhóm" />
 				</div>
 				<div className="button-add" onClick={create}>
-					<Button type="primary" style={{ width: '100%', marginTop: '10px', height: '50px' }}>
+					<Button type="primary" style={{ width: '100%', marginTop: '10px', height: '50px' , marginLeft:'0px'}}>
 						<span style={{ fontSize: '15px', fontWeight: '500' }}>+ Tạo nhóm</span>
 					</Button>
 				</div>
 			</div>
-			<div style={{ margin: '200px 0 0 0' }}>
+			<div style={{ margin: '228px 0 0 0' }}>
 				<div className="your-group">
 					<div style={{ display: 'flex', justifyContent: 'space-around' }}>
 						<h4>Nhóm do bạn quản lý</h4>
@@ -121,7 +121,7 @@ const LeftsGroup = () => {
 				</div>
 				<div className="your-group">
 					<div style={{ display: 'flex', justifyContent: 'space-around' }}>
-						<h4>Nhóm do tham gia</h4>
+						<h4>Nhóm bạn tham gia</h4>
 						<h4 style={{ color: 'blue' }}>Xem thêm</h4>
 					</div>
 					{group &&group.map((group, index) => {

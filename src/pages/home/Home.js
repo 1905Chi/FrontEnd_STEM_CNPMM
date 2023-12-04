@@ -6,20 +6,37 @@ import { ToastContainer, toast } from 'react-toastify';
 import Editor from './components/Editor';
 import { useSelector ,useDispatch} from 'react-redux';
 import { selectselectuser,selectuser } from '../../redux/User';
-
+import Api from '../../api/Api';
+import { url } from '../../constants/Constant';
+import { Skeleton } from 'antd';
 function Home() {
   
  
   const [ispost, setIspost] = useState(false);
   const dispatch = useDispatch();
+ const [listpost, setListpost] = useState([]);
+ const [page, setPage] = useState(1);
+ const [size, setSize] = useState(30);
   useEffect(() => {
     if (localStorage.getItem('login')) {
       toast.success('Đăng nhập thành công');
-      localStorage.removeItem('login');
-      dispatch(selectuser(JSON.parse(localStorage.getItem('user'))));
-      
-      
+      localStorage.removeItem('login');      
     }
+    dispatch(selectuser(JSON.parse(localStorage.getItem('user'))));
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('user')).token,
+    };
+    Api.get(url+`api/v1/posts/home-posts?page=${page}&size=${size}`, {headers:headers}).then((response) => {
+      if (response.data.statusCode === 200) {
+        setListpost(response.data.result);
+      } else {
+        console.log(response.error);
+      }
+      
+    }).catch((error) => {
+      console.log(error);
+    });
 
   }, []);
 
@@ -99,8 +116,7 @@ const openInput=()=>{
   return (
     <>
       <div className="home-page">
-      <button className="btn btn-primary" onClick={openInput}>Đăng</button>
-      {ispost && <div className=""> <Editor cancel={openInput} /></div>}
+    {post.length === 0 ?<Skeleton active /> : null}
       {post.map((post, index) => {
         return (
           <PostItem

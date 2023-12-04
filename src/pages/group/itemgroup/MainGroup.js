@@ -25,27 +25,13 @@ export default function MainGroup() {
       <div>
         <BannerGroup />
 
-        {(selectedOption === 'introduce' && inforGroup!== null) ? (
-          <div>
-            <div style={{ margin: '25px', borderRadius: '10px', padding: '5px', background: 'aliceblue' }}>
-              <h3 style={{ borderBottom: '0.5px solid black' }}>Giới thiệu về nhóm này</h3>
-              <h4>Đây là nhóm: {  inforGroup && inforGroup.config.accessibility ==='PUBLIC'? ('Công Khai') : 'Riêng tư'}</h4>
-              <h4>Thành viên: { memberGroup && memberGroup.length}</h4>
-              <h4>Ngày tạo: {inforGroup.createdAt}</h4>
-            </div>
-            <div style={{ margin: '25px', borderRadius: '10px', padding: '5px', background: 'aliceblue' }}>
-              <h3 style={{ borderBottom: '0.5px solid black' }}>Quy tắc của quản trị viên:</h3>
-              <p>{inforGroup.config.description}</p>
-            </div>
-          </div>
-        ) : null}
+       
         {selectedOption === 'post' ? <PostGroup /> : null}
         {selectedOption === 'member' ? <MemberGroup /> : null}
         {selectedOption === 'event' ? <EventGroup /> : null}
         {selectedOption === 'question' ? <QuestionGroup /> : null}
         {selectedOption === 'document' ? <DocumentGroup /> : null}
         {selectedOption === 'exam' ? <Exam /> : null} 
-
 
        
 

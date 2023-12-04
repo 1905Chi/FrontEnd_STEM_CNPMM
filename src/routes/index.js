@@ -31,12 +31,17 @@ import  ProfileUser from '../pages/profile/ProfileUser/Profile';
 import ExamItem from '../pages/class/exam/ExamItem/ExamItem';
 import Submit from '../pages/class/exam/ExamItem/Submit';
 import LeftSubmit from '../pages/class/layouts/LeftSubmit';
+import LeftMessenger from '../pages/messenger/layouts/LeftMessenger';
+import RightMessenger from '../pages/messenger/layouts/RightMessenger';
+import Main from '../pages/messenger/main/Main';
 const privateRoutes = [
 	{ path: '/home', component: Home, Left: Left, Right: Right },
-	{ path: '/groups', component: Home, Left: LeftsGroup, Right: Right },
+	
 	{ path: '/groups/:uuid', component: MainGroup, Left: LeftItemGroup, Right: RightItemGroup },
 	{ path: '/classes/:uuid', component: MainGroup, Left: LeftItemGroup, Right: RightItemGroup },
-	{ path: '/classes', component: Class, Left: LeftClass, Right: RightClass },
+	{ path: '/messenger', component: Main, Left: LeftMessenger, Right: RightMessenger },
+
+	
 
 	
 ];
@@ -51,6 +56,8 @@ const privateRoutes2page = [
 	{ path: '/profile/:uuid', component: ProfileUser, Left: Left },
 	{ path: '/classes/:uuid/exam/:id', component: ExamItem, Left: LeftItemClass },
 	{ path: '/exam/:id/submit/:submissionId', component: Submit, Left: LeftSubmit },
+	{ path: '/classes', component: Class, Left: RightClass  },
+	{ path: '/groups', component: Home, Left: LeftsGroup},
 ];
 const publicRoutes = [
 	{ path: '/login', component: Login },

@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Loading from '../../../components/Loading';
 import { useDispatch,useSelector } from 'react-redux';
 import { selectuser,selectselectuser} from '../../../redux/User';
+import { UseSelector } from 'react-redux/es/hooks/useSelector';
 
 import './Login.css';
 
@@ -45,7 +46,8 @@ function Login() {
 						.then(async (response) => {
 							if (response.data.statusCode === 200) {
 								 localStorage.setItem('user', JSON.stringify(response.data.result))
-								 
+								 dispatch(selectuser(response.data.result));	
+											 
 								window.location.href = '/home';
 							} else {
 								toast.error(response.data.message);

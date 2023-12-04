@@ -68,7 +68,7 @@
   position: relative;
 }
 .post-content{
-  margin: 0 0 90px 30px;
+  margin: 0 0 30px 30px;
 }
 
 .post-content img{
@@ -126,6 +126,10 @@
   position: relative;
 }
 
+.content-container button :hover{
+  background-color: aliceblue;
+
+}
 
 .show-more.active {
   display: block;

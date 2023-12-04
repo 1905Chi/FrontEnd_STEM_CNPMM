@@ -8,6 +8,8 @@ import eventGroupReducer from './redux/EventGroup';
 import friendReducer from './redux/Friend';
 import ExamReducer  from './redux/Exam';
 import UserReducer  from './redux/User';
+import MessengerReducer from './redux/Messenger';
+
 const   store =  configureStore({
   reducer: {
     menu: menuReducer,
@@ -17,6 +19,7 @@ const   store =  configureStore({
     friend:friendReducer,
     exam:ExamReducer,
     user:UserReducer,
+    messageItem:MessengerReducer,
 
   },
 })
