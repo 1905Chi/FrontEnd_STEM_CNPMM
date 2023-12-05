@@ -94,7 +94,7 @@ const Left = () =>{
 
 	return (
         
-		<Space  className="sidebar" direction="vertical" style={{ overflowY: 'auto',color: theme.foreground, background: theme.background }}>
+		<Space  className="sidebar" direction="vertical" style={{ color: theme.foreground, background: theme.background }}>
 			{lists.map((list, index) => (
 				<List
 					key={index}
