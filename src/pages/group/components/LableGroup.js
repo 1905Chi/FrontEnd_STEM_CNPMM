@@ -1,14 +1,16 @@
 import './LableGroup.css';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-export default function LableGroup({ image, name, id }) {
+export default function LableGroup({ image, name, id, type }) {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const isclass = location.pathname.includes('classes');
+	const isclass = location.pathname.includes('classes') ? true : false;
+	
 	const linktogroup = () => {
-		if (isclass) {
+		if(type!==null || isclass===true ){
 			navigate(`/classes/${id}`);
-		} else {
+		}
+		 else {
 			navigate(`/groups/${id}`);
 		}
 	};

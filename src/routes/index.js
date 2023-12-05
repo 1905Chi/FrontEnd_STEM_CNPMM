@@ -34,6 +34,8 @@ import LeftSubmit from '../pages/class/layouts/LeftSubmit';
 import LeftMessenger from '../pages/messenger/layouts/LeftMessenger';
 import RightMessenger from '../pages/messenger/layouts/RightMessenger';
 import Main from '../pages/messenger/main/Main';
+import MainSearch from '../pages/search/main/MainSearch';
+import LeftSearch from '../pages/search/layout/LeftSearch';
 const privateRoutes = [
 	{ path: '/home', component: Home, Left: Left, Right: Right },
 	
@@ -58,6 +60,8 @@ const privateRoutes2page = [
 	{ path: '/exam/:id/submit/:submissionId', component: Submit, Left: LeftSubmit },
 	{ path: '/classes', component: Class, Left: RightClass  },
 	{ path: '/groups', component: Home, Left: LeftsGroup},
+	{ path: '/search', component: MainSearch, Left: LeftSearch},
+
 ];
 const publicRoutes = [
 	{ path: '/login', component: Login },
