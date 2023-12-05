@@ -89,7 +89,7 @@ export default function RegisterParent(props) {
 				if (response.data.statusCode === 200) {
 					toast.success(response.data.message);
 					setTimeout(() => {
-						navigate('*');
+						navigate('/login');
 					}, 2000);
 				} else {
 					toast.error(response.data.message);

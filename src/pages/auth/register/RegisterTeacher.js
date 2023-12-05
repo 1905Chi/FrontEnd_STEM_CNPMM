@@ -10,49 +10,8 @@ import Loading from '../../../components/Loading';
 import "./Register.css"
 
 export default function RegisterTeacher(props) {
-	const roles = ['STUDENT', 'TEACHER', 'PARENT'];
+
 	const navigate = useNavigate();
-	const [provinces, setProvinces] = useState([]);
-	const [districts, setDistricts] = useState([]);
-	const [schools, setSchools] = useState([]);
-	const [grade, setGrade] = useState([]);
-	const [isRegisterForParent, setIsRegisterForParent] = useState(false);
-
-	useEffect(() => {
-		axios
-			.get(url + 'api/v1/locations/provinces')
-			.then((response) => {
-				setProvinces(response.data.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, []);
-	const handleChangeProvince = (value) => {
-		axios
-			.get(url + `api/v1/locations/districts?provinceId=${value}`)
-			.then((response) => {
-				setDistricts(response.data.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
-	const handleChangeDistrict = (value) => {
-		axios
-			.get(url + `api/v1/locations/schools?districtId=${value}`)
-			.then((response) => {
-				setSchools(response.data.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
-	const { Option } = Select;
-	const RegisterForParent = () => {
-		setIsRegisterForParent(!isRegisterForParent);
-	};
-
 	const login = () => {
 		navigate('/login');
 	};
@@ -71,7 +30,7 @@ export default function RegisterTeacher(props) {
 		const data = {
 			email: values.email,
 			password: values.password,
-			role: values.roles,
+			
 		};
 		const config = {
 			headers: {
@@ -79,16 +38,17 @@ export default function RegisterTeacher(props) {
 			},
 		};
 		axios
-			.post(url + 'api/v1/auth/register', data, config)
+			.post(url + 'api/v1/auth/register-teacher', data, config)
 			.then((response) => {
 				// Xử lý kết quả sau khi gửi thành công
 				if (response.data.statusCode === 200) {
 					toast.success(response.data.message);
 					setTimeout(() => {
-						navigate('*');
-					}, 2000);
+						navigate('/');
+					}, 5000);
 				} else {
 					toast.error(response.data.message);
+				
 				}
 			})
 			.catch((error) => {
@@ -96,12 +56,14 @@ export default function RegisterTeacher(props) {
 				// Xử lý lỗi nếu có lỗi xảy ra
 				if (error.response) {
 					// Lỗi từ phía máy chủ
-					const status = error.response.status;
-					if (status === 503) {
+					
+					console.log(error.response.data.statusCode);
+					if (error.response.data.statusCode >= 500) {
 						// Xử lý lỗi 503 Service Unavailable
 						toast.error('Máy chủ hiện không khả dụng. Vui lòng thử lại sau.');
-					} else if (status === 404) {
-						toast.error('Không tìm thấy tài khoản này');
+					} else if (error.response.data.statusCode === 400) {
+						toast.error(error.response.data.message);
+						console.log(error.response.data.message);
 					} else {
 						toast.error(error.response.data.message);
 					}
@@ -114,7 +76,11 @@ export default function RegisterTeacher(props) {
 				}
 			})
 			.finally(() => {
+				setTimeout(() => {
+
 				setLoading(false);
+				props.cancelRegister();
+				} , 5000);
 			});
 
 		// Xử lý logic xác thực email ở đây (gửi email xác thực, kiểm tra địa chỉ email, vv.)
@@ -226,8 +192,9 @@ export default function RegisterTeacher(props) {
 							</Button>
 						</div>
 					</Form>
+					<ToastContainer/>
 				</div>
-				<ToastContainer />
+				
 			</div>
 		</>
 	);

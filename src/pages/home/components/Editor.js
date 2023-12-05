@@ -5,10 +5,12 @@ import 'react-quill/dist/quill.snow.css';
 import { htmlToMarkdown, markdownToHtml } from './Parser';
 import uploadToCloudinary from './upload';
 import { GiCancel } from 'react-icons/gi';
-
+import Api from '../../../api/Api';
+import { useParams } from 'react-router-dom';
+import { url } from '../../../constants/Constant';
 export default function Editor(props) {
 	const [value, setValue] = useState(props.data || '');
-
+	const { uuid } = useParams();
 	const reactQuillRef = useRef(null);
 	const onChange = (content) => {	
 		setValue(content);
@@ -22,14 +24,94 @@ export default function Editor(props) {
 	const Save = (e) => {
 		
 		e.preventDefault();
-		if (props.editcontent != null) {
+		if(props.isQuiz){
 			props.editcontent(value);
+			props.cancel();
+			return ;
+		}
+
+		if(props.idPost){
+			const stringValue = value.toString();
+			console.log(stringValue);
+			const data = {
+				postId: props.idPost,
+				content: stringValue,
+				
+			}
+			const headers = {
+				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+				'Content-Type': 'multipart/form-data', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
+			};
+			Api.post(url + 'api/v1/comments', data, { headers: headers })
+				.then((response) => {
+					if (response.data.statusCode === 200) {
+						console.log(response.data.message);
+						setValue('');
+					} else {
+						console.log(response.error);
+					}
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		}
+		else if (props.editcontent != null) {
+			props.editcontent(value);
+			const stringValue = value.toString();
+			
+			const data = {
+				content: stringValue,
+				postId: props.index,
+				postType:props.type,
+				mediaFiles:[],
+			};
+			const headers = {
+				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+				'Content-Type': 'multipart/form-data', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
+			};
+			Api.put(url + 'api/v1/posts', data, { headers: headers })
+				.then((response) => {
+					if (response.data.statusCode === 200) {
+						console.log(response.data.result);
+					} else {
+						console.log(response.error);
+					}
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+
 		} else {
-			console.log(value);
+		
+			const stringValue = value.toString();
+			console.log(stringValue);
+			const data = {
+				content: stringValue,
+				groupId: uuid,
+				TypeCode:props.type,
+				mediaFiles:[],
+			};
+			const headers = {
+				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+				'Content-Type': 'multipart/form-data', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
+			};
+			Api.post(url + 'api/v1/posts', data, { headers: headers })
+				.then((response) => {
+					if (response.data.statusCode === 200) {
+						console.log(response.data.result);
+					} else {
+						console.log(response.error);
+					}
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+
 		}
 		const parser = new DOMParser();
 		const doc = parser.parseFromString(value, 'text/html');
 
+		
 		// Lấy tất cả các thẻ img trong DOM
 		const images = doc.querySelectorAll('img');
 
@@ -63,14 +145,14 @@ export default function Editor(props) {
 		<div
 			className="Editor"
 			style={{
-				position: 'fixed',
+				position: 'absolute',
 				width: '50%',
 				position: 'fixed',
 				zIndex: '150',
 				backgroundColor: 'aliceblue',
 				border: '1px solid',
-				top: '25%',
-				overFlow: 'scroll',
+				top:'25%',
+				overFlow: 'auto',
 			}}
 		>
 			<div
@@ -87,6 +169,7 @@ export default function Editor(props) {
 			</div>
 			<ReactQuill
 				ref={reactQuillRef}
+				style={{height:'50vh',overflow:'scroll',width:'100%'}}
 				theme="snow"
 				placeholder="Start writing..."
 				modules={{

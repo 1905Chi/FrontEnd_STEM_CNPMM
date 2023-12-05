@@ -7,9 +7,12 @@ import { useNavigate } from 'react-router-dom';
 import { url } from '../../../constants/Constant';
 import { toast, ToastContainer } from 'react-toastify';
 import Api from '../../../../src/api/Api';
+import { selectuser } from '../../../redux/User';
+import { useSelector , useDispatch} from 'react-redux';
 export default function EditAvatar(props) {
 	const [AvatarPicture, setAvatarPicture] = useState(props.avatar);
 	const [selectedFile, setSelectedFile] = useState(null);
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	
 
@@ -45,6 +48,7 @@ export default function EditAvatar(props) {
 					if (res.data.statusCode === 200) {
 						toast.success(res.data.message);
 						localStorage.setItem('user', JSON.stringify(res.data.result));
+						dispatch(selectuser(res.data.result));
 						props.changeAvatar(selectedFile);					
 					} else {
 						toast.error(res.data.message);
@@ -55,20 +59,14 @@ export default function EditAvatar(props) {
 						// lỗi khi access token hết hạn
 						
 								// lỗi khi refresh token hết hạn
-								toast.error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
-								setTimeout(() => {
-									localStorage.clear();
-									navigate('/login');
-								}, 5000);
+								toast.error(error.response.data.message);
+								
 							
 						
 					} else if (error.request) {
 						// Lỗi không có phản hồi từ máy chủ
 						toast.error(error.request.data.message);
-						setTimeout(() => {
-							localStorage.clear();
-							navigate('/login');
-						}, 5000);
+						
 					} else {
 						// Lỗi trong quá trình thiết lập yêu cầu
 						toast('Lỗi khi thiết lập yêu cầu.');
