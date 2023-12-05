@@ -33,7 +33,7 @@ const RightClass = () => {
 	
 		console.log(e.target.value);
 	}
-	const user=useSelector(selectselectuser);
+	const user=localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')):null;
 	useEffect(() => {
 		const headers = {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),

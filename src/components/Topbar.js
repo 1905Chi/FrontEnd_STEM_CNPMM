@@ -16,7 +16,7 @@ const Topbar = (props) => {
 	const location = useLocation();
 	const [search, setSearch] = useState(false);
 	const navigate = useNavigate();
-	const user = useSelector(selectselectuser);
+	const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 	const [inputValue, setInputValue] = useState('');
 	const [historySearch,sethistorySearch] = useState(JSON.parse(localStorage.getItem('search')));
 	useEffect(() => {
