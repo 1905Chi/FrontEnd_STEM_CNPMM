@@ -18,24 +18,11 @@ import moment from 'moment';
 
 export default function Register(props) {
 	const navigate = useNavigate();
-	const [provinces, setProvinces] = useState(['Quảng Nam', 'Đà Nẵng', 'Quảng Ngãi', 'Quảng Trị', 'Huế', 'Hà Nội']);
-	const [districts, setDistricts] = useState([
-		'Hải Châu',
-		'Cẩm Lệ',
-		'Thanh Khê',
-		'Liên Chiểu',
-		'Ngũ Hành Sơn',
-		'Sơn Trà',
-		'Hòa Vang',
-	]);
-	const [schools, setSchools] = useState([
-		'Trường THPT Nguyễn Khuyến',
-		'Trường THPT Nguyễn Hiền',
-		'Trường THPT Nguyễn Trãi',
-		'Trường THPT Nguyễn Du',
-		'Trường THPT Nguyễn Thị Minh Khai',
-		'Trường THPT Nguyễn Thị Định',
-	]);
+	const [provinces, setProvinces] = useState([]);
+	const [currentProvince, setCurrentProvince] = useState(1);
+	const [districts, setDistricts] = useState([]);
+	const [currentDistrict, setCurrentDistrict] = useState();
+	const [schools, setSchools] = useState([]);
 	const [grade, setGrade] = useState(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']);
 	const [isRegisterForParent, setIsRegisterForParent] = useState(false);
 	const [currentDate, setCurrentDate] = useState(moment());
@@ -44,36 +31,41 @@ export default function Register(props) {
 	const isDateDisabled = (date) => {
 		return date.isAfter(moment()); // Trả về true nếu ngày là ngày tương lai
 	};
-	// useEffect(() => {
-	// 	axios
-	// 		.get(url + 'api/v1/locations/provinces')
-	// 		.then((response) => {
-	// 			setProvinces(response.data.data);
-	// 		})
-	// 		.catch((error) => {
-	// 			console.log(error);
-	// 		});
-	// }, []);
-	// const handleChangeProvince = (value) => {
-	// 	axios
-	// 		.get(url + `api/v1/locations/districts?provinceId=${value}`)
-	// 		.then((response) => {
-	// 			setDistricts(response.data.data);
-	// 		})
-	// 		.catch((error) => {
-	// 			console.log(error);
-	// 		});
-	// };
-	// const handleChangeDistrict = (value) => {
-	// 	axios
-	// 		.get(url + `api/v1/locations/schools?districtId=${value}`)
-	// 		.then((response) => {
-	// 			setSchools(response.data.data);
-	// 		})
-	// 		.catch((error) => {
-	// 			console.log(error);
-	// 		});
-	// };
+	useEffect(() => {
+		handleProvince();
+	}, []);
+
+	const handleProvince = async () => {
+		await axios
+			.get(url + 'api/v1/addresses/provinces')
+			.then((response) => {
+				setProvinces(response.data.result);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+	const handleChangeProvince = async (currentProvince) => {
+		await axios
+			.get(url + `api/v1/addresses/districtsByProvince?pId=${currentProvince}`)
+			.then((response) => {
+				setDistricts(response.data.result);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+	const handleChangeDistrict = (value) => {
+		axios
+			.get(url + `api/v1/addresses/schoolsByDistrict?dId=${value}`)
+			.then((response) => {
+				setSchools(response.data.result);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 	const { Option } = Select;
 	const RegisterForParent = () => {
 		setIsRegisterForParent(!isRegisterForParent);
@@ -299,11 +291,15 @@ export default function Register(props) {
 									showSearch
 									style={{ width: '180px' }}
 									placeholder="Tỉnh thành"
-									onChange={handleChange}
+									onChange={(value) => {
+										handleChangeProvince(value);
+										setSchools([]);
+										setDistricts([]);
+									}}
 								>
-									{grade.map((grade) => (
-										<Option value={grade} key={grade} style={{ color: 'black' }}>
-											{grade}
+									{provinces.map((grade) => (
+										<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
+											{grade.name}
 										</Option>
 									))}
 								</Select>
@@ -317,11 +313,14 @@ export default function Register(props) {
 									showSearch
 									style={{ width: '180px' }}
 									placeholder="Quận huyện"
-									onChange={handleChange}
+									onChange={(value) => {
+										handleChangeDistrict(value);
+										setSchools([]);
+									}}
 								>
-									{grade.map((grade) => (
-										<Option value={grade} key={grade} style={{ color: 'black' }}>
-											{grade}
+									{districts.map((grade) => (
+										<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
+											{grade.name}
 										</Option>
 									))}
 								</Select>
@@ -337,9 +336,9 @@ export default function Register(props) {
 									placeholder="Trường học"
 									onChange={handleChange}
 								>
-									{grade.map((grade) => (
-										<Option value={grade} key={grade} style={{ color: 'black' }}>
-											{grade}
+									{schools.map((grade) => (
+										<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
+											{grade.name}
 										</Option>
 									))}
 								</Select>
