@@ -26,19 +26,19 @@ function PostItem({ user, content, likes, index, type, refUrls }) {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			conttentType: 'application/json',
 		};
-		let data = {}
-		if(isLiked === false){
-		 data={
-			postId:index,
-			typeCode:"LIKE",
-		}}
-		else{
-			data={
-				postId:index,
-				typeCode:"DISLIKE",
-			}
-		}		
-		Api.put(url+'api/v1/reactions', data, { headers: headers })
+		let data = {};
+		if (isLiked === false) {
+			data = {
+				postId: index,
+				typeCode: 'LIKE',
+			};
+		} else {
+			data = {
+				postId: index,
+				typeCode: 'DISLIKE',
+			};
+		}
+		Api.put(url + 'api/v1/reactions', data, { headers: headers })
 			.then((response) => {
 				if (response.data.statusCode === 200) {
 					console.log(response.data.result);
@@ -126,12 +126,20 @@ function PostItem({ user, content, likes, index, type, refUrls }) {
 				</Editor>
 			) : null}
 			<div className="user-info">
-				<div className="avatarPost" style={{ flex: 1 , marginTop:'15px'}}>
-					<Avatar src={user.avatarUrl} />
+				<div className="avatarPost" style={{ flex: 1, marginTop: '15px' }}>
+					<Avatar
+						src={user.avatarUrl}
+						onClick={() => {
+							window.location.href = '/profile/' + user.id;
+						}}
+					/>
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'row', flex: 9 }}>
-					<a  style={{ textDecoration: 'none', color: 'black' }}>
-						<p className="user-name" style={{fontWeight:'bold'}}> {user.firstName + ' ' + user.lastName} </p>
+					<a style={{ textDecoration: 'none', color: 'black' }}>
+						<p className="user-name" style={{ fontWeight: 'bold' }}>
+							{' '}
+							{user.firstName + ' ' + user.lastName}{' '}
+						</p>
 					</a>
 					<p className="user-name" style={{ display: 'block' }}>
 						{' '}
@@ -171,10 +179,7 @@ function PostItem({ user, content, likes, index, type, refUrls }) {
 					})}
 			</div>
 
-			<p className="likes-count">
-			
-				likes
-			</p>
+			<p className="likes-count">likes</p>
 			<div className="post-actions">
 				<button
 					style={{

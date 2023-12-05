@@ -10,6 +10,7 @@ import { Avatar } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { FaHistory } from "react-icons/fa";
 import { useLocation } from 'react-router-dom';
+import Api from '../api/Api';
 const Topbar = (props) => {
 	const [activeIndex, setActiveIndex] = useState(1);
 	const location = useLocation();
@@ -55,6 +56,33 @@ const Topbar = (props) => {
 		}
 	  };
 	const [isLogin, setIsLogin] = useState(localStorage.getItem('accessToken') ? true : false);
+
+	const searchUser = async (searchQuery) => {
+		try {
+			const response = await Api.get('/api/v1/users/searchWithoutToken?', {
+				params: {
+					query: searchQuery,
+				},
+			});
+			console.log(response);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const [searchQuery, setSearchQuery] = useState('');
+
+	const handleSearch = () => {
+		console.log('Searching for:', searchQuery);
+		searchUser(searchQuery);
+	};
+
+	const handleKeyPress = (event) => {
+		if (event.key === 'Enter') {
+			handleSearch();
+		}
+	};
+
 	const items = [
 		{
 			label: 'Trang chủ',
@@ -83,12 +111,7 @@ const Topbar = (props) => {
 		return (
 			<div className="start-topbar">
 				<div className="logo-topbar">
-					<img
-						alt="logo"
-						src="https://primefaces.org/cdn/primereact/images/logo.png"
-						height="40"
-						className="mr-2"
-					></img>
+					<img alt="logo" src="anhlogo.jpg" height="40" className="mr-2"></img>
 				</div>
 				<div className="search-topbar">
 					<InputText placeholder="Search" type="text" onClick={openSearch}  onChange={(e) => setInputValue(e.target.value)} onKeyDown={handleKeyDown} />
@@ -112,19 +135,12 @@ const Topbar = (props) => {
 				) : null}
 				{isLogin && user !== null ? (
 					user.avatarUrl !== null ? (
-						
 						<div className="avatar-topbar" onClick={toProfile}>
-							
 							<Avatar alt="avatar" src={user.avatarUrl} height="40" className="mr-2" />
 						</div>
 					) : (
 						<div className="avatar-topbar" onClick={toProfile}>
-							<Avatar
-								alt="avatar"
-								src={anh_logo_1}
-								height="40"
-								className="mr-2"
-							/>
+							<Avatar alt="avatar" src={anh_logo_1} height="40" className="mr-2" />
 						</div>
 					)
 				) : null}
