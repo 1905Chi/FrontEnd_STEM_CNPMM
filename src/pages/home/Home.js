@@ -9,6 +9,7 @@ import { selectselectuser,selectuser } from '../../redux/User';
 import Api from '../../api/Api';
 import { url } from '../../constants/Constant';
 import { Skeleton } from 'antd';
+//import { verifyJwtToken } from '../../api/Jwt';
 function Home() {
   
  
@@ -18,6 +19,8 @@ function Home() {
  const [page, setPage] = useState(1);
  const [size, setSize] = useState(30);
   useEffect(() => {
+ 
+    //console.log(verifyJwtToken(localStorage.getItem('use')));
     if (localStorage.getItem('login')) {
       toast.success('Đăng nhập thành công');
       localStorage.removeItem('login');      

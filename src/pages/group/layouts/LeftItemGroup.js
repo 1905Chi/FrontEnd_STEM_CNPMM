@@ -63,6 +63,7 @@ export default function LeftItemGroup() {
 	};
 
 	useEffect(() => {
+		
 		Api.get(url + 'api/v1/groups/' + uuid, { headers: headers })
 			.then((response) => {
 				if (response.data.statusCode === 200) {
@@ -124,7 +125,8 @@ export default function LeftItemGroup() {
 			})
 			.catch((error) => {
 				console.log(error);
-			});
+			})
+			.finally(() => {dispatch(selectOption('post'));});
 		if (isClassesPath) {
 			Api.get(url + 'api/v1/exams/group/' + uuid, { headers: headers })
 				.then((response) => {
