@@ -11,14 +11,14 @@ import { url } from '../../constants/Constant';
 import { Skeleton } from 'antd';
 //import { verifyJwtToken } from '../../api/Jwt';
 function Home() {
-  
+	
  
   const [ispost, setIspost] = useState(false);
   const dispatch = useDispatch();
  const [listpost, setListpost] = useState([]);
  const [page, setPage] = useState(1);
  const [size, setSize] = useState(30);
- 
+
   useEffect(() => {
  
     //console.log(verifyJwtToken(localStorage.getItem('use')));
@@ -209,7 +209,7 @@ function Home() {
 		<>
 			<div className="home-page">
 				{listpost.length === 0 ? <Skeleton active /> : null}
-				{listpost.map((post, index) => {
+				{listpost.length>0 &&  listpost.map((post, index) => {
 					return (
 						<PostItem
 							key={index}
