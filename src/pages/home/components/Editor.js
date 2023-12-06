@@ -8,10 +8,16 @@ import { GiCancel } from 'react-icons/gi';
 import Api from '../../../api/Api';
 import { useParams } from 'react-router-dom';
 import { url } from '../../../constants/Constant';
+import { useDispatch } from 'react-redux';
+import {editPostGroup} from '../../../redux/Group'
+import { toast, ToastContainer } from 'react-toastify';
+import Loading from '../../../components/Loading';
 export default function Editor(props) {
 	const [value, setValue] = useState(props.data || '');
 	const { uuid } = useParams();
 	const reactQuillRef = useRef(null);
+	const dispatch = useDispatch();
+	const [isLoading, setIsLoading] = useState(false);
 	const onChange = (content) => {	
 		setValue(content);
 		if (props.editcontent) {
@@ -22,7 +28,7 @@ export default function Editor(props) {
 		if (props.cancel) props.cancel();
 	};
 	const Save = (e) => {
-		
+		setIsLoading(true);
 		e.preventDefault();
 		if(props.isQuiz){
 			props.editcontent(value);
@@ -33,6 +39,7 @@ export default function Editor(props) {
 		if(props.idPost){
 			const stringValue = value.toString();
 			console.log(stringValue);
+			setIsLoading(true);
 			const data = {
 				postId: props.idPost,
 				content: stringValue,
@@ -46,6 +53,7 @@ export default function Editor(props) {
 				.then((response) => {
 					if (response.data.statusCode === 200) {
 						console.log(response.data.message);
+						dispatch(editPostGroup(response.data.result));
 						setValue('');
 					} else {
 						console.log(response.error);
@@ -53,6 +61,9 @@ export default function Editor(props) {
 				})
 				.catch((error) => {
 					console.log(error);
+				})
+				.finally(()=>{
+					setIsLoading(false);
 				});
 		}
 		else if (props.editcontent != null) {
@@ -79,6 +90,9 @@ export default function Editor(props) {
 				})
 				.catch((error) => {
 					console.log(error);
+				})
+				.finally(()=>{
+					setIsLoading(false);
 				});
 
 		} else {
@@ -105,6 +119,9 @@ export default function Editor(props) {
 				})
 				.catch((error) => {
 					console.log(error);
+				})
+				.finally(()=>{
+					setIsLoading(false);
 				});
 
 		}
@@ -155,6 +172,7 @@ export default function Editor(props) {
 				overFlow: 'auto',
 			}}
 		>
+			{isLoading && <Loading></Loading>}
 			<div
 				style={{
 					display: 'flex',
