@@ -11,7 +11,7 @@ import { selectSelectedPostGroup } from '../../../redux/Group';
 export default function PostGroup() {
     const [open, setOpen] = useState(false);
 	const postgroup = useSelector(selectSelectedPostGroup);
-	
+	console.log(postgroup);
 
     const openEdttor = () => {
         setOpen(!open);
@@ -31,7 +31,7 @@ export default function PostGroup() {
 			</div>
 			<div className="post-group__list">
 				{postgroup && postgroup.map((item) => (
-					<PostItem index={item.post.id} content={item.post.content} user={item.post.author} likes={item.post.reactions} type={item.post.type} refUrls={item.post.refUrls} />
+					<PostItem index={item.post.id} content={item.post.content} user={item.post.author} likes={item.post.reactions} type={item.post.type} refUrls={item.post.refUrls}  comment={item.post.comments}/>
 				))}
 				</div>
 		</div>
