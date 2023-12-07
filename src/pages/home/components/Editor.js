@@ -35,6 +35,38 @@ export default function Editor(props) {
 			props.cancel();
 			return ;
 		}
+		if(props.idComment)
+		{
+			const stringValue = value.toString();
+			console.log(stringValue);
+			setIsLoading(true);
+			const data = {
+				commentId: props.idComment,
+				content: stringValue,
+				
+			}
+			const headers = {
+				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+				'Content-Type': 'multipart/form-data', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
+			};
+			Api.post(url + 'api/v1/comments', data, { headers: headers })
+				.then((response) => {
+					if (response.data.statusCode === 200) {
+						console.log(response.data.message);
+						dispatch(editPostGroup(response.data.result));
+						setValue('');
+					} else {
+						console.log(response.error);
+					}
+				})
+				.catch((error) => {
+					console.log(error);
+				})
+				.finally(()=>{
+					setIsLoading(false);
+				});
+				return ;
+		}
 
 		if(props.idPost){
 			const stringValue = value.toString();
