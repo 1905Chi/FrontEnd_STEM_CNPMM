@@ -91,6 +91,7 @@ function PostItem({ user, content, likes, index, type, refUrls, comment }) {
 		if (contentContainer && showMoreButton) {
 			if (contentContainer.scrollHeight > 500) {
 				showMoreButton.style.display = 'block';
+				showLessButton.style.display = 'none';
 			} else {
 				showMoreButton.style.display = 'none';
 			}
