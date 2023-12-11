@@ -11,8 +11,9 @@ import Api from '../../../api/Api';
 import { url } from '../../../constants/Constant';
 import Editor from './Editor';
 import LabelFile from '../../profile/component/LabelFile';
-function PostItem({ user, content, likes, index, type, refUrls, comment }) {
-	const [isLiked, setIsLiked] = useState(false); // Trạng thái ban đầu là "không thích"
+import { toast } from 'react-toastify';
+function PostItem({ user, content, likes, liked, index, type, refUrls, comment }) {
+	const [isLiked, setIsLiked] = useState(liked); // Trạng thái ban đầu là "không thích"
 	const [isEditPost, setisEditPost] = useState(false); // Trạng thái ban đầu là "không chỉnh sửa"
 	const [contentPost, setContentPost] = useState(content);
 	const [idComment, setIdComment] = useState(null);
@@ -32,19 +33,19 @@ function PostItem({ user, content, likes, index, type, refUrls, comment }) {
 		let data = {};
 		if (isLiked === false) {
 			data = {
-				postId: index,
-				typeCode: 'LIKE',
+				post_id: index,
+				type: 'LIKE',
 			};
 		} else {
 			data = {
-				postId: index,
-				typeCode: 'DISLIKE',
+				post_id: index,
+				type: 'DISLIKE',
 			};
 		}
-		Api.put(url + 'api/v1/reactions', data, { headers: headers })
+		Api.post(url + 'reaction', data, { headers: headers })
 			.then((response) => {
 				if (response.data.statusCode === 200) {
-					console.log(response.data.result);
+					toast.success(response.data.message);
 				} else {
 					console.log(response.error);
 				}
@@ -104,14 +105,14 @@ function PostItem({ user, content, likes, index, type, refUrls, comment }) {
 		const contentContainer = document.querySelector('.content' + index);
 		const showMoreButton = document.querySelector('#show' + index);
 		const showLessButton = document.querySelector('#less' + index);
-		const post= document.querySelector('#post');
+		const post = document.querySelector('#post');
 
 		if (contentContainer && showMoreButton) {
 			if (contentContainer.scrollHeight > 500) {
 				showMoreButton.style.display = 'none';
 				showLessButton.style.display = 'block';
 				contentContainer.style.height = 'auto';
-				post.style.maxHeight = "max-content";
+				post.style.maxHeight = 'max-content';
 			}
 		}
 		setXemthem(true);
@@ -120,13 +121,13 @@ function PostItem({ user, content, likes, index, type, refUrls, comment }) {
 		const contentContainer = document.querySelector('.content' + index);
 		const showLessButton = document.querySelector('#less' + index);
 		const showMoreButton = document.querySelector('#show' + index);
-		const post= document.querySelector('#post');
+		const post = document.querySelector('#post');
 		if (contentContainer && showMoreButton) {
 			if (contentContainer.scrollHeight > 500) {
 				showMoreButton.style.display = 'block';
 				showLessButton.style.display = 'none';
 				contentContainer.style.height = '500px';
-				post.style.maxHeight = "500px";
+				post.style.maxHeight = '500px';
 			}
 		}
 		setXemthem(false);
@@ -168,7 +169,7 @@ function PostItem({ user, content, likes, index, type, refUrls, comment }) {
 
 	const likeButtonStyle = isLiked ? { color: 'blue' } : {}; // Đổi màu của biểu tượng "like"
 	return (
-		<div className="post-item" >
+		<div className="post-item">
 			{isEditPost ? (
 				<Editor
 					cancel={EditPost}
@@ -186,7 +187,7 @@ function PostItem({ user, content, likes, index, type, refUrls, comment }) {
 			<div className="user-info">
 				<div className="avatarPost" style={{ flex: 1, marginTop: '15px' }}>
 					<Avatar
-						src={user.avatarUrl}
+						src={user.avatar_url}
 						onClick={() => {
 							window.location.href = '/profile/' + user.id;
 						}}
@@ -195,7 +196,7 @@ function PostItem({ user, content, likes, index, type, refUrls, comment }) {
 				<div style={{ display: 'flex', flexDirection: 'row', flex: 9 }}>
 					<a style={{ textDecoration: 'none', color: 'black' }}>
 						<p className="user-name" style={{ fontWeight: 'bold' }}>
-							{user.firstName + ' ' + user.lastName}
+							{user.first_name + ' ' + user.last_name}
 						</p>
 					</a>
 					<p className="user-name" style={{ display: 'block' }}>
@@ -219,7 +220,7 @@ function PostItem({ user, content, likes, index, type, refUrls, comment }) {
 				</Dropdown>
 			</div>
 			<div className={'content-container content' + index}>
-				<div className="post-content" dangerouslySetInnerHTML={{ __html: contentPost }}  id="post"/>
+				<div className="post-content" dangerouslySetInnerHTML={{ __html: contentPost }} id="post" />
 
 				<button className={'show-more-button'} id={'show' + index} onClick={SeeMore}>
 					Xem thêm
@@ -238,7 +239,7 @@ function PostItem({ user, content, likes, index, type, refUrls, comment }) {
 					})}
 			</div>
 
-			<p className="likes-count">{likes ? likes.length : null} likes</p>
+			<p className="likes-count">{likes ? likes : 0} likes</p>
 			<div className="post-actions">
 				<button
 					style={{
@@ -275,13 +276,13 @@ function PostItem({ user, content, likes, index, type, refUrls, comment }) {
 						</button>
 					) : null}
 					<div className="new-comment">
-						<Avatar src={comment[comment.length - 1].author.avatarUrl} />
+						<Avatar src={comment[comment.length - 1].author.avatar_url} />
 						<div style={{ flex: 8 }}>
 							<div className="content-comment">
 								<p className="user-name" style={{ fontWeight: 'bold' }}>
-									{comment[comment.length - 1].author.firstName +
+									{comment[comment.length - 1].author.first_name +
 										' ' +
-										comment[comment.length - 1].author.lastName}
+										comment[comment.length - 1].author.last_name}
 								</p>
 								<div
 									className="comment-content"
@@ -303,17 +304,21 @@ function PostItem({ user, content, likes, index, type, refUrls, comment }) {
 						{' '}
 						Thu gọn
 					</button>
-					{comment.map((item,index) => (
+					{comment.map((item, index) => (
 						<div className="new-comment">
-							<Avatar src={comment[comment.length-1-index].author.avatarUrl} />
+							<Avatar src={comment[comment.length - 1 - index].author.avatar_url} />
 							<div style={{ flex: 8 }}>
 								<div className="content-comment">
 									<p className="user-name" style={{ fontWeight: 'bold' }}>
-										{comment[comment.length-1-index].author.firstName + ' ' + comment[comment.length-1-index].author.lastName}
+										{comment[comment.length - 1 - index].author.first_name +
+											' ' +
+											comment[comment.length - 1 - index].author.last_name}
 									</p>
 									<div
 										className="comment-content"
-										dangerouslySetInnerHTML={{ __html: comment[comment.length-1-index].content }}
+										dangerouslySetInnerHTML={{
+											__html: comment[comment.length - 1 - index].content,
+										}}
 									/>
 								</div>
 								<div className="react-post">
