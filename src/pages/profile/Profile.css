@@ -84,7 +84,7 @@
     object-fit: cover;
   }
   .usename-button{
-    position: absolute;
+    
     display: flex;
     width: 55%;
     justify-content: space-between;

@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { Avatar } from 'antd';
 import { MdFilePresent } from 'react-icons/md';
 import { FaRegImage } from 'react-icons/fa';
+import EmojiInput from 'react-input-emoji';
 export default function Main() {
 	const messageItem = useSelector(selectselectMessenger);
 	const user = JSON.parse(localStorage.getItem('user'));
@@ -15,7 +16,12 @@ export default function Main() {
 	const [listmessage, setlistmessage] = useState([]);
 	const [isScrolling, setIsScrolling] = useState(false);
 	const [isLoadMore, setIsLoadMore] = useState(false);
-	const [inputValue, setInputValue] = useState('');
+	const [emoji, setEmoji] = useState('');
+	const handleEmojiChange = (text) => {
+		setEmoji(text);
+	};
+
+	
     const [selectedFile, setSelectedFile] = useState(null);
 	useEffect(() => {
 		setlistmessage([
@@ -31,47 +37,9 @@ export default function Main() {
 				name: 'Nguyễn Văn A',
 				message: 'Chào bà già giữa trời đông hiu quạnh ' + 2,
 			},
-			{
-				idsender: 1,
-				avatar: user.avatarUrl,
-				name: 'Nguyễn Văn A',
-				message: 'Chào bà già giữa trời đông hiu quạnh ' + 3,
-			},
-			{
-				idsender: '9d79ed61-420b-443a-9838-66689bd9d0dd',
-				avatar: user.avatarUrl,
-				name: 'Nguyễn Văn A',
-				message: 'Chào bà già giữa trời đông hiu quạnh ' + 4,
-			},
-			{
-				idsender: '9d79ed61-420b-443a-9838-66689bd9d0dd',
-				avatar: user.avatarUrl,
-				name: 'Nguyễn Văn A',
-				message: 'Chào bà già giữa trời đông hiu quạnh ' + 5,
-			},
-			{
-				avatar: user.avatarUrl,
-				name: 'Nguyễn Văn A',
-				message: 'Chào bà già giữa trời đông hiu quạnh ' + 6,
-			},
-			{
-				idsender: '1',
-				avatar: user.avatarUrl,
-				name: 'Nguyễn Văn A',
-				message: 'Chào bà già giữa trời đông hiu quạnh ' + 7,
-			},
-			{
-				idsender: '9d79ed61-420b-443a-9838-66689bd9d0dd',
-				avatar: user.avatarUrl,
-				name: 'Nguyễn Văn A',
-				message: 'Chào bà già giữa trời đông hiu quạnh ' + 8,
-			},
-			{
-				idsender: '1',
-				avatar: user.avatarUrl,
-				name: 'Nguyễn Văn A',
-				message: 'Chào bà già giữa trời đông hiu quạnh ' + 9,
-			},
+			
+			
+			
 		]);
 	}, [messageItem]);
 	useEffect(() => {
@@ -94,7 +62,7 @@ export default function Main() {
 
 			// Tính toán 60% chiều cao
 			const sixtyPercentHeight = (pageHeight * 30) / 100;
-			if (scrollY < sixtyPercentHeight && isLoadMore === false) {
+			if (scrollY < sixtyPercentHeight && isLoadMore === false ) {
 				setIsLoadMore(true);
 				setoldScrollHeight(pageHeight);
 
@@ -107,18 +75,21 @@ export default function Main() {
 		}
 	};
 	const handleKeyDown = (e) => {
+		//e.preventDefault();
+		// Xử lý dữ liệu đã nhập (emoji) ở đây
+		console.log('Emoji đã chọn:', emoji);
 		if (e.key === 'Enter') {
-			if (inputValue !== '') {
+			if (emoji !== '') {
 				setlistmessage((prevMessages) => [
 					{
 						idsender: user.id,
 						avatar: user.avatarUrl,
 						name: 'Nguyễn Văn A',
-						message: inputValue,
+						message: emoji ,
 					},
 					...prevMessages,
 				]);
-				setInputValue('');
+				setEmoji('');
 			}
 		}
 	};
@@ -210,13 +181,8 @@ export default function Main() {
 					</div>
 					<div className="mainMessenger__footer">
 						<div className="mainMessenger__footer__input">
-							<input
-								type="text"
-								placeholder="Nhập tin nhắn"
-								value={inputValue}
-								onChange={(e) => setInputValue(e.target.value)}
-								onKeyDown={handleKeyDown}
-							/>
+						<EmojiInput value={emoji} onChange={handleEmojiChange} placeholder="Nhập tin nhắn" onKeyDown={handleKeyDown} />
+							
 						</div>
 						<MdFilePresent className="icon-file" />
 						<FaRegImage className="icon-file"  onClick={openChonsePicture}/>

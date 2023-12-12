@@ -488,7 +488,7 @@ export default function EditProfile({ onCancel }) {
 						flex: 10,
 					}}
 				>
-					<h2 style={{ flex: 8, textAlign: 'end' }}>Chỉnh sửa trang cá nhân</h2>
+					<h2 style={{ flex: 8, textAlign: 'end' }}>Chỉnh sửa thông cá nhân</h2>
 					<button
 						style={{ flex: 3, height: '72.5px', backgroundColor: 'white', textAlign: 'end' }}
 						onClick={onCancel}
