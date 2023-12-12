@@ -24,15 +24,77 @@ export default function LeftFriend() {
 	const [friendPending, setFriendPending] = useState([]);
 	const [friend, setFriend] = useState([]);
 	const [friendOfFriend, setFriendOfFriend] = useState([]);
+	const [update, setUpdate] = useState(false);
 	useEffect(() => {
 		dispatch(selectOption('all'));
 	}, []);
 
 	useEffect(() => {
 		fetchFriendRequest();
-		fetchFriend();
-		fetchFriendOfFriend();
-	}, []);
+		fetchFriendAccepted();
+		// fetchFriendOfFriend();
+		fetchFriends();
+	}, [update]);
+
+	const handleFriendRequest = (userId) => {
+		try {
+			const headers = {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+			};
+			const data = {
+				userId: userId,
+			};
+			Api.post(url + 'friend', data, { headers: headers }).then((response) => {
+				if (response.data.statusCode === 200) {
+					toast.success('Đã gửi lời mời kết bạn');
+					setUpdate(!update);
+				}
+			});
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const handleAcceptFriendRequest = (id) => {
+		try {
+			const headers = {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+			};
+			const data = {
+				friend_id: id,
+			};
+			Api.post(url + 'accept/friend', data, { headers: headers }).then((response) => {
+				if (response.data.statusCode === 200) {
+					toast.success('Đã kết bạn thành công');
+					setUpdate(!update);
+				}
+			});
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const handleRejectFriendRequest = (id) => {
+		try {
+			const headers = {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+			};
+			const data = {
+				friend_id: id,
+			};
+			Api.post(url + 'decline/friend', data, { headers: headers }).then((response) => {
+				if (response.data.statusCode === 200) {
+					toast.success('Đã xóa lời mời kết bạn');
+					setUpdate(!update);
+				}
+			});
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	const fetchFriendRequest = async () => {
 		try {
@@ -51,7 +113,7 @@ export default function LeftFriend() {
 		}
 	};
 
-	const fetchFriend = async () => {
+	const fetchFriendAccepted = async () => {
 		try {
 			if (friendRequest === null) {
 				const headers = {
@@ -75,6 +137,21 @@ export default function LeftFriend() {
 				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			};
 			const response = await Api.get(url + 'friend/suggestions', { headers: headers });
+			if (response.data.statusCode === 200) {
+				setFriendOfFriend(response.data.friendWithAuthor);
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const fetchFriends = async () => {
+		try {
+			const headers = {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+			};
+			const response = await Api.get(url + 'friends', { headers: headers });
 			if (response.data.statusCode === 200) {
 				setFriendOfFriend(response.data.friendWithAuthor);
 			}
@@ -195,18 +272,21 @@ export default function LeftFriend() {
 							>
 								<div style={{ flex: '2', margin: '15px', marginTop: '18px' }}>
 									<div className="friend-request__item__avatar">
-										<Avatar src={item.avatar_url} alt="" />
+										<Avatar src={item.avatarUrl} alt="" />
 									</div>
 								</div>
 								<div className="friend-request__item__button">
 									<div className="friend-request__item__name">
-										<p>{item.first_name + ' ' + item.last_name}</p>
+										<p>{item.firstName + ' ' + item.lastName}</p>
 									</div>
 									<div style={{ textAlign: 'start' }}>
 										<button
 											className="btn btn-primary"
 											style={{ backgroundColor: '#1677ff' }}
-											onClick={accept('ACCEPT', item.id)}
+											// onClick={accept('ACCEPT', item.id)}
+											onClick={() => {
+												handleAcceptFriendRequest(item.id);
+											}}
 										>
 											Chấp nhận
 										</button>
@@ -243,7 +323,7 @@ export default function LeftFriend() {
 							>
 								<div style={{ margin: '15px', marginTop: '18px' }}>
 									<div className="friend-request__item__avatar">
-										<Avatar src={item.avatar_url} alt="" />
+										<Avatar src={item.avatarUrl} alt="" />
 									</div>
 								</div>
 								<div
@@ -251,7 +331,7 @@ export default function LeftFriend() {
 									style={{ textAlign: 'start', paddingTop: '10px' }}
 								>
 									<div className="friend-request__item__name">
-										<p style={{ textAlign: 'start' }}>{item.first_name + ' ' + item.last_name}</p>
+										<p style={{ textAlign: 'start' }}>{item.firstName + ' ' + item.lastName}</p>
 									</div>
 								</div>
 							</div>
@@ -294,11 +374,20 @@ export default function LeftFriend() {
 										<button
 											className="btn btn-primary"
 											style={{ backgroundColor: '#1677ff' }}
-											onClick={accept('ACCEPT', item.id)}
+											// onClick={accept('ACCEPT', item.id)}
+											onClick={() => {
+												handleFriendRequest(item.id);
+											}}
 										>
 											Thêm bạn bè
 										</button>
-										<button className="btn btn-danger" onClick={accept('REJECT', item.id)}>
+										<button
+											className="btn btn-danger"
+											// onClick={accept('REJECT', item.id)}
+											onClick={() => {
+												handleRejectFriendRequest(item.id);
+											}}
+										>
 											Xóa
 										</button>
 									</div>

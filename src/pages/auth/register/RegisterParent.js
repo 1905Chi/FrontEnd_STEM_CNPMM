@@ -81,7 +81,7 @@ export default function RegisterParent(props) {
 			},
 		};
 		axios
-			.post(url + 'api/v1/auth/register', data, config)
+			.post(url + 'api/v1/auth/register-parent', data, config)
 			.then((response) => {
 				// Xử lý kết quả sau khi gửi thành công
 				if (response.data.statusCode === 200) {
@@ -250,29 +250,6 @@ export default function RegisterParent(props) {
 									style={{ width: '180px' }}
 									placeholder="Ngày tháng năm sinh"
 								/>
-							</Form.Item>
-
-							<Form.Item
-								className="form-item-register"
-								name="district"
-								rules={[{ required: true, message: 'Vui lòng chọn quận huyện!' }]}
-							>
-								<Select
-									showSearch
-									style={{ width: '180px' }}
-									placeholder="Quận huyện"
-									optionFilterProp="children"
-									onChange={handleChange}
-									filterOption={(input, option) =>
-										option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-									}
-								>
-									{districts.map((district) => (
-										<Option value={district.id} key={district.id}>
-											{district.name}
-										</Option>
-									))}
-								</Select>
 							</Form.Item>
 
 							<Form.Item
