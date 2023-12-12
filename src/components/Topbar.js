@@ -8,7 +8,7 @@ import { selectselectuser } from '../redux/User';
 import anh_logo_1 from '../../src/assets/images/anh_logo_1.jpg';
 import { Avatar } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { FaHistory } from "react-icons/fa";
+import { FaHistory } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 import Api from '../api/Api';
 import { CiEdit } from "react-icons/ci";
@@ -42,33 +42,31 @@ const Topbar = (props) => {
 	};
 	const openSearch = () => {
 		setSearch(true);
-	}
+	};
 	const closeSearch = () => {
 		setSearch(false);
-	}
+	};
 
 	const handleKeyDown = (event) => {
 		if (event.key === 'Enter') {
-		  // Xử lý sự kiện khi nhấn phím Enter ở đây
-			let history= localStorage.getItem('search') 
-			if(history===null){
+			// Xử lý sự kiện khi nhấn phím Enter ở đây
+			let history = localStorage.getItem('search');
+			if (history === null) {
 				let arr = [];
 				arr.push(inputValue);
 				localStorage.setItem('search', JSON.stringify(arr));
 				sethistorySearch(arr);
-			}else{
+			} else {
 				let arr = JSON.parse(history);
-				
+
 				arr.push(inputValue);
 				localStorage.setItem('search', JSON.stringify(arr));
 				sethistorySearch(arr);
-
 			}
 			setSearch(false);
-			navigate('/search/?search='+inputValue);
-			
+			navigate('/search/?search=' + inputValue);
 		}
-	  };
+	};
 	const [isLogin, setIsLogin] = useState(localStorage.getItem('accessToken') ? true : false);
 
 	const searchUser = async (searchQuery) => {
@@ -125,10 +123,24 @@ const Topbar = (props) => {
 		return (
 			<div className="start-topbar">
 				<div className="logo-topbar">
-					<img alt="logo" src="anhlogo.jpg" height="40" className="mr-2"></img>
+					<img
+						alt="logo"
+						src="https://res.cloudinary.com/djzwxw0ao/image/upload/v1696942528/uqbxidtwcdbqn8glt6we.jpg"
+						height="40"
+						className="mr-2"
+						onClick={() => {
+							navigate('/home');
+						}}
+					></img>
 				</div>
 				<div className="search-topbar">
-					<InputText placeholder="Search" type="text" onClick={openSearch}  onChange={(e) => setInputValue(e.target.value)} onKeyDown={handleKeyDown} />
+					<InputText
+						placeholder="Search"
+						type="text"
+						onClick={openSearch}
+						onChange={(e) => setInputValue(e.target.value)}
+						onKeyDown={handleKeyDown}
+					/>
 				</div>
 			</div>
 		);
@@ -178,26 +190,32 @@ const Topbar = (props) => {
 			{editprofile === true? <EditProfile onCancel={cancel} /> : null}
 			{search ? (
 				<div className="search-topbar-menu-history">
-					<div className='header-menu-search'>
-						<button onClick={closeSearch}><ArrowLeftOutlined/></button>
+					<div className="header-menu-search">
+						<button onClick={closeSearch}>
+							<ArrowLeftOutlined />
+						</button>
 						<h3>Tìm kiếm gần đây</h3>
-						<button onClick={()=>{
-							localStorage.removeItem('search');
-							sethistorySearch([]);
-						}}>Xóa lịch sử</button>
+						<button
+							onClick={() => {
+								localStorage.removeItem('search');
+								sethistorySearch([]);
+							}}
+						>
+							Xóa lịch sử
+						</button>
 					</div>
 					<div>
-						{historySearch && historySearch.length>0 ?(
-							historySearch.map((item,index) => (
-								<button className='history-search-item' key={index}>
-									<FaHistory style={{paddingTop:'5px'}}/>
-									<p>{item}</p>
-								</button>
-							))	
-						):null }
+						{historySearch && historySearch.length > 0
+							? historySearch.map((item, index) => (
+									<button className="history-search-item" key={index}>
+										<FaHistory style={{ paddingTop: '5px' }} />
+										<p>{item}</p>
+									</button>
+							  ))
+							: null}
 					</div>
 				</div>
-				): null}
+			) : null}
 			<MegaMenu model={items} orientation="horizontal" start={start} end={end} />
 		</div>
 	);

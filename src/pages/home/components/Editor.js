@@ -1,8 +1,6 @@
 import { useCallback, useRef, useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
-
 import 'react-quill/dist/quill.snow.css';
-import { htmlToMarkdown, markdownToHtml } from './Parser';
 import uploadToCloudinary from './upload';
 import { GiCancel } from 'react-icons/gi';
 import Api from '../../../api/Api';
@@ -73,20 +71,18 @@ export default function Editor(props) {
 			console.log(stringValue);
 			setIsLoading(true);
 			const data = {
-				postId: props.idPost,
+				post_id: props.idPost,
 				content: stringValue,
 				
 			}
 			const headers = {
 				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
-				'Content-Type': 'multipart/form-data', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
+				'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
 			};
-			Api.post(url + 'api/v1/comments', data, { headers: headers })
+			Api.post(url + 'comment', data, { headers: headers })
 				.then((response) => {
 					if (response.data.statusCode === 200) {
-						console.log(response.data.message);
-						dispatch(editPostGroup(response.data.result));
-						setValue('');
+						toast.success('Bình luận thành công');
 					} else {
 						console.log(response.error);
 					}
@@ -134,23 +130,28 @@ export default function Editor(props) {
 			const data = {
 				content: stringValue,
 				groupId: uuid,
-				TypeCode:props.type,
-				mediaFiles:[],
+				typeName:props.type,
+				
 			};
 			const headers = {
 				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
-				'Content-Type': 'multipart/form-data', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
+				'Content-Type': 'multipart/form-data',
+
 			};
 			Api.post(url + 'api/v1/posts', data, { headers: headers })
 				.then((response) => {
 					if (response.data.statusCode === 200) {
-						console.log(response.data.result);
+						console.log(response.data.post);
+						toast.success('Đăng bài thành công');
+						
 					} else {
 						console.log(response.error);
+						toast.error('Đăng bài thất bại');
 					}
 				})
 				.catch((error) => {
 					console.log(error);
+					toast.error('Đăng bài thất bại');
 				})
 				.finally(()=>{
 					setIsLoading(false);

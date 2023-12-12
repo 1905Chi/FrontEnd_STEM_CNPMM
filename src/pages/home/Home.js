@@ -11,37 +11,37 @@ import { url } from '../../constants/Constant';
 import { Skeleton } from 'antd';
 //import { verifyJwtToken } from '../../api/Jwt';
 function Home() {
-  const dispatch = useDispatch();
- const [listpost, setListpost] = useState([]);
- const [page, setPage] = useState(1);
- const [size, setSize] = useState(30);
+	const [ispost, setIspost] = useState(false);
+	const dispatch = useDispatch();
+	const [listpost, setListpost] = useState([]);
+	const [page, setPage] = useState(0);
+	const [size, setSize] = useState(30);
 
-  useEffect(() => {
- 
-    //console.log(verifyJwtToken(localStorage.getItem('use')));
-    if (localStorage.getItem('login')) {
-      toast.success('Đăng nhập thành công');
-      localStorage.removeItem('login');      
-    }
-    dispatch(selectuser(JSON.parse(localStorage.getItem('user'))));
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('user')).token,
-    };
-    Api.get(url+`api/v1/posts/home-posts?page=${page}&size=${size}`, {headers:headers}).then((response) => {
-      if (response.data.statusCode === 200) {
-        setListpost(response.data.result);
-      } else {
-        console.log(response.error);
-      }
-      
-    }).catch((error) => {
-      console.log(error);
-    });
-  }, []);
-	// useEffect(() => {
-	// 	homePostss();
-	// }, []);
+	useEffect(() => {
+		//console.log(verifyJwtToken(localStorage.getItem('use')));
+		if (localStorage.getItem('login')) {
+			toast.success('Đăng nhập thành công');
+			localStorage.removeItem('login');
+		}
+		dispatch(selectuser(JSON.parse(localStorage.getItem('user'))));
+		// const headers = {
+		// 	'Content-Type': 'application/json',
+		// 	Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('user')).token,
+		// };
+		// Api.get(url+`api/v1/posts/home-posts?page=${page}&size=${size}`, {headers:headers}).then((response) => {
+		//   if (response.data.statusCode === 200) {
+		//     setListpost(response.data.result);
+		//   } else {
+		//     console.log(response.error);
+		//   }
+
+		// }).catch((error) => {
+		//   console.log(error);
+		// });
+	}, []);
+	useEffect(() => {
+		homePosts();
+	}, []);
 	const fetchData = () => {
 		// Tạo một Promise mới
 		const myPromise = new Promise((resolve, reject) => {
@@ -81,31 +81,15 @@ function Home() {
 		try {
 			const headers = {
 				'Content-Type': 'application/json',
-				Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('user')).token,
-				timeout: 15000,
+				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			};
-
-			// Create an array of promises for each API call
-			const apiCalls = [];
-
-			// Assuming page and size are defined somewhere in your code
-
-			apiCalls.push(Api.get(url + `api/v1/posts/home-posts?page=${page}&size=${size}`, { headers }));
-			// Add more API calls if needed
-
-			// Wait for all promises to resolve
-			const responses = await Promise.all(apiCalls);
-
-			// Process responses
-			responses.forEach((response, index) => {
-				if (response.data.statusCode === 200) {
-					console.log(`Data for API call ${index + 1}:`, response.data.result);
-					// Handle the data as needed, e.g., setListpost(response.data.result.posts);
-				} else {
-					console.log(`Error for API call ${index + 1}:`, response.error);
-					// Handle errors as needed
-				}
-			});
+			const response = await Api.get(`home-posts`, { headers: headers });
+			if (response.data.statusCode === 200) {
+				setListpost(response.data.result);
+				
+			} else {
+				console.log(response.error);
+			}
 		} catch (error) {
 			console.log('Error:', error);
 		}

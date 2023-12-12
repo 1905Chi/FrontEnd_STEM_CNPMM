@@ -39,6 +39,12 @@ function Login() {
 					//navigate("/");
 					localStorage.setItem('accessToken', response.data.result.accessToken);
 					localStorage.setItem('refreshToken', response.data.result.refreshToken);
+					localStorage.setItem('role', response.data.result.role);
+					localStorage.setItem('id', response.data.result.id);
+					localStorage.setItem('first_name', response.data.result.first_name);
+					localStorage.setItem('last_name', response.data.result.last_name);
+					localStorage.setItem('avatar_url', response.data.result.avatar_url);
+					
 					localStorage.setItem('login', true);
 
 					axios

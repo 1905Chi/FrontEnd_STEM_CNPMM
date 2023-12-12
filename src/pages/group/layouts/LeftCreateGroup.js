@@ -72,19 +72,17 @@ export default function LeftCreateGroup() {
 			data = {
 				name: values.nameGroup,
 				description: values.descriptionGroup,
-				typeName: 'CLASS',
-				accessibilityName: values.policy,
-				memberModeName: values.policy,
-				subject: values.subject,
-				grade: values.grade,
+				isClass: true,
+				isPublic: values.policy ==='PUBLIC'? true : false,
+				isAcceptAllRequest:  values.policy ==='PUBLIC'? true : false,
 			};
 		} else {
 			data = {
 				name: values.nameGroup,
 				description: values.descriptionGroup,
-				typeName: 'DISCUSSION',
-				accessibilityName: values.policy,
-				memberModeName: values.policy,
+				isClass: false,
+				isPublic: values.policy ==='PUBLIC'? true : false,
+				isAcceptAllRequest:  values.policy ==='PUBLIC'? true : false,
 			};
 		}
 
@@ -96,11 +94,11 @@ export default function LeftCreateGroup() {
 					toast.success(response.data.message);
 					if (isClassesPath) {
 						setTimeout(() => {
-							navigate(`/classes/${response.data.result.id}`);
+							navigate(`/classes/${response.data.result}`);
 						}, 5000);
 					} else {
 						setTimeout(() => {
-							navigate(`/groups/${response.data.result.id}`);
+							navigate(`/groups/${response.data.result}`);
 						}, 5000);
 					}
 				} else {
@@ -244,7 +242,7 @@ export default function LeftCreateGroup() {
 							</Form.Item>
 						)}
 
-						<Form.Item name="member">
+						{/* <Form.Item name="member">
 							<Select
 								mode="tags"
 								placeholder="Mời bạn bè ( Không bắt buộc)"
@@ -261,7 +259,7 @@ export default function LeftCreateGroup() {
 									</Select.Option>
 								))}
 							</Select>
-						</Form.Item>
+						</Form.Item> */}
 						<Form.Item style={{ position: 'fixed', bottom: '0', width: '285px', margin: '0 15px 0 0' }}>
 							<Button type="primary" htmlType="submit" style={{ width: '100%', height: '45px' }}>
 								Tạo
