@@ -128,6 +128,9 @@ export default function EditExam() {
 			title: 'Loại câu hỏi',
 			dataIndex: 'typeCode',
 			key: 'typeCode',
+            render: (typeCode) => (typeCode === 'single_choice' ? <span style={{color:'green', fontWeight:'bold'}}>Chọn 1</span>
+                : typeCode === 'multiple_choice' ? <span style={{color:'orange', fontWeight:'bold'}}>Chọn nhiều</span>           
+                : <span style={{color:'black', fontWeight:'bold'}}>Không xác định</span>),
             width: '10%',
 		},
         {
@@ -146,6 +149,7 @@ export default function EditExam() {
 
 	return (
 		<>
+        <h2 style={{textAlign:'center'}}>Danh sách câu hỏi</h2>
 			<Table
 				columns={columns}
 				expandable={{
