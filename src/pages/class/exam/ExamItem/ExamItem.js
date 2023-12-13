@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import { selectexam, selectselectexam } from '../../../../redux/Exam';
 import moment from 'moment';
 export default function ExamItem(props) {
-	const { uuid,id } = useParams();
+	const { uuid, id } = useParams();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [examId, setExamId] = useState();
@@ -26,7 +26,6 @@ export default function ExamItem(props) {
 		setTimeout(() => {
 			navigate('/exam/' + id + '/submit');
 		}, 3000);
-		
 	};
 
 	const Continue = () => {
@@ -35,8 +34,8 @@ export default function ExamItem(props) {
 		setTimeout(() => {
 			navigate('/exam/' + id + '/submit');
 		}, 3000);
-	}
-	
+	};
+
 	useEffect(() => {
 		const headers = {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
@@ -46,12 +45,10 @@ export default function ExamItem(props) {
 			.then((response) => {
 				if (response.data.statusCode === 200) {
 					setExamId(response.data.result);
-					const startTime = new Date(examId.exam.staredAt).getTime();
-
-					const endTime = new Date(examId.exam.endedAt).getTime();
-
 					dispatch(selectexam(response.data.result));
+					const startTime = moment(response.data.result.exam.staredAt, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
 
+					const endTime = moment(response.data.result.exam.endedAt, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
 					const now = new Date();
 
 					const nowTime =
@@ -65,9 +62,15 @@ export default function ExamItem(props) {
 						':' +
 						now.getMinutes() +
 						':' +
-						now.getSeconds();
+						now.getSeconds() +
+						':' +
+						'000000';
 
-					const nowDate = new Date(nowTime).getTime();
+					const nowDate = moment(nowTime, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
+					console.log(nowTime);
+					console.log(nowDate);
+					console.log(startTime);
+					console.log(endTime);
 
 					if (nowDate >= startTime && nowDate <= endTime) {
 						setIsWithinTimeRange(true);
@@ -83,13 +86,13 @@ export default function ExamItem(props) {
 			});
 	}, [id]);
 
-	const checkContinue = ( dateStart, dateEnd,duration) => {
-		const startTime =  moment(dateStart, "DD-MM-YYYY HH:mm:ss:SSSSSS").valueOf();
-		
-		const endTime =  moment(dateEnd, "DD-MM-YYYY HH:mm:ss:SSSSSS").valueOf();
-		
+	const checkContinue = (dateStart, dateEnd, duration) => {
+		const startTime = moment(dateStart, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
+
+		const endTime = moment(dateEnd, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
+
 		const now = new Date();
-		
+
 		const nowTime =
 			now.getDate() +
 			'-' +
@@ -101,29 +104,26 @@ export default function ExamItem(props) {
 			':' +
 			now.getMinutes() +
 			':' +
-			now.getSeconds()
-			+':' +
+			now.getSeconds() +
+			':' +
 			'000000';
 
+		const nowDate = moment(nowTime, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
 		
-		const nowDate =  moment(nowTime, "DD-MM-YYYY HH:mm:ss:SSSSSS").valueOf();
-
-		
-			if (nowDate >= startTime && nowDate <= endTime) {
-				if(nowDate.diff(startTime,'minutes') > duration){
-					console.log(nowDate.diff(startTime,'minutes'));
-					return false;
-				}
-				else{
-					return true;
-				}
-				
-			} else {
+		console.log(nowDate);
+		console.log(startTime);
+		console.log(endTime);
+	
+		if (nowDate >= startTime && nowDate <= endTime) {
+			if (startTime+duration*60000 <nowDate) {
 				return false;
-			}	
-		
-		
-	}
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	};
 	return (
 		<div className="exam-item-component">
 			{examId ? (
@@ -131,7 +131,7 @@ export default function ExamItem(props) {
 					<div className="exam-item__header">
 						<h1>{examId.exam.name}</h1>
 					</div>
-					<div className='exam-item-infor'>
+					<div className="exam-item-infor">
 						<div className="exam-item__title">
 							<p>Thời gian bắt đầu: {examId.exam.staredAt}</p>
 							<p>Thời gian kết thúc: {examId.exam.endedAt}</p>
@@ -156,7 +156,12 @@ export default function ExamItem(props) {
 										</button>
 									</div>
 									<div className="exam-item__button">
-										<button className="exam-item__button__start" onClick={() => { navigate('/classes/'+uuid+'/edit-exam/'+id)}}>
+										<button
+											className="exam-item__button__start"
+											onClick={() => {
+												navigate('/classes/' + uuid + '/edit-exam/' + id);
+											}}
+										>
 											Chỉnh sửa
 										</button>
 									</div>
@@ -168,7 +173,11 @@ export default function ExamItem(props) {
 						examId &&
 						examId.submission !== null &&
 						examId.submission.endedAt === null &&
-						checkContinue(examId.submission.startedAt,examId.exam.endedAt,Number(examId.exam.duration))  ?(
+						checkContinue(
+							examId.submission.startedAt,
+							examId.exam.endedAt,
+							Number(examId.exam.duration)
+						) ? (
 							<div className="exam-item__button">
 								<button className="exam-item__button__start" onClick={Continue}>
 									Tiếp tục làm bài
@@ -179,7 +188,6 @@ export default function ExamItem(props) {
 				</div>
 			) : null}
 
-			
 			<ToastContainer />
 		</div>
 	);

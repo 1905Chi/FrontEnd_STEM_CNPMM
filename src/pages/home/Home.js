@@ -57,7 +57,7 @@ function Home() {
 				});
 				// Gọi resolve khi công việc đã hoàn thành thành công
 				resolve(apiData);
-			}, 15000); // Giả định mất 2 giây để lấy dữ liệu
+			}, 3000); // Giả định mất 2 giây để lấy dữ liệu
 		});
 
 		// Sử dụng Promise
@@ -106,8 +106,8 @@ function Home() {
 				headers: headers,
 			});
 			if (response.data.statusCode === 200) {
-				setListpost(response.data.result);
-				console.log('data', response.data.result);
+				setListpost(response.data.result.posts);
+				console.log('data', response.data.result.posts);
 			} else {
 				console.log(response.error);
 			}
@@ -124,11 +124,20 @@ function Home() {
 					return (
 						<PostItem
 							key={index}
-							user={post.user}
-							content={post.content}
-							image={post.image}
-							likes={post.likes}
-							index={index}
+							id={post.post.id}
+							authorId={post.post.authorId}
+							authorFirstName={post.post.authorFirstName}
+							authorLastName={post.post.authorLastName}
+							authorAvatar={post.post.authorAvatar}
+							type={post.post.type}
+							refUrls={post.post.refUrls}
+							totalReactions={post.post.totalReactions}
+							totalComments={post.post.totalComments}
+							createdAt={post.post.createdAt}
+							updatedAt={post.post.updatedAt}
+							content={post.post.content}
+							comments={post.post.comments}
+							reaction={post.reaction}
 						/>
 					);
 				})}

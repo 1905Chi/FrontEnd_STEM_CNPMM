@@ -57,6 +57,7 @@ export default function Register(props) {
 			});
 	};
 	const handleChangeDistrict = (value) => {
+		console.log(`selected ${value}`);
 		axios
 			.get(url + `api/v1/addresses/schoolsByDistrict?dId=${value}`)
 			.then((response) => {
@@ -297,9 +298,9 @@ export default function Register(props) {
 										setDistricts([]);
 									}}
 								>
-									{grade.map((grade) => (
-										<Option value={grade} key={grade} style={{ color: 'black' }}>
-											{grade}
+									{provinces.map((grade) => (
+										<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
+											{grade.name}
 										</Option>
 									))}
 								</Select>
@@ -318,9 +319,9 @@ export default function Register(props) {
 										setSchools([]);
 									}}
 								>
-									{grade.map((grade) => (
-										<Option value={grade} key={grade} style={{ color: 'black' }}>
-											{grade}
+									{districts.map((grade) => (
+										<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
+											{grade.name}
 										</Option>
 									))}
 								</Select>
@@ -336,9 +337,9 @@ export default function Register(props) {
 									placeholder="Trường học"
 									onChange={handleChange}
 								>
-									{grade.map((grade) => (
-										<Option value={grade} key={grade} style={{ color: 'black' }}>
-											{grade}
+									{schools.map((grade) => (
+										<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
+											{grade.name}
 										</Option>
 									))}
 								</Select>

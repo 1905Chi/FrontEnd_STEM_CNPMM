@@ -65,7 +65,7 @@ export default function Submit() {
 
 	return (
 		<div className="submit">
-			{submition.questions.length > 0 &&
+			{ submition && submition.questions.length > 0 &&
 				submition.questions.map((question) => (
 					<div key={question.submissionDetailId} className="item-question">
 						<div className="quest-content" dangerouslySetInnerHTML={{ __html: question.content }} />
