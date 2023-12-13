@@ -24,8 +24,7 @@ const Left = () =>{
 
 	//Đăng xuất
 	const logoutHandler = () => {
-		localStorage.removeItem('accessToken');
-		localStorage.removeItem('refreshToken');
+		localStorage.clear();
 		navigate('/login');
 	};
 

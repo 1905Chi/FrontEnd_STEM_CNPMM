@@ -81,7 +81,7 @@ export default function RegisterParent(props) {
 			},
 		};
 		axios
-			.post(url + 'api/v1/auth/register', data, config)
+			.post(url + 'api/v1/auth/register-parent', data, config)
 			.then((response) => {
 				// Xử lý kết quả sau khi gửi thành công
 				if (response.data.statusCode === 200) {
@@ -252,7 +252,7 @@ export default function RegisterParent(props) {
 								/>
 							</Form.Item>
 
-							<Form.Item
+							{/* <Form.Item
 								className="form-item-register"
 								name="district"
 								rules={[{ required: true, message: 'Vui lòng chọn quận huyện!' }]}
@@ -273,7 +273,7 @@ export default function RegisterParent(props) {
 										</Option>
 									))}
 								</Select>
-							</Form.Item>
+							</Form.Item> */}
 
 							<Form.Item
 								name="gender"

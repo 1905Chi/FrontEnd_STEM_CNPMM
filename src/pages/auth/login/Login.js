@@ -37,7 +37,9 @@ function Login() {
 				// Xử lý kết quả sau khi gửi thành công
 				if (response.data.statusCode === 200) {
 					//navigate("/");
-					localStorage.setItem('accessToken', response.data.result.accessToken);
+					console.log('sdjiasd',response.data.result);
+					localStorage.setItem('accessToken', response.data.result.refreshToken);
+					console.log('accessToken', response.data.result.accessToken);
 					localStorage.setItem('refreshToken', response.data.result.refreshToken);
 					localStorage.setItem('role', response.data.result.role);
 					localStorage.setItem('id', response.data.result.id);
