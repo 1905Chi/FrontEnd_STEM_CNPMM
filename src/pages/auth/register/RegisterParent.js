@@ -14,7 +14,7 @@ import './Register.css';
 import { url } from '../../../constants/Constant';
 import Loading from '../../../components/Loading';
 import { GiCancel } from 'react-icons/gi';
-
+import moment from 'moment';
 export default function RegisterParent(props) {
 	const roles = ['STUDENT', 'TEACHER', 'PARENT'];
 	const navigate = useNavigate();
@@ -22,6 +22,7 @@ export default function RegisterParent(props) {
 	const [districts, setDistricts] = useState([]);
 	const [schools, setSchools] = useState([]);
 	const [grade, setGrade] = useState([]);
+	const [currentDate, setCurrentDate] = useState(moment());
 
 	useEffect(() => {
 		axios
@@ -33,6 +34,10 @@ export default function RegisterParent(props) {
 				console.log(error);
 			});
 	}, []);
+
+	const isDateDisabled = (date) => {
+		return date.isAfter(moment()); // Trả về true nếu ngày là ngày tương lai
+	};
 	const handleChangeProvince = (value) => {
 		axios
 			.get(url + `api/v1/addresses/districtsByProvince?pId=${value}`)
@@ -249,6 +254,8 @@ export default function RegisterParent(props) {
 									format="DD-MM-YYYY"
 									style={{ width: '180px' }}
 									placeholder="Ngày tháng năm sinh"
+									onChange={(date) => setCurrentDate(date)}
+									disabledDate={isDateDisabled}
 								/>
 							</Form.Item>
 

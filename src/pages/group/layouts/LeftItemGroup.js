@@ -28,6 +28,7 @@ import { useSelector } from 'react-redux';
 import { FaSignsPost } from 'react-icons/fa6';
 import { MdGroups2 } from 'react-icons/md';
 import { Skeleton } from 'antd';
+import moment from 'moment';
 export default function LeftItemGroup() {
 	const { theme } = UseTheme();
 	const [inforGroup, setInforGroup] = useState(null);
@@ -103,7 +104,7 @@ export default function LeftItemGroup() {
 			.catch((error) => {
 				toast.error(error);
 			});
-		Api.get(url + 'api/v1/group-member-requests?groupId=' + uuid, { headers: headers })
+		Api.get(url + 'api/v1/group-member-requests?groupId=' + uuid+ '&state=PENDING', { headers: headers })
 			.then((response) => {
 				if (response.data.statusCode === 200) {
 					dispatch(selectMemberGroupRequest(response.data.result));
@@ -144,11 +145,15 @@ export default function LeftItemGroup() {
 	}, []);
 
 	const convertDay = (date) => {
-		const dateConvert = new Date(date);
-		const day = dateConvert.getDate();
-		const month = dateConvert.getMonth() + 1;
-		const year = dateConvert.getFullYear();
-		return day + '/' + month + '/' + year;
+		console.log(date);
+		return  date.slice(0,10)
+		// const dateConvert = new Date(date);
+		// console.log(dateConvert);
+		// const day = dateConvert.getDate();
+		// const month = dateConvert.getMonth() + 1;
+		// const year = dateConvert.getFullYear();
+		// console.log(day + '/' + month + '/' + year);
+		// return day + '/' + month + '/' + year;
 	};
 
 	return (
@@ -159,9 +164,9 @@ export default function LeftItemGroup() {
 				) : (
 					<div>
 						<div className="header-item-group">
-							<LableGroup image={group.avatarUrl} name={group.name} />
+							
 							{inforGroup ? (
-								<div style={{display: 'flex', marginLeft:'35px'}}>
+								<div style={{display: 'flex', marginLeft:'35px', marginTop:'15px'}}>
 									<h4 style={{ textAlign: 'center' ,margin:'0px'}}>Nhóm :</h4>
 									<span style={{paddingLeft: '5px'}}>
 										{inforGroup && inforGroup.isPublic=== true
@@ -180,7 +185,7 @@ export default function LeftItemGroup() {
 							{inforGroup && inforGroup.createdAt ? (
 								<div style={{display:'flex', marginLeft:'35px'}}>
 								<h4 style={{ textAlign: 'center' ,margin:'0px'}}>Ngày tạo: </h4>
-								<span style={{ paddingLeft: '5px'}}>{convertDay(inforGroup && inforGroup.createdAt)}</span>
+								<span style={{ paddingLeft: '5px'}}>{convertDay(inforGroup.createdAt)}</span>
 								</div>
 							) : null}
 

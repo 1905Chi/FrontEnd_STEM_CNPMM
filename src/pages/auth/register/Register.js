@@ -57,6 +57,7 @@ export default function Register(props) {
 			});
 	};
 	const handleChangeDistrict = (value) => {
+		console.log(`selected ${value}`);
 		axios
 			.get(url + `api/v1/addresses/schoolsByDistrict?dId=${value}`)
 			.then((response) => {
