@@ -9,6 +9,9 @@ import { Form, Input, Button, Radio, Tooltip, DatePicker, Select } from 'antd';
 import { FcManager } from 'react-icons/fc';
 import { FcBusinesswoman } from 'react-icons/fc';
 import { AiFillQuestionCircle } from 'react-icons/ai';
+import { PiStudentBold } from 'react-icons/pi';
+import { RiParentLine } from 'react-icons/ri';
+import { LiaChalkboardTeacherSolid } from 'react-icons/lia'
 import '../../pages/auth/register/Register.css';
 import moment from 'moment';
 
@@ -121,7 +124,7 @@ const User = () => {
 				gender: values.gender,
 				phone: values.phone,
 				// dob: values.date_picker.format('DD-MM-YYYY'),
-				dob:'12-08-2002',
+				dob: '12-08-2002',
 				role: values.role,
 			};
 			console.log(data);
@@ -326,7 +329,7 @@ const User = () => {
 						>
 							<Input placeholder="Số điện thoại" style={{ width: '180px' }} />
 						</Form.Item>
-						{/* <Form.Item name="date_picker" {...config} className="form-item-register">
+						<Form.Item name="date_picker" {...config} className="form-item-register">
 							<DatePicker
 								format="DD-MM-YYYY"
 								style={{ width: '180px' }}
@@ -334,7 +337,7 @@ const User = () => {
 								onChange={(date) => setCurrentDate(date)}
 								disabledDate={isDateDisabled}
 							/>
-						</Form.Item> */}
+						</Form.Item>
 
 						<Form.Item
 							name="gender"
@@ -368,35 +371,43 @@ const User = () => {
 							</div>
 						</Form.Item>
 						<Form.Item
-							name="gender"
-							defaultValue="MALE"
+							
+							name="roles"
 							rules={[
 								{
 									required: true,
-									message: 'Chọn giới tính',
+									message: 'Chọn vai trò của bạn!',
 								},
 							]}
-							className="form-item-register"
 						>
-							<div>
-								<Radio.Group defaultValue="MALE" style={{ width: '180px' }}>
-									<Tooltip title="Học sinh">
-										<Radio.Button value="STUDENT">
-											<FcManager />
-										</Radio.Button>
-									</Tooltip>
-									<Tooltip title="Giáo viên">
-										<Radio.Button value="TEACHER">
-											<FcBusinesswoman />
-										</Radio.Button>
-									</Tooltip>
-									<Tooltip title="Phụ huynh">
-										<Radio.Button value="PARENT">
-											<AiFillQuestionCircle />
-										</Radio.Button>
-									</Tooltip>
-								</Radio.Group>
-							</div>
+							<Radio.Group defaultValue="STUDENT">
+								<Tooltip title="Giáo viên">
+									<Radio.Button
+										value="TEACHER"
+										style={{ padding: '0px', marginLeft: '25px', padding: '0 20px 0 20px' }}
+									>
+										<LiaChalkboardTeacherSolid />
+									</Radio.Button>
+								</Tooltip>
+								<Tooltip title="Học sinh">
+									<Radio.Button
+										value="STUDENT"
+										style={{
+											padding: '0px',
+											marginLeft: '10px',
+											marginRight: '10px',
+											padding: '0 20px 0 20px',
+										}}
+									>
+										<PiStudentBold />
+									</Radio.Button>
+								</Tooltip>
+								<Tooltip title="Phụ huynh">
+									<Radio.Button value="PARENT" style={{ padding: '0 20px 0 20px' }}>
+										<RiParentLine />
+									</Radio.Button>
+								</Tooltip>
+							</Radio.Group>
 						</Form.Item>
 					</div>
 

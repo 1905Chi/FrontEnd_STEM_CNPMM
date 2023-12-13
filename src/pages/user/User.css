@@ -24,3 +24,14 @@
 .p-dialog {
     background-color: blanchedalmond;
 }
+
+.ant-picker-dropdown {
+    z-index: 2000;
+  }
+  
+  .p-dialog {
+    z-index: 1000;
+  }
+  .ant-tooltip {
+    z-index: 2000;
+  }

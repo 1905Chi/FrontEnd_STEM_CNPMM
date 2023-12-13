@@ -42,6 +42,8 @@ import User from '../pages/user/User';
 import Subject from '../pages/subject/Subject';
 import Address from '../pages/address/Address';
 
+
+
 const privateRoutes = [
 	{ path: '/home', component: Home, Left: Left, Right: Right },
 
