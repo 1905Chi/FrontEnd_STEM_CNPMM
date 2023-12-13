@@ -36,7 +36,7 @@ const Address = () => {
 			});
 			const provinces = response.data.result.provinces;
       setTotalElemet(response.data.result.totalElements);
-      setTotalpage(response.data.result.totalPages);
+      
       console.log('totalpage',totalpage);
       console.log('totalElemet',totalElemet);
 			if (provinces && provinces.length > 0) {
@@ -232,10 +232,11 @@ const Address = () => {
         
 			/>
 			<Pagination
-        total= {80}
+        total= {Number(totalElemet)}
         showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-        defaultPageSize= {5}
+        defaultPageSize= {Number(pageSize)}
         defaultCurrent={1}
+        onChange={handlePaginationChange}
       />
 		</div>
 	);
