@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Api from '../api/Api';
 import { url } from './../constants/Constant';
 import { useSelector, useDispatch } from 'react-redux';
@@ -6,78 +6,60 @@ import { selectFriendRequest } from '../redux/Friend';
 import { selectselectFriendRequest } from '../redux/Friend';
 import { Avatar } from 'antd';
 import { selectFriend } from '../redux/Friend';
-import './../pages/friend/layouts/LeftFriend.css';
-import { toast, ToastContainer } from 'react-toastify';
+import "./../pages/friend/layouts/LeftFriend.css"
+import { toast,ToastContainer } from 'react-toastify';
 import { editFriendRequest } from '../redux/Friend';
 import { selectOption } from '../redux/Group';
 
 export default function Right() {
 	const dispatch = useDispatch();
 	const friendRequest = useSelector(selectselectFriendRequest);
-	const accept = (status, id) => () => {
-		if (status === 'ACCEPT') {
-			const headers = {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-			};
-			Api.put(url + 'api/v1/friend-requests/accept/' + id, { headers: headers })
-				.then((res) => {
-					toast.success('Đã chấp nhận lời mời kết bạn');
-					dispatch(editFriendRequest(id));
-					dispatch(selectOption('all'));
-				})
-				.catch((err) => {
-					toast.error('Đã xảy ra lỗi');
-				});
-		}
-		if (status === 'REJECT') {
-			const headers = {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-			};
-			Api.put(url + 'api/v1/friend-requests/reject/' + id, { headers: headers })
-				.then((res) => {
-					toast.success('Đã xóa lời mời kết bạn');
-					dispatch(editFriendRequest(id));
-					dispatch(selectOption('all'));
-				})
-				.catch((err) => {
-					toast.error('Đã xảy ra lỗi');
-				});
-		}
-	};
-
-	const [friend, setFriend] = useState([]);
-
-	const fetchFriend = async () => {
-		try {
-			const headers = {
-				'Content-Type': 'application/json',
-				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
-			};
-			const response = await Api.get(url + 'friend/pending', { headers: headers });
-			if (response.data.statusCode === 200) {
-				setFriend(response.data.friendWithAuthor);
-			}
-		} catch (err) {
-			console.log(err);
-		}
+  const accept = (status, id) => () => {
+    if(status=== "ACCEPT"){
+		const headers = {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+		};
+		Api.put(url + 'api/v1/friend-requests/accept/'+id , { headers: headers })
+			.then((res) => {
+			   toast.success("Đã chấp nhận lời mời kết bạn")
+			   dispatch(editFriendRequest(id));
+			   dispatch(selectOption('all'));
+			})
+			.catch((err) => {
+				toast.error("Đã xảy ra lỗi")
+			});
 	}
+	if(status=== "REJECT"){
+		const headers = {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+		};
+		Api.put(url + 'api/v1/friend-requests/reject/'+id , { headers: headers })
+			.then((res) => {
+				toast.success("Đã xóa lời mời kết bạn")
+				dispatch(editFriendRequest(id));
+				dispatch(selectOption('all'));
+			})
+			.catch((err) => {
+				toast.error("Đã xảy ra lỗi")    
+			});
+	}
+  };
 
 	useEffect(() => {
-		// const headers = {
-		// 	'Content-Type': 'application/json',
-		// 	Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-		// };
-		// Api.get(url + 'api/v1/users/friend-requests', { headers: headers })
-		// 	.then((res) => {
-		// 		console.log(res.data);
-		// 		dispatch(selectFriendRequest(res.data.result));
-		// 	})
-		// 	.catch((err) => {
-		// 		console.log(err);
-		// 	});
-		fetchFriend();
+		const headers = {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+		};
+		Api.get(url + 'api/v1/users/friend-requests', { headers: headers })
+			.then((res) => {
+				console.log(res.data);
+        dispatch(selectFriendRequest(res.data.result));
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	}, []);
 	return (
 		<>
@@ -85,8 +67,8 @@ export default function Right() {
 				<div className="friend-request__title">
 					<p>Lời mời kết bạn</p>
 				</div>
-				{friend &&
-					friend.map((item, index) => (
+				{friendRequest &&
+					friendRequest.map((item, index) => (
 						<div
 							className="friend-request__item"
 							key={item.id}
@@ -96,12 +78,12 @@ export default function Right() {
 						>
 							<div style={{ flex: '2', margin: '15px', marginTop: '18px' }}>
 								<div className="friend-request__item__avatar">
-									<Avatar src={item.avartarUrl} alt="" />
+									<Avatar src={item.sender.avartarUrl} alt="" />
 								</div>
 							</div>
 							<div className="friend-request__item__button">
 								<div className="friend-request__item__name">
-									<p>{item.firstName + ' ' + item.lastName}</p>
+									<p>{item.sender.firstName + ' ' + item.sender.lastName}</p>
 								</div>
 								<div style={{ textAlign: 'start' }}>
 									<button
@@ -111,18 +93,14 @@ export default function Right() {
 									>
 										Chấp nhận
 									</button>
-									<button
-										className="btn btn-danger"
-										onClick={accept('REJECT', item.id)}
-										style={{ width: '64px' }}
-									>
+									<button className="btn btn-danger" onClick={accept('REJECT', item.id)} style={{width:'64px'}}>
 										Xóa
 									</button>
 								</div>
 							</div>
 						</div>
 					))}
-				<ToastContainer />
+					<ToastContainer/>
 			</div>
 		</>
 	);
