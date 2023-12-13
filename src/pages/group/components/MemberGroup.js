@@ -11,7 +11,9 @@ import { url } from '../../../constants/Constant';
 import { selectselectGroup } from '../../../redux/GetItemGroup';
 import { selectselectMemberGroup,editMemberRequest } from '../../../redux/MemberGroup';
 import { selectselectMemberGroupRequest } from '../../../redux/MemberGroup';
+import { useDispatch } from 'react-redux';
 export default function MemberGroup() {
+	const dispatch = useDispatch();
 	const inforGroup = useSelector(selectselectGroup);
 	const memberGroup = useSelector(selectselectMemberGroup);
 	const memberGroupRequest = useSelector(selectselectMemberGroupRequest);
