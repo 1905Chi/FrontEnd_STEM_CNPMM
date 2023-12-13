@@ -23,6 +23,7 @@ export default function ExamItem(props) {
 
 	const CreateSubmit = () => {
 		localStorage.setItem('typesubmit', 'create');
+		localStorage.setItem('StartAt', examId.exam.staredAt)
 		setTimeout(() => {
 			navigate('/exam/' + id + '/submit');
 		}, 3000);
@@ -30,7 +31,9 @@ export default function ExamItem(props) {
 
 	const Continue = () => {
 		localStorage.setItem('typesubmit', 'continue');
+		localStorage.setItem('StartAt', examId.submission.startedAt)
 		localStorage.setItem('submissionId', examId.submission.id);
+		localStorage.setItem('duration', examId.exam.duration)
 		setTimeout(() => {
 			navigate('/exam/' + id + '/submit');
 		}, 3000);
@@ -67,10 +70,7 @@ export default function ExamItem(props) {
 						'000000';
 
 					const nowDate = moment(nowTime, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
-					console.log(nowTime);
-					console.log(nowDate);
-					console.log(startTime);
-					console.log(endTime);
+					
 
 					if (nowDate >= startTime && nowDate <= endTime) {
 						setIsWithinTimeRange(true);
@@ -109,11 +109,6 @@ export default function ExamItem(props) {
 			'000000';
 
 		const nowDate = moment(nowTime, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
-		
-		console.log(nowDate);
-		console.log(startTime);
-		console.log(endTime);
-	
 		if (nowDate >= startTime && nowDate <= endTime) {
 			if (startTime+duration*60000 <nowDate) {
 				return false;

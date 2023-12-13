@@ -61,7 +61,7 @@ const Topbar = (props) => {
 					},
 				},
 			]);
-		} else if (role === 'TEACHER' || role === 'STUDENT' || role === 'PARENT') {
+		} else if (role === 'TEACHER' || role === 'STUDENT' || role === 'PARENT' ||user.role === 'TEACHER' || user.role === 'STUDENT' || user.role === 'PARENT') {
 			setItems([
 				{
 					label: 'Trang chủ',
