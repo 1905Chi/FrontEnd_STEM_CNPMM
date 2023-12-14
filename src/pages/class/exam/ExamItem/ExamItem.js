@@ -12,6 +12,7 @@ import { selectselectuser } from '../../../../redux/User';
 import { selectsubmition } from '../../../../redux/Exam';
 import { useDispatch } from 'react-redux';
 import { selectexam, selectselectexam } from '../../../../redux/Exam';
+import { RiArrowGoBackLine } from "react-icons/ri";
 import moment from 'moment';
 export default function ExamItem(props) {
 	const { uuid, id } = useParams();
@@ -24,6 +25,7 @@ export default function ExamItem(props) {
 	const CreateSubmit = () => {
 		localStorage.setItem('typesubmit', 'create');
 		localStorage.setItem('StartAt', examId.exam.staredAt)
+		localStorage.setItem('duration', examId.exam.duration)
 		setTimeout(() => {
 			navigate('/exam/' + id + '/submit');
 		}, 3000);
@@ -119,8 +121,38 @@ export default function ExamItem(props) {
 			return false;
 		}
 	};
+	const checkClose = (dateEnd) => {
+		const endTime = moment(dateEnd, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
+
+		const now = new Date();
+
+		const nowTime =
+			now.getDate() +
+			'-' +
+			(now.getMonth() + 1) +
+			'-' +
+			now.getFullYear() +
+			' ' +
+			now.getHours() +
+			':' +
+			now.getMinutes() +
+			':' +
+			now.getSeconds() +
+			':' +
+			'000000';
+
+		const nowDate = moment(nowTime, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
+		if (nowDate > endTime) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	return (
 		<div className="exam-item-component">
+			<button className="exam-item-component__back" onClick={() => navigate('/classes/' + uuid)}>
+				<RiArrowGoBackLine/>	 Trở về khóa học
+			</button>
 			{examId ? (
 				<div className="exam-item">
 					<div className="exam-item__header">
@@ -176,6 +208,21 @@ export default function ExamItem(props) {
 							<div className="exam-item__button">
 								<button className="exam-item__button__start" onClick={Continue}>
 									Tiếp tục làm bài
+								</button>
+							</div>
+						) : null}
+						{user.role === 'STUDENT' &&
+						examId &&
+						examId.submission !== null &&
+						examId.submission.endedAt !== null &&
+						checkClose(
+							
+							examId.exam.endedAt,
+							
+						) ? (
+							<div className="exam-item__button">
+								<button className="exam-item__button__start" onClick={Continue}>
+									Xem lại bài làm
 								</button>
 							</div>
 						) : null}

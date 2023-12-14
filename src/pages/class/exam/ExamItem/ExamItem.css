@@ -9,3 +9,7 @@
 .exam-item-component{
     margin-top: 75px;
 }
+
+.exam-item-component__back{
+    margin: 3rem 0 0 5rem;
+}
