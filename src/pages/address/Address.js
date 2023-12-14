@@ -21,7 +21,7 @@ const Address = () => {
 	const [page, setPage] = useState(0);
 	const [pageSize, setPageSize] = useState(1);
 	const [totalElemet, setTotalElemet] = useState(0);
-  const [totalpage, setTotalpage] = useState(0);
+	const [totalpage, setTotalpage] = useState(0);
 	useEffect(() => {
 		fetchData();
 	}, []);
@@ -35,10 +35,10 @@ const Address = () => {
 				headers: header,
 			});
 			const provinces = response.data.result.provinces;
-      setTotalElemet(response.data.result.totalElements);
-      
-      console.log('totalpage',totalpage);
-      console.log('totalElemet',totalElemet);
+			setTotalElemet(response.data.result.totalElements);
+
+			console.log('totalpage', totalpage);
+			console.log('totalElemet', totalElemet);
 			if (provinces && provinces.length > 0) {
 				const provincesWithDistricts = await Promise.all(
 					provinces.map(async (province) => {
@@ -89,29 +89,29 @@ const Address = () => {
 	};
 
 	// const expandtableDistricts = (record) => {
-		const columnschool= [
-			{
-				title: 'Thứ tự',
-				dataIndex: 'key',
-				key: 'key',
-				render: (key) => Number(key) + 1,
-			},
-			{
-				title: 'Code',
-				dataIndex: 'code',
-				key: 'code',
-			},
-			{
-				title: 'Tên trường',
-				dataIndex: 'name',
-				key: 'name',
-			},
-			{
-				title: 'Mô tả',
-				key: 'description',
-				render: (description) => (description ? description : 'Không có mô tả'),
-			},
-		];
+	const columnschool = [
+		{
+			title: 'Thứ tự',
+			dataIndex: 'key',
+			key: 'key',
+			render: (key) => Number(key) + 1,
+		},
+		{
+			title: 'Code',
+			dataIndex: 'code',
+			key: 'code',
+		},
+		{
+			title: 'Tên trường',
+			dataIndex: 'name',
+			key: 'name',
+		},
+		{
+			title: 'Mô tả',
+			key: 'description',
+			render: (description) => (description ? description : 'Không có mô tả'),
+		},
+	];
 
 	// 	return (
 	// 		<div style={{ textAlign: 'center' }}>
@@ -128,58 +128,53 @@ const Address = () => {
 				dataIndex: 'key',
 				key: 'key',
 				render: (key) => Number(key) + 1,
-        width: '5%',
+				width: '5%',
 			},
 			{
 				title: 'Code',
 				dataIndex: 'code',
 				key: 'code',
-        width: '5%',
+				width: '5%',
 			},
 			{
 				title: 'Tên huyện',
 				dataIndex: 'name',
 				key: 'name',
-        width: '20%',
+				width: '20%',
 			},
 			{
 				title: 'Mô tả',
-        dataIndex: 'description',
+				dataIndex: 'description',
 				key: 'description',
 				render: (description) => (description ? description : 'Không có mô tả'),
-        width: '10%',
+				width: '10%',
 			},
-      {
-        title: 'Trường',
-        key: 'schools',
-        render: (text, record) => (
-          <Collapse className='collapse-table'>
-          <Collapse.Panel header="Danh sách các trường của huyện" key="1">
-              <Table
-                dataSource={record.schools}
-                columns={columnschool}
-                pagination={false}
-              />
-           </Collapse.Panel>
-          </Collapse>
-        ),
-        width: '40%',
-      }
+			{
+				title: 'Trường',
+				key: 'schools',
+				render: (text, record) => (
+					<Collapse className="collapse-table">
+						<Collapse.Panel header="Danh sách các trường của huyện" key="1">
+							<Table dataSource={record.schools} columns={columnschool} pagination={false} />
+						</Collapse.Panel>
+					</Collapse>
+				),
+				width: '40%',
+			},
 		];
 
 		return (
-      <div style={{textAlign:'center'}}>
-        <h3>Danh sách các huyện của tỉnh {record.name}</h3>
-			<Table
-				columns={columns}
-				dataSource={record.districts}
-				pagination={false}
-        size="small"
-				
-        align="center"
-        width="90%"
-			/>
-      </div>
+			<div style={{ textAlign: 'center' }}>
+				<h3>Danh sách các huyện của tỉnh {record.name}</h3>
+				<Table
+					columns={columns}
+					dataSource={record.districts}
+					pagination={false}
+					size="small"
+					align="center"
+					width="90%"
+				/>
+			</div>
 		);
 	};
 	const columns = [
@@ -188,26 +183,26 @@ const Address = () => {
 			dataIndex: 'key',
 			key: 'key',
 			render: (key) => Number(key) + 1,
-      width: '5%',
+			width: '5%',
 		},
 		{
 			title: 'Code',
 			dataIndex: 'code',
 			key: 'code',
-      width: '5%',
+			width: '5%',
 		},
 		{
 			title: 'Tên tỉnh',
 			dataIndex: 'name',
 			key: 'name',
-      width: '20%',
+			width: '20%',
 		},
 		{
 			title: 'Mô tả',
 			dataIndex: 'description',
 			key: 'description',
 			render: (description) => (description ? description : 'Không có mô tả'),
-      width: '70%',
+			width: '70%',
 		},
 	];
 
@@ -216,9 +211,9 @@ const Address = () => {
 		console.log(`Selected Page: ${current}, PageSize: ${pageSize}`);
 	};
 
-	
 	return (
 		<div className="manager-address-admin">
+			<h1 style={{ textAlign: 'center' }}>Danh sách các tỉnh, huyện, trường</h1>
 			<Table
 				columns={columns}
 				expandable={{
@@ -227,17 +222,16 @@ const Address = () => {
 				dataSource={listdata}
 				size="middle"
 				pagination={false}
-        style={{width:'90%' , marginLeft:'5rem'}}
-        align="center"
-        
+				style={{ width: '90%', marginLeft: '5rem' }}
+				align="center"
 			/>
 			<Pagination
-        total= {Number(totalElemet)}
-        showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-        defaultPageSize= {Number(pageSize)}
-        defaultCurrent={1}
-        onChange={handlePaginationChange}
-      />
+				total={Number(totalElemet)}
+				showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+				defaultPageSize={Number(pageSize)}
+				defaultCurrent={1}
+				onChange={handlePaginationChange}
+			/>
 		</div>
 	);
 };

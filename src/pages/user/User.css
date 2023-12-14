@@ -1,4 +1,4 @@
-#user-container {
+#manage-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -21,8 +21,42 @@
     border-radius: 50%;
     
 }
+#user-container {
+  height: auto;
+  width: 80%;
+  margin: 0 0 1rem 0;
+}
+#add-user-button {
+  width: auto;
+  height: 3rem;
+  margin: 0 0 1rem 0;
+  background-color: #1890ff;
+}
+#add-user-button:hover {
+  background-color: #40a9ff;
+}
+#column-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#action-button {
+  width: auto;
+  height: auto;
+  background-color: #1890ff;
+}
+#action-button:hover {
+  background-color: #40a9ff;
+}
+
+
+
+
 .p-dialog {
     background-color: blanchedalmond;
+    padding: 1rem;
+    border-radius: 0.5rem;
 }
 
 .ant-picker-dropdown {

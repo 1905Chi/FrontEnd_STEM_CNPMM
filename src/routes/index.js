@@ -41,6 +41,7 @@ import EditExam from '../pages/class/exam/ExamItem/EditExam';
 import User from '../pages/user/User';
 import Subject from '../pages/subject/Subject';
 import Address from '../pages/address/Address';
+import ManageGroup from '../pages/manageGroup/ManageGroup';
 
 
 
@@ -69,9 +70,10 @@ const private1page = [
 	{ path: '/classes/:uuid/exam/createquiz', component: CreateQuiz },
 	{ path: '/profile', component: Profile },
 	{ path: '/classes/:uuid/exam/:id', component: ExamItem },
-	{ path: '/users', component: User, Left: Left, Right: Right  },
+	{ path: '/users', component: User, Left: Left, Right: Right },
 	{ path: '/subjects', component: Subject, Left: Left },
 	{ path: '/addresses', component: Address, Left: Left },
+	{ path: '/manage/groups', component: ManageGroup },
 ];
 const publicRoutes = [
 	{ path: '/login', component: Login },

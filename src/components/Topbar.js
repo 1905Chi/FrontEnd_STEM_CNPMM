@@ -40,6 +40,13 @@ const Topbar = (props) => {
 					},
 				},
 				{
+					label: 'Nhóm',
+					icon: 'pi pi-fw pi-users',
+					command: () => {
+						navigate('/manage/groups');
+					},
+				},
+				{
 					label: 'Môn học',
 					icon: 'pi pi-fw pi-users',
 					command: () => {
