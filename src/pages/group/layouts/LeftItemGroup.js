@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import LableGroup from './../components/LableGroup';
-import { Button } from 'antd';
+import { Button, Checkbox } from 'antd';
 import './LeftItemGroup.css';
 import { BsFillCalendar2WeekFill } from 'react-icons/bs';
 import { InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
@@ -28,6 +28,7 @@ import { useSelector } from 'react-redux';
 import { FaSignsPost } from 'react-icons/fa6';
 import { MdGroups2 } from 'react-icons/md';
 import { Skeleton } from 'antd';
+import { Dialog } from 'primereact/dialog';
 import moment from 'moment';
 export default function LeftItemGroup() {
 	const { theme } = UseTheme();
@@ -39,9 +40,11 @@ export default function LeftItemGroup() {
 	const location = useLocation();
 	const isClassesPath = location.pathname.includes('classes');
 	const memberGroup = useSelector(selectselectMemberGroup);
-
+	const [visible, setVisible] = useState(false);
 	const dispatch = useDispatch();
 
+	const [listfriend, setListFriend] = useState([]);
+	const [listfriendSelected, setListFriendSelected] = useState([]);
 	const headers = {
 		Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 		'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
@@ -104,7 +107,7 @@ export default function LeftItemGroup() {
 			.catch((error) => {
 				toast.error(error);
 			});
-		Api.get(url + 'api/v1/group-member-requests?groupId=' + uuid+ '&state=PENDING', { headers: headers })
+		Api.get(url + 'api/v1/group-member-requests?groupId=' + uuid + '&state=PENDING', { headers: headers })
 			.then((response) => {
 				if (response.data.statusCode === 200) {
 					dispatch(selectMemberGroupRequest(response.data.result));
@@ -146,7 +149,7 @@ export default function LeftItemGroup() {
 
 	const convertDay = (date) => {
 		console.log(date);
-		return  date.slice(0,10)
+		return date.slice(0, 10);
 		// const dateConvert = new Date(date);
 		// console.log(dateConvert);
 		// const day = dateConvert.getDate();
@@ -155,37 +158,80 @@ export default function LeftItemGroup() {
 		// console.log(day + '/' + month + '/' + year);
 		// return day + '/' + month + '/' + year;
 	};
+	const openDialogInviteMember = () => {
+		Api.get(url + 'api/v1/users/friends', { headers: headers })
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					setListFriend(response.data.result);
+					setListFriendSelected(response.data.result);
+					setVisible(true);
+				} else {
+					toast.error(response.data.message);
+				}
+			})
+			.catch((error) => {
+				toast.error(error);
+			});
+	};
 
 	return (
 		<>
+			<Dialog
+				header="Mời thành viên"
+				visible={visible}
+				style={{ width: '50vw' }}
+				onHide={() => {
+					setVisible(false);
+				}}
+			>
+				<div className="body-invite-friend">
+					<div className="left-invite-friend">
+						<input placeholder="Tìm bạn bè" />
+						<span>Gợi ý</span>
+						{listfriendSelected && listfriendSelected.length > 0 ? <div>
+							{listfriendSelected.map((item, index) => {
+								return (
+									<div
+										
+									>
+										<img src={item.avatar} alt="avatar" />
+										<span>{item.name}</span>
+										<Checkbox />
+									</div>
+								);
+							})}
+						</div> : null}
+					</div>
+					<div className="right-invite-friend">
+						<p>Đã chọn {} người bạn</p>
+					</div>
+				</div>
+			</Dialog>
 			<div style={{ position: 'relative', borderRight: '0.2px solid black', top: '45px' }}>
 				{memberGroup === null || inforGroup === null ? (
 					<Skeleton />
 				) : (
 					<div>
 						<div className="header-item-group">
-							
 							{inforGroup ? (
-								<div style={{display: 'flex', marginLeft:'35px', marginTop:'15px'}}>
-									<h4 style={{ textAlign: 'center' ,margin:'0px'}}>Nhóm :</h4>
-									<span style={{paddingLeft: '5px'}}>
-										{inforGroup && inforGroup.isPublic=== true
-											? 'Công Khai'
-											: 'Riêng tư'}
+								<div style={{ display: 'flex', marginLeft: '35px', marginTop: '15px' }}>
+									<h4 style={{ textAlign: 'center', margin: '0px' }}>Nhóm :</h4>
+									<span style={{ paddingLeft: '5px' }}>
+										{inforGroup && inforGroup.isPublic === true ? 'Công Khai' : 'Riêng tư'}
 									</span>
 								</div>
 							) : null}
 
 							{memberGroup && memberGroup.length > 0 ? (
-								<div style={{display:'flex', marginLeft:'35px'}}>
-									<h4 style={{ textAlign: 'center' ,margin:'0px'}}>Thành viên:</h4>
-									<span style={{paddingLeft: '5px'}}>{memberGroup && memberGroup.length}</span>
+								<div style={{ display: 'flex', marginLeft: '35px' }}>
+									<h4 style={{ textAlign: 'center', margin: '0px' }}>Thành viên:</h4>
+									<span style={{ paddingLeft: '5px' }}>{memberGroup && memberGroup.length}</span>
 								</div>
 							) : null}
 							{inforGroup && inforGroup.createdAt ? (
-								<div style={{display:'flex', marginLeft:'35px'}}>
-								<h4 style={{ textAlign: 'center' ,margin:'0px'}}>Ngày tạo: </h4>
-								<span style={{ paddingLeft: '5px'}}>{convertDay(inforGroup.createdAt)}</span>
+								<div style={{ display: 'flex', marginLeft: '35px' }}>
+									<h4 style={{ textAlign: 'center', margin: '0px' }}>Ngày tạo: </h4>
+									<span style={{ paddingLeft: '5px' }}>{convertDay(inforGroup.createdAt)}</span>
 								</div>
 							) : null}
 
@@ -202,6 +248,7 @@ export default function LeftItemGroup() {
 												height: '50px',
 												alignItems: 'center',
 											}}
+											onClick={openDialogInviteMember}
 										>
 											<span style={{ fontSize: '15px', fontWeight: '500' }}>
 												{' '}
