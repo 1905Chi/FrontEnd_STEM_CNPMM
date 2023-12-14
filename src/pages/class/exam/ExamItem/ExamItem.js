@@ -14,6 +14,8 @@ import { useDispatch } from 'react-redux';
 import { selectexam, selectselectexam } from '../../../../redux/Exam';
 import { RiArrowGoBackLine } from "react-icons/ri";
 import moment from 'moment';
+import {Table} from 'antd';
+import Title from 'antd/es/skeleton/Title';
 export default function ExamItem(props) {
 	const { uuid, id } = useParams();
 	const navigate = useNavigate();
@@ -21,7 +23,8 @@ export default function ExamItem(props) {
 	const [examId, setExamId] = useState();
 	const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 	const [isWithinTimeRange, setIsWithinTimeRange] = useState(false);
-
+	const [listsubmit, setlistsubmit] = useState();
+const [converArray, setconverArray] = useState()
 	const CreateSubmit = () => {
 		localStorage.setItem('typesubmit', 'create');
 		localStorage.setItem('StartAt', examId.exam.staredAt)
@@ -46,6 +49,7 @@ export default function ExamItem(props) {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
 		};
+
 		Api.get(url + 'api/v1/exams/' + id, { headers: headers })
 			.then((response) => {
 				if (response.data.statusCode === 200) {
@@ -55,6 +59,12 @@ export default function ExamItem(props) {
 
 					const endTime = moment(response.data.result.exam.endedAt, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
 					const now = new Date();
+					setconverArray([{
+						key:0,
+						startedAt:response.data.result.submission.startedAt,
+						endedAt:response.data.result.submission.endedAt,
+						score:response.data.result.submission.score
+					}])
 
 					const nowTime =
 						now.getDate() +
@@ -86,6 +96,30 @@ export default function ExamItem(props) {
 			.catch((error) => {
 				toast.error(error);
 			});
+
+			if(user.role==='TEACHER'){
+				Api.get(url+'api/v1/submissions/list/'+id,{headers:headers})
+				.then((response)=>{
+					if(response.data.statusCode===200){
+						const list = response.data.result.map((item,index)=>{
+							return{
+								key:index,
+								authorId:item.authorId,
+								score:item.score,
+								createdAt:item.createdAt,
+								updatedAt:item.updatedAt
+							}
+						})
+						setlistsubmit(list)
+						console.log(list)
+
+					}
+					
+				})
+				.catch((error)=>{
+					toast.error(error)
+				})
+			}
 	}, [id]);
 
 	const checkContinue = (dateStart, dateEnd, duration) => {
@@ -148,10 +182,80 @@ export default function ExamItem(props) {
 			return false;
 		}
 	}
+	const columns = [
+		{
+			title: 'Thứ tự',
+			dataIndex: 'key',
+			key: 'key',
+			render: (key) => Number(key) + 1,
+		},
+		{
+			title:'Học sinh',
+			dataIndex:'authorId',
+			key:'authorId'
+
+		},
+		{
+			title:'Điểm',
+			dataIndex:'score',
+			key:'score'
+		},
+		{
+			title:'Thời gian bắt đầu',
+			dataIndex:'createdAt',
+			key:'createdAt'
+		},
+		{
+			title:'Thời gian nộp bài',
+			dataIndex:'updatedAt',
+			key:'updatedAt'
+		},
+		{
+			title:'Action',
+			dataIndex:'action',
+			key:'action',
+			render:(text,record)=>(
+				<span>
+					<button className="exam-item__button__start" onClick={()=>{}}>Xem</button>
+				</span>
+			)
+		}
+	]
+
+	const columStudent = [
+		{
+			title:'Bắt đầu lúc',
+			dataIndex:'startedAt',
+			key:'startedAt',
+		},
+		{
+			title:'Nộp bài lúc',
+			dataIndex:'endedAt',
+			key:'endedAt'
+		},
+		{
+			title:'Điểm',
+			dataIndex:'score',
+			key:'score'
+		},
+		{
+			title:'Action',
+			dataIndex:'action',
+			key:'action',
+			render:(text,record)=>(
+				<span>
+					<button className="exam-item__button__start" onClick={()=>{}}>Xem lại bài làm </button>
+				</span>
+			)
+		}
+
+	]
+	
+
 	return (
 		<div className="exam-item-component">
 			<button className="exam-item-component__back" onClick={() => navigate('/classes/' + uuid)}>
-				<RiArrowGoBackLine/>	 Trở về khóa học
+				<RiArrowGoBackLine/>	 Trở về lớp học
 			</button>
 			{examId ? (
 				<div className="exam-item">
@@ -221,11 +325,18 @@ export default function ExamItem(props) {
 							
 						) ? (
 							<div className="exam-item__button">
-								<button className="exam-item__button__start" onClick={Continue}>
-									Xem lại bài làm
-								</button>
+								<h3>Kết quả bài làm</h3>
+								<Table columns={columStudent} dataSource={converArray} size="middle"  style={{margin:'0px 20%'}} />
 							</div>
 						) : null}
+						{user.role === 'TEACHER' ? (
+							<div style={{textAlign:'center'}}>
+								<h3>Danh sách bài làm</h3>
+								
+							<Table columns={columns} dataSource={listsubmit} size="middle"  style={{margin:'0px 20%'}} />
+						</div>): null
+						}
+						
 					</div>
 				</div>
 			) : null}

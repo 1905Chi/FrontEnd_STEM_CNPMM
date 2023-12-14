@@ -21,6 +21,7 @@ export default function Submit() {
 	const [time, setTime] = useState(0);
 	const [targetTime, setTargetTime] = useState();
 	const [loading, setloading] = useState(false);
+	const [iscreate, setiscreate] = useState(false);
 
 	const onFinish = () => {
 		setloading(true);
@@ -53,7 +54,7 @@ export default function Submit() {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
 		};
-		if (typesubmit === 'create') {
+		if (typesubmit === 'create' && !iscreate) {
 			Api.post(url + 'api/v1/submissions/create?examId=' + id + '', { headers: headers })
 				.then((response) => {
 					if (response.data.statusCode === 200) {
@@ -61,6 +62,7 @@ export default function Submit() {
 						localStorage.setItem('submissionId', response.data.result.submissionId);
 						setTargetTime(Number(localStorage.getItem('duration')) * 60 * 1000);
 						localStorage.removeItem('typesubmit');
+						setiscreate(true);
 						
 					} else {
 						toast.error(response.data.message);

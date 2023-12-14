@@ -13,3 +13,7 @@
 .exam-item-component__back{
     margin: 3rem 0 0 5rem;
 }
+
+.item__button__start{
+    border-radius: 5px;
+}

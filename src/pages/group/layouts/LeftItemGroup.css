@@ -28,3 +28,27 @@
     margin-left: 10px;
     font-weight: 500;
 }
+.body-invite-friend{
+    margin: 2%;
+    
+    display: flex;
+    
+}
+
+.right-invite-friend p{
+    margin: 0px;
+    
+}
+
+.left-invite-friend input{
+    border-radius: 30px;
+}
+
+.left-invite-friend {
+    width: 50%;
+    
+}
+.right-invite-friend{
+    width: 50%;
+    
+}
