@@ -59,14 +59,16 @@ export default function Submit() {
 					if (response.data.statusCode === 200) {
 						setsubmition(response.data.result);
 						localStorage.setItem('submissionId', response.data.result.submissionId);
-						setTargetTime(response.data.result.exam.duration * 60 * 1000);
-						console.log(response.data.result.exam.duration * 60 * 1000);
+						setTargetTime(Number(localStorage.getItem('duration')) * 60 * 1000);
+						localStorage.removeItem('typesubmit');
+						
 					} else {
 						toast.error(response.data.message);
 					}
 				})
 				.catch((error) => {
 					toast.error('Lỗi! không thể mở bài kiểm tra. Vui lòng quay lại sau	');
+					console.log(error);
 				});
 		}
 		if (typesubmit === 'continue') {
@@ -103,7 +105,7 @@ export default function Submit() {
 					toast.error(error);
 				});
 		}
-	}, [id]);
+	}, []);
 	const [selectedAnswers, setSelectedAnswers] = useState([]);
 
 	const handleRadioChange = (questionId, answer, typeCode) => {

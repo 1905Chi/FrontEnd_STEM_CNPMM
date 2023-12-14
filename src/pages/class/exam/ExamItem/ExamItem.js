@@ -25,6 +25,7 @@ export default function ExamItem(props) {
 	const CreateSubmit = () => {
 		localStorage.setItem('typesubmit', 'create');
 		localStorage.setItem('StartAt', examId.exam.staredAt)
+		localStorage.setItem('duration', examId.exam.duration)
 		setTimeout(() => {
 			navigate('/exam/' + id + '/submit');
 		}, 3000);
