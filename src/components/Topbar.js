@@ -25,7 +25,7 @@ const Topbar = (props) => {
 	const [historySearch, sethistorySearch] = useState(JSON.parse(localStorage.getItem('search')));
 	const [openMenu, setOpenMenu] = useState(false);
 	const [editprofile, setEditProfile] = useState(false);
-	const role = localStorage.getItem('role') || '';
+	const role = localStorage.getItem('role') ? localStorage.getItem('role') : null;
 	const [isLogin, setIsLogin] = useState(localStorage.getItem('accessToken') ? true : false);
 	const [items, setItems] = useState([]);
 
@@ -61,7 +61,32 @@ const Topbar = (props) => {
 					},
 				},
 			]);
-		} else if (role === 'TEACHER' || role === 'STUDENT' || role === 'PARENT' ||user.role === 'TEACHER' || user.role === 'STUDENT' || user.role === 'PARENT') {
+		} else if (role ===undefined || role=== null|| role === 'TEACHER' || role === 'STUDENT' || role === 'PARENT' ||user.role === 'TEACHER' || user.role === 'STUDENT' || user.role === 'PARENT') {
+			setItems([
+				{
+					label: 'Trang chủ',
+					icon: 'pi pi-fw pi-home',
+					command: () => {
+						navigate('/home');
+					},
+				},
+				{
+					label: 'Lớp học',
+					icon: 'pi pi-fw pi-users',
+					command: () => {
+						navigate('/classes');
+					},
+				},
+				{
+					label: 'Nhóm',
+					icon: 'pi pi-fw pi-users',
+					command: () => {
+						navigate('/groups');
+					},
+				},
+			]);
+		}
+		else{
 			setItems([
 				{
 					label: 'Trang chủ',

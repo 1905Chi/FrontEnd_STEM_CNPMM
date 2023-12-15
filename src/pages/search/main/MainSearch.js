@@ -13,7 +13,7 @@ export default function MainSearch() {
 	const group = useSelector(selectselectgroup);
 	const classs = useSelector(selectselectclass);
     const people = useSelector(selectselectSearchpeople);
-    
+    console.log(people);
 	return (
 		<div className='search-main'>
 			{selectedOption === 'all' && (
@@ -42,6 +42,19 @@ export default function MainSearch() {
 							))}
 						</div>
 					)}
+                    {people && people.length > 0 && (
+                        <div>
+                            <h1>Mọi người</h1>
+                            {people.map((item, index) => (
+                                  <div className='user-search'>
+                                    <Avatar size={64} src={item.avatarUrl} />
+                                    <p>{item.firstName + ' ' + item.lastName}</p>
+                                    <button>Thêm bạn</button>
+                               </div>
+                            ))}
+                        </div>
+                    )}
+
 				</div>
 			)}
 			{selectedOption === 'post' && (
