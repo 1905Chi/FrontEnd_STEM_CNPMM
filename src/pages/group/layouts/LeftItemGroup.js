@@ -27,9 +27,11 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FaSignsPost } from 'react-icons/fa6';
 import { MdGroups2 } from 'react-icons/md';
-import { Skeleton } from 'antd';
+import { Skeleton, Avatar } from 'antd';
 import { Dialog } from 'primereact/dialog';
 import moment from 'moment';
+import { selectFriendInvite, editSelectFriendInvite, selectselectFriendInvite } from '../../../redux/Friend';
+import anh_logo_1 from './../../../assets/images/anh_logo_1.jpg';
 export default function LeftItemGroup() {
 	const { theme } = UseTheme();
 	const [inforGroup, setInforGroup] = useState(null);
@@ -42,9 +44,32 @@ export default function LeftItemGroup() {
 	const memberGroup = useSelector(selectselectMemberGroup);
 	const [visible, setVisible] = useState(false);
 	const dispatch = useDispatch();
+	const [checkedItems, setCheckedItems] = useState({});
+	const [listfriend, setListFriend] = useState([
+		{
+			id: 1,
+			name: 'Nguyễn Văn A',
+			avatar: anh_logo_1,
+		},
+		{
+			id: 2,
+			name: 'Nguyễn Văn B',
+			avatar: anh_logo_1,
+		},
+		{
+			id: 3,
+			name: 'Nguyễn Văn C',
+			avatar: anh_logo_1,
+		},
+		{
+			id: 4,
+			name: 'Nguyễn Văn D',
+			avatar: anh_logo_1,
+		},
+	]);
 
-	const [listfriend, setListFriend] = useState([]);
-	const [listfriendSelected, setListFriendSelected] = useState([]);
+	const [listFriendSearch, setListFriendSearch] = useState([...listfriend]);
+	const listfriendSelected = useSelector(selectselectFriendInvite);
 	const headers = {
 		Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 		'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
@@ -162,8 +187,8 @@ export default function LeftItemGroup() {
 		Api.get(url + 'api/v1/users/friends', { headers: headers })
 			.then((response) => {
 				if (response.data.statusCode === 200) {
-					setListFriend(response.data.result);
-					setListFriendSelected(response.data.result);
+					// setListFriend(response.data.result);
+
 					setVisible(true);
 				} else {
 					toast.error(response.data.message);
@@ -174,37 +199,112 @@ export default function LeftItemGroup() {
 			});
 	};
 
+	const checkChecked = (item) => {
+		if (listfriendSelected && listfriendSelected.length > 0) {
+			for (let i = 0; i < listfriendSelected.length; i++) {
+				if (listfriendSelected[i].id === item.id) {
+					return true;
+				}
+			}
+		}
+		return false;
+	};
+	const handleCheckboxChange = (item) => {
+		const newCheckedItems = { ...checkedItems, [item]: !checkedItems[item] };
+		setCheckedItems(newCheckedItems);
+
+		if (!checkedItems[item]) {
+			dispatch(selectFriendInvite(item));
+		} else {
+			dispatch(editSelectFriendInvite(item));
+		}
+	};
+
+	const Search = (e) => {
+		return (e) => {
+			if (e.target.value !== '') {
+				setListFriendSearch(
+					listfriend.filter((item) => {
+						return item.name.toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1;
+					})
+				);
+			} else {
+				setListFriendSearch(listfriend);
+			}
+		};
+	};
+	const inviteFriend = () => {
+		console.log(listfriendSelected);
+		setVisible(false);
+	};
 	return (
 		<>
 			<Dialog
-				header="Mời thành viên"
+				 header={<div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '1.5em' }}>Mời thành viên</div>}
 				visible={visible}
-				style={{ width: '50vw' }}
+				style={{ width: '50vw', height: '60vh' }}
 				onHide={() => {
 					setVisible(false);
 				}}
 			>
-				<div className="body-invite-friend">
-					<div className="left-invite-friend">
-						<input placeholder="Tìm bạn bè" />
+				<div className="body-invite-friend" style={{ position: 'relative' }}>
+					<div className="left-invite-friend" style={{ position: 'relative' }}>
+						<input placeholder="Tìm bạn bè" onChange={Search()} style={{ position: 'sticky' }} />
 						<span>Gợi ý</span>
-						{listfriendSelected && listfriendSelected.length > 0 ? <div>
-							{listfriendSelected.map((item, index) => {
-								return (
-									<div
-										
-									>
-										<img src={item.avatar} alt="avatar" />
-										<span>{item.name}</span>
-										<Checkbox />
-									</div>
-								);
-							})}
-						</div> : null}
+						{listFriendSearch && listFriendSearch.length > 0 ? (
+							<div style={{ height: '30vh', overflowY: 'scroll' }}>
+								{listFriendSearch.map((item, index) => {
+									return (
+										<div style={{ display: 'flex', marginRight: '15px' }}>
+											<Avatar src={item.avatar} alt="avatar" />
+											<span style={{ margin: '0 15px', paddingTop: '12px' }}>{item.name}</span>
+
+											<Checkbox
+												style={{ marginLeft: 'auto' }}
+												onChange={() => handleCheckboxChange(item)}
+												checked={checkChecked(item) || false}
+											/>
+										</div>
+									);
+								})}
+							</div>
+						) : null}
 					</div>
 					<div className="right-invite-friend">
-						<p>Đã chọn {} người bạn</p>
+						<p>
+							Đã chọn{' '}
+							{listfriendSelected && listfriendSelected.length > 0 ? listfriendSelected.length : 0} người
+							bạn
+						</p>
+						{listfriendSelected && listfriendSelected.length > 0 ? (
+							<div style={{ height: '30vh', overflowY: 'scroll' }}>
+								{listfriendSelected.map((item, index) => {
+									return (
+										<div style={{ display: 'flex', marginRight: '15px' }}>
+											<Avatar src={item.avatar} alt="avatar" />
+											<span style={{ margin: '0 15px', paddingTop: '12px' }}>{item.name}</span>
+											<button
+												style={{ marginLeft: 'auto', backgroundColor: 'blanchedalmond' }}
+												onClick={() => {
+													dispatch(editSelectFriendInvite(item));
+												}}
+											>
+												X
+											</button>
+										</div>
+									);
+								})}
+							</div>
+						) : null}
 					</div>
+				</div>
+				<div className="footer-invite-friend" style={{textAlign:'center'}}>
+					<button style={{ backgroundColor: 'e6e6e6' }}>
+						<strong>Hủy</strong>
+					</button>
+					<button style={{ backgroundColor: '1677ff' }} onClick={inviteFriend}>
+						<strong>Gửi lời mời</strong>
+					</button>
 				</div>
 			</Dialog>
 			<div style={{ position: 'relative', borderRight: '0.2px solid black', top: '45px' }}>
