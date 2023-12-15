@@ -1,17 +1,18 @@
 import { selectselectsubmition } from '../../../../redux/Exam';
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { url } from '../../../../constants/Constant';
 import Api from '../../../../api/Api';
 import { CountdownProps } from 'antd';
-import { Col, Row, Statistic } from 'antd';
+import { Col, Row, Statistic, Skeleton } from 'antd';
 import { toast, ToastContainer } from 'react-toastify';
 import './Submit.css';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
-import { Navigate } from 'react-big-calendar';
 import Loading from '../../../../components/Loading';
+import {selectsubmition, selectexam,selectquestionChoose} from '../../../../redux/Exam'
+
 export default function Submit() {
 	const [submition, setsubmition] = useState();
 
@@ -22,7 +23,7 @@ export default function Submit() {
 	const [targetTime, setTargetTime] = useState();
 	const [loading, setloading] = useState(false);
 	const [iscreate, setiscreate] = useState(false);
-
+	const dispatch = useDispatch();
 	const onFinish = () => {
 		setloading(true);
 		Api.post(url + 'api/v1/submissions/submit?submissionId=' + localStorage.getItem('submissionId'), {
@@ -61,6 +62,7 @@ export default function Submit() {
 						setsubmition(response.data.result);
 						localStorage.setItem('submissionId', response.data.result.submissionId);
 						setTargetTime(Number(localStorage.getItem('duration')) * 60 * 1000);
+						dispatch(selectexam(response.data.result.questions));
 						localStorage.removeItem('typesubmit');
 						setiscreate(true);
 						
@@ -79,7 +81,7 @@ export default function Submit() {
 				.then((response) => {
 					if (response.data.statusCode === 200) {
 						setsubmition(response.data.result);
-
+						dispatch(selectexam(response.data.result.questions));
 						var startat = moment(localStorage.getItem('StartAt'), 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
 						const now = new Date();
 						const nowTime =
@@ -150,8 +152,10 @@ export default function Submit() {
 				'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
 			}})
 			.then((response) => {
-				if (response.data.statusCode === 200) {
+				if (response) {
 					console.log('cập nhật thành công');
+					dispatch(selectquestionChoose(data));
+
 				} else {
 					console.log('cập nhật thất bại');
 				}
@@ -159,12 +163,12 @@ export default function Submit() {
 		}
 		else{
 			const data={ submissionDetailId : questionId}
-			Api.put(url + 'api/v1/submission-details/delete-answer'+data, { headers: {
+			Api.put(url + 'api/v1/submission-details/delete-answer',data, { headers: {
 				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 				'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
 			}})
 			.then((response) => {
-				if (response.data.statusCode === 200) {
+				if (response) {
 					console.log('xóa thành công');
 				} else {
 					console.log('xóa thất bại');
@@ -174,7 +178,9 @@ export default function Submit() {
 	};
 
 	return (
-		<div className="submit">
+		<div className="submit-sipn">
+			{submition === null || !submition ? (<Skeleton active />):
+			<div>
 			<Countdown title="Thời gian còn lại" value={Date.now() + targetTime} onFinish={onFinish} />
 			{loading ? <Loading /> : null}
 			{submition &&
@@ -223,6 +229,7 @@ export default function Submit() {
 					</div>
 				))}
 			<button onClick={onFinish}>Submit</button>
+			</div>}
 			<ToastContainer />
 		</div>
 	);

@@ -8,6 +8,7 @@ const dataExam = createSlice({
 		submition: null,
 		question: null,
 		answer: [],
+		questionChoose: [],
 	},
 	reducers: {
 		selectexam: (state, action) => {
@@ -43,12 +44,27 @@ const dataExam = createSlice({
 				}
 			}
 		},
+		selectquestionChoose: (state, action) => {
+			if (action.payload === null) {
+				state.questionChoose = [];
+			} else {
+				if (state.questionChoose.length === 0) {
+					state.questionChoose.push(action.payload);
+				} else {
+					const exis = state.questionChoose.find((item) => item.id === action.payload.id);
+					if (!exis) {
+						state.questionChoose.push(action.payload);
+					}
+				}
+			}
+		}
 	},
 });
 
-export const { selectexam, selectsubmition, selectquestion, selectanswer,editquestion } = dataExam.actions;
+export const { selectexam, selectsubmition, selectquestion, selectanswer,editquestion ,selectquestionChoose } = dataExam.actions;
 export const selectselectexam = (state) => state.exam.value;
 export const selectselectsubmition = (state) => state.exam.submition;
 export const selectselectquestion = (state) => state.exam.question;
 export const selectselectanswer = (state) => state.exam.answer;
+export const selectselectquestionChoose = (state) => state.exam.questionChoose;
 export default dataExam.reducer;

@@ -12,9 +12,9 @@ import { selectselectuser } from '../../../../redux/User';
 import { selectsubmition } from '../../../../redux/Exam';
 import { useDispatch } from 'react-redux';
 import { selectexam, selectselectexam } from '../../../../redux/Exam';
-import { RiArrowGoBackLine } from "react-icons/ri";
+import { RiArrowGoBackLine } from 'react-icons/ri';
 import moment from 'moment';
-import {Table} from 'antd';
+import { Table } from 'antd';
 import Title from 'antd/es/skeleton/Title';
 export default function ExamItem(props) {
 	const { uuid, id } = useParams();
@@ -24,11 +24,11 @@ export default function ExamItem(props) {
 	const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 	const [isWithinTimeRange, setIsWithinTimeRange] = useState(false);
 	const [listsubmit, setlistsubmit] = useState();
-const [converArray, setconverArray] = useState()
+	const [converArray, setconverArray] = useState();
 	const CreateSubmit = () => {
 		localStorage.setItem('typesubmit', 'create');
-		localStorage.setItem('StartAt', examId.exam.staredAt)
-		localStorage.setItem('duration', examId.exam.duration)
+		localStorage.setItem('StartAt', examId.exam.staredAt);
+		localStorage.setItem('duration', examId.exam.duration);
 		setTimeout(() => {
 			navigate('/exam/' + id + '/submit');
 		}, 3000);
@@ -36,9 +36,9 @@ const [converArray, setconverArray] = useState()
 
 	const Continue = () => {
 		localStorage.setItem('typesubmit', 'continue');
-		localStorage.setItem('StartAt', examId.submission.startedAt)
+		localStorage.setItem('StartAt', examId.submission.startedAt);
 		localStorage.setItem('submissionId', examId.submission.id);
-		localStorage.setItem('duration', examId.exam.duration)
+		localStorage.setItem('duration', examId.exam.duration);
 		setTimeout(() => {
 			navigate('/exam/' + id + '/submit');
 		}, 3000);
@@ -55,16 +55,23 @@ const [converArray, setconverArray] = useState()
 				if (response.data.statusCode === 200) {
 					setExamId(response.data.result);
 					dispatch(selectexam(response.data.result));
-					const startTime = moment(response.data.result.exam.staredAt, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
+					const startTime = moment(
+						response.data.result.exam.staredAt,
+						'DD-MM-YYYY HH:mm:ss:SSSSSS'
+					).valueOf();
 
 					const endTime = moment(response.data.result.exam.endedAt, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
 					const now = new Date();
-					setconverArray([{
-						key:0,
-						startedAt:response.data.result.submission.startedAt,
-						endedAt:response.data.result.submission.endedAt,
-						score:response.data.result.submission.score
-					}])
+					if (response.data.result.submission !== null) {
+						setconverArray([
+							{
+								key: 0,
+								startedAt: response.data.result.submission.startedAt,
+								endedAt: response.data.result.submission.endedAt,
+								score: response.data.result.submission.score,
+							},
+						]);
+					}
 
 					const nowTime =
 						now.getDate() +
@@ -82,12 +89,13 @@ const [converArray, setconverArray] = useState()
 						'000000';
 
 					const nowDate = moment(nowTime, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
-					
 
 					if (nowDate >= startTime && nowDate <= endTime) {
 						setIsWithinTimeRange(true);
+						console.log('trong thoi gian');
 					} else {
 						setIsWithinTimeRange(false);
+						console.log('ngoai thoi gian');
 					}
 				} else {
 					toast.error(response.data.message);
@@ -97,29 +105,27 @@ const [converArray, setconverArray] = useState()
 				toast.error(error);
 			});
 
-			if(user.role==='TEACHER'){
-				Api.get(url+'api/v1/submissions/list/'+id,{headers:headers})
-				.then((response)=>{
-					if(response.data.statusCode===200){
-						const list = response.data.result.map((item,index)=>{
-							return{
-								key:index,
-								authorId:item.authorId,
-								score:item.score,
-								createdAt:item.createdAt,
-								updatedAt:item.updatedAt
-							}
-						})
-						setlistsubmit(list)
-						console.log(list)
-
+		if (user.role === 'TEACHER') {
+			Api.get(url + 'api/v1/submissions/list/' + id, { headers: headers })
+				.then((response) => {
+					if (response.data.statusCode === 200) {
+						const list = response.data.result.map((item, index) => {
+							return {
+								key: index,
+								authorId: item.authorId,
+								score: item.score,
+								createdAt: item.createdAt,
+								updatedAt: item.updatedAt,
+							};
+						});
+						setlistsubmit(list);
+						console.log(list);
 					}
-					
 				})
-				.catch((error)=>{
-					toast.error(error)
-				})
-			}
+				.catch((error) => {
+					toast.error(error);
+				});
+		}
 	}, [id]);
 
 	const checkContinue = (dateStart, dateEnd, duration) => {
@@ -146,7 +152,7 @@ const [converArray, setconverArray] = useState()
 
 		const nowDate = moment(nowTime, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
 		if (nowDate >= startTime && nowDate <= endTime) {
-			if (startTime+duration*60000 <nowDate) {
+			if (startTime + duration * 60000 < nowDate) {
 				return false;
 			} else {
 				return true;
@@ -181,7 +187,7 @@ const [converArray, setconverArray] = useState()
 		} else {
 			return false;
 		}
-	}
+	};
 	const columns = [
 		{
 			title: 'Thứ tự',
@@ -190,72 +196,73 @@ const [converArray, setconverArray] = useState()
 			render: (key) => Number(key) + 1,
 		},
 		{
-			title:'Học sinh',
-			dataIndex:'authorId',
-			key:'authorId'
-
+			title: 'Học sinh',
+			dataIndex: 'authorId',
+			key: 'authorId',
 		},
 		{
-			title:'Điểm',
-			dataIndex:'score',
-			key:'score'
+			title: 'Điểm',
+			dataIndex: 'score',
+			key: 'score',
 		},
 		{
-			title:'Thời gian bắt đầu',
-			dataIndex:'createdAt',
-			key:'createdAt'
+			title: 'Thời gian bắt đầu',
+			dataIndex: 'createdAt',
+			key: 'createdAt',
 		},
 		{
-			title:'Thời gian nộp bài',
-			dataIndex:'updatedAt',
-			key:'updatedAt'
+			title: 'Thời gian nộp bài',
+			dataIndex: 'updatedAt',
+			key: 'updatedAt',
 		},
 		{
-			title:'Action',
-			dataIndex:'action',
-			key:'action',
-			render:(text,record)=>(
+			title: 'Action',
+			dataIndex: 'action',
+			key: 'action',
+			render: (text, record) => (
 				<span>
-					<button className="exam-item__button__start" onClick={()=>{}}>Xem</button>
+					<button className="exam-item__button__start" onClick={() => {}}>
+						Xem
+					</button>
 				</span>
-			)
-		}
-	]
+			),
+		},
+	];
 
 	const columStudent = [
 		{
-			title:'Bắt đầu lúc',
-			dataIndex:'startedAt',
-			key:'startedAt',
+			title: 'Bắt đầu lúc',
+			dataIndex: 'startedAt',
+			key: 'startedAt',
 		},
 		{
-			title:'Nộp bài lúc',
-			dataIndex:'endedAt',
-			key:'endedAt'
+			title: 'Nộp bài lúc',
+			dataIndex: 'endedAt',
+			key: 'endedAt',
 		},
 		{
-			title:'Điểm',
-			dataIndex:'score',
-			key:'score'
+			title: 'Điểm',
+			dataIndex: 'score',
+			key: 'score',
 		},
 		{
-			title:'Action',
-			dataIndex:'action',
-			key:'action',
-			render:(text,record)=>(
+			title: 'Action',
+			dataIndex: 'action',
+			key: 'action',
+			render: (text, record) => (
 				<span>
-					<button className="exam-item__button__start" onClick={()=>{}}>Xem lại bài làm </button>
+					<button className="exam-item__button__start" onClick={() => {}}>
+						Xem lại bài làm{' '}
+					</button>
 				</span>
-			)
-		}
-
-	]
-	
+			),
+		},
+	];
 
 	return (
 		<div className="exam-item-component">
 			<button className="exam-item-component__back" onClick={() => navigate('/classes/' + uuid)}>
-				<RiArrowGoBackLine/>	 Trở về lớp học
+				<RiArrowGoBackLine /> Trở về lớp học
 			</button>
 			{examId ? (
 				<div className="exam-item">
@@ -319,24 +326,29 @@ const [converArray, setconverArray] = useState()
 						examId &&
 						examId.submission !== null &&
 						examId.submission.endedAt !== null &&
-						checkClose(
-							
-							examId.exam.endedAt,
-							
-						) ? (
+						checkClose(examId.exam.endedAt) ? (
 							<div className="exam-item__button">
 								<h3>Kết quả bài làm</h3>
-								<Table columns={columStudent} dataSource={converArray} size="middle"  style={{margin:'0px 20%'}} />
+								<Table
+									columns={columStudent}
+									dataSource={converArray}
+									size="middle"
+									style={{ margin: '0px 20%' }}
+								/>
 							</div>
 						) : null}
 						{user.role === 'TEACHER' ? (
-							<div style={{textAlign:'center'}}>
+							<div style={{ textAlign: 'center' }}>
 								<h3>Danh sách bài làm</h3>
-								
-							<Table columns={columns} dataSource={listsubmit} size="middle"  style={{margin:'0px 20%'}} />
-						</div>): null
-						}
-						
+
+								<Table
+									columns={columns}
+									dataSource={listsubmit}
+									size="middle"
+									style={{ margin: '0px 20%' }}
+								/>
+							</div>
+						) : null}
 					</div>
 				</div>
 			) : null}

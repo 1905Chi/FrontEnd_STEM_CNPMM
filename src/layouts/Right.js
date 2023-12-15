@@ -14,6 +14,7 @@ import { selectOption } from '../redux/Group';
 export default function Right() {
 	const dispatch = useDispatch();
 	const friendRequest = useSelector(selectselectFriendRequest);
+	console.log(friendRequest);
   const accept = (status, id) => () => {
     if(status=== "ACCEPT"){
 		const headers = {
@@ -69,36 +70,38 @@ export default function Right() {
 				</div>
 				{friendRequest &&
 					friendRequest.map((item, index) => (
+						item.status === 'PENDING' ? 
 						<div
-							className="friend-request__item"
-							key={item.id}
-							onClick={() => {
-								dispatch(selectFriend(item.id));
-							}}
-						>
-							<div style={{ flex: '2', margin: '15px', marginTop: '18px' }}>
-								<div className="friend-request__item__avatar">
-									<Avatar src={item.sender.avartarUrl} alt="" />
-								</div>
-							</div>
-							<div className="friend-request__item__button">
-								<div className="friend-request__item__name">
-									<p>{item.sender.firstName + ' ' + item.sender.lastName}</p>
-								</div>
-								<div style={{ textAlign: 'start' }}>
-									<button
-										className="btn btn-primary"
-										style={{ backgroundColor: '#1677ff', width: '83px' }}
-										onClick={accept('ACCEPT', item.id)}
-									>
-										Chấp nhận
-									</button>
-									<button className="btn btn-danger" onClick={accept('REJECT', item.id)} style={{width:'64px'}}>
-										Xóa
-									</button>
-								</div>
+						className="friend-request__item"
+						key={item.id}
+						onClick={() => {
+							dispatch(selectFriend(item.id));
+						}}
+					>
+						<div style={{ flex: '2', margin: '15px', marginTop: '18px' }}>
+							<div className="friend-request__item__avatar">
+								<Avatar src={item.sender.avartarUrl} alt="" />
 							</div>
 						</div>
+						<div className="friend-request__item__button">
+							<div className="friend-request__item__name">
+								<p>{item.sender.firstName + ' ' + item.sender.lastName}</p>
+							</div>
+							<div style={{ textAlign: 'start' }}>
+								<button
+									className="btn btn-primary"
+									style={{ backgroundColor: '#1677ff', width: '83px' }}
+									onClick={accept('ACCEPT', item.id)}
+								>
+									Chấp nhận
+								</button>
+								<button className="btn btn-danger" onClick={accept('REJECT', item.id)} style={{width:'64px'}}>
+									Xóa
+								</button>
+							</div>
+						</div>
+					</div>: null 
+						
 					))}
 					<ToastContainer/>
 			</div>
