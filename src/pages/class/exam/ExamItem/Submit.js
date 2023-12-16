@@ -1,17 +1,18 @@
 import { selectselectsubmition } from '../../../../redux/Exam';
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { url } from '../../../../constants/Constant';
 import Api from '../../../../api/Api';
 import { CountdownProps } from 'antd';
-import { Col, Row, Statistic } from 'antd';
+import { Col, Row, Statistic, Skeleton } from 'antd';
 import { toast, ToastContainer } from 'react-toastify';
 import './Submit.css';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
-import { Navigate } from 'react-big-calendar';
 import Loading from '../../../../components/Loading';
+import {selectsubmition, selectexam,selectquestionChoose,deletequestionChoose} from '../../../../redux/Exam'
+
 export default function Submit() {
 	const [submition, setsubmition] = useState();
 
@@ -22,7 +23,8 @@ export default function Submit() {
 	const [targetTime, setTargetTime] = useState();
 	const [loading, setloading] = useState(false);
 	const [iscreate, setiscreate] = useState(false);
-
+	const [selectedAnswers, setSelectedAnswers] = useState([]);
+	const dispatch = useDispatch();
 	const onFinish = () => {
 		setloading(true);
 		Api.post(url + 'api/v1/submissions/submit?submissionId=' + localStorage.getItem('submissionId'), {
@@ -49,7 +51,7 @@ export default function Submit() {
 
 	useEffect(() => {
 		const typesubmit = localStorage.getItem('typesubmit');
-
+		//dispatch(selectquestionChoose())
 		const headers = {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
@@ -61,6 +63,7 @@ export default function Submit() {
 						setsubmition(response.data.result);
 						localStorage.setItem('submissionId', response.data.result.submissionId);
 						setTargetTime(Number(localStorage.getItem('duration')) * 60 * 1000);
+						dispatch(selectexam(response.data.result.questions));
 						localStorage.removeItem('typesubmit');
 						setiscreate(true);
 						
@@ -79,6 +82,35 @@ export default function Submit() {
 				.then((response) => {
 					if (response.data.statusCode === 200) {
 						setsubmition(response.data.result);
+						dispatch(selectexam(response.data.result.questions));
+						var oldsubmisstion = []
+						response.data.result.questions.map((item) => {
+							var answer=[]
+							if (item.answers.length > 0) {
+								item.answers.map((answeritem) => {
+										
+									if (answeritem.checked && answer !== null) {
+										answer.push(answeritem.answer)
+									}
+									else if(answeritem.checked && answer === null){
+										answer.push(answeritem.answer)
+									}
+								});
+							}
+							if(answer.length>0){
+								oldsubmisstion.push({ questionId: item.submissionDetailId, answerIndex: answer })
+							}
+						})
+						if (oldsubmisstion.length > 0) {
+							setSelectedAnswers(oldsubmisstion);
+							//dispatch(selectquestionChoose());
+							oldsubmisstion.map((item) => {
+								dispatch(selectquestionChoose({id:item.questionId,answer:item.answerIndex.join(',')}));
+							})
+							
+						} else {
+							setSelectedAnswers([]);
+						}
 
 						var startat = moment(localStorage.getItem('StartAt'), 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
 						const now = new Date();
@@ -108,10 +140,12 @@ export default function Submit() {
 				});
 		}
 	}, []);
-	const [selectedAnswers, setSelectedAnswers] = useState([]);
+	
 
 	const handleRadioChange = (questionId, answer, typeCode) => {
 		const oldSelectedAnswers = selectedAnswers;
+		
+
 		if (oldSelectedAnswers.filter((item) => item.questionId === questionId).length === 0) {
 			oldSelectedAnswers.push({ questionId: questionId, answerIndex: [answer] });
 		} else {
@@ -122,6 +156,8 @@ export default function Submit() {
 				oldSelectedAnswers.filter((item) => item.questionId === questionId)[0].answerIndex = oldSelectedAnswers
 					.filter((item) => item.questionId === questionId)[0]
 					.answerIndex.filter((item) => item !== answer);
+
+				
 				// else
 				// 	{
 				// 		oldSelectedAnswers.filter((item)=>item.questionId===questionId)[0].answerIndex=[];
@@ -140,6 +176,7 @@ export default function Submit() {
 		}
 
 		setSelectedAnswers(oldSelectedAnswers);
+		console.log(selectedAnswers);
 		if(selectedAnswers.filter((item) => item.questionId === questionId)[0].answerIndex.length>0){
 			const data={
 				id:questionId,
@@ -150,8 +187,10 @@ export default function Submit() {
 				'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
 			}})
 			.then((response) => {
-				if (response.data.statusCode === 200) {
+				if (response) {
 					console.log('cập nhật thành công');
+					dispatch(selectquestionChoose(data));
+
 				} else {
 					console.log('cập nhật thất bại');
 				}
@@ -159,13 +198,14 @@ export default function Submit() {
 		}
 		else{
 			const data={ submissionDetailId : questionId}
-			Api.put(url + 'api/v1/submission-details/delete-answer'+data, { headers: {
+			Api.put(url + 'api/v1/submission-details/delete-answer',data, { headers: {
 				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 				'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
 			}})
 			.then((response) => {
-				if (response.data.statusCode === 200) {
+				if (response) {
 					console.log('xóa thành công');
+					dispatch(deletequestionChoose({id:questionId}));
 				} else {
 					console.log('xóa thất bại');
 				}
@@ -174,7 +214,9 @@ export default function Submit() {
 	};
 
 	return (
-		<div className="submit">
+		<div className="submit-sipn">
+			{submition === null || !submition ? (<Skeleton active />):
+			<div>
 			<Countdown title="Thời gian còn lại" value={Date.now() + targetTime} onFinish={onFinish} />
 			{loading ? <Loading /> : null}
 			{submition &&
@@ -223,6 +265,7 @@ export default function Submit() {
 					</div>
 				))}
 			<button onClick={onFinish}>Submit</button>
+			</div>}
 			<ToastContainer />
 		</div>
 	);
