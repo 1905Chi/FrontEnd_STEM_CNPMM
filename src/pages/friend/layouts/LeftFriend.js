@@ -20,7 +20,7 @@ import { selectFriendOfFriend } from '../../../redux/Friend';
 export default function LeftFriend() {
 	const dispatch = useDispatch();
 	const selectedOption = useSelector(selectSelectedOption);
-	const friendRequest = useSelector(selectselectFriendRequest);
+	const [friendRequest, setFriendRequest] = useState(null);
 	const [friendPending, setFriendPending] = useState([]);
 	const [friend, setFriend] = useState([]);
 	const [friendOfFriend, setFriendOfFriend] = useState([]);
@@ -32,7 +32,7 @@ export default function LeftFriend() {
 		fetchFriendRequest();
 		fetchFriend();
 		fetchFriendOfFriend();
-	}, []);
+	}, [selectOption]);
 
 	const fetchFriendRequest = async () => {
 		try {
@@ -44,6 +44,7 @@ export default function LeftFriend() {
 				const response = await Api.get(url + 'api/v1/friendships/friend/pending', { headers: headers });
 				if (response.data.statusCode === 200) {
 					setFriendPending(response.data.friendWithAuthor);
+					console.log(response.data.friendWithAuthor);
 				}
 			}
 		} catch (err) {
@@ -171,6 +172,7 @@ export default function LeftFriend() {
 						className="option-friend"
 						onClick={() => {
 							dispatch(selectOption('all_friend'));
+							fetchFriend();
 						}}
 					>
 						<button className="btn-friend">
@@ -181,6 +183,7 @@ export default function LeftFriend() {
 					<div
 						className="option-friend"
 						onClick={() => {
+							fetchFriendRequest();
 							dispatch(selectOption('request_friend'));
 						}}
 					>
@@ -193,6 +196,7 @@ export default function LeftFriend() {
 						className="option-friend"
 						onClick={() => {
 							dispatch(selectOption('sent_request'));
+							fetchFriendOfFriend();
 						}}
 					>
 						<button className="btn-friend">
