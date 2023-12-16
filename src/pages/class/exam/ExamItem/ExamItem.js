@@ -67,7 +67,8 @@ export default function ExamItem(props) {
 							{
 								key: 0,
 								startedAt: response.data.result.submission.startedAt,
-								endedAt: response.data.result.submission.endedAt,
+								endedAt: response.data.result.submission.endedAt === null ? response.data.result.submission.startedAt : response.data.result.submission.endedAt,
+								closeAt: response.data.result.exam.endedAt,
 								score: response.data.result.submission.score,
 							},
 						]);
@@ -247,14 +248,17 @@ export default function ExamItem(props) {
 		},
 		{
 			title: 'Action',
-			dataIndex: 'action',
-			key: 'action',
-			render: (text, record) => (
+			dataIndex: 'closeAt',
+			key: 'closeAt',
+			render: (closeAt) => (	
+			checkClose(closeAt) 
+				?
 				<span>
 					<button className="exam-item__button__start" onClick={() => {}}>
 						Xem lại bài làm{' '}
 					</button>
 				</span>
+				: <span>{closeAt}</span>
 			),
 		},
 	];
@@ -324,9 +328,7 @@ export default function ExamItem(props) {
 						) : null}
 						{user.role === 'STUDENT' &&
 						examId &&
-						examId.submission !== null &&
-						examId.submission.endedAt !== null &&
-						checkClose(examId.exam.endedAt) ? (
+						examId.submission !== null ? (
 							<div className="exam-item__button">
 								<h3>Kết quả bài làm</h3>
 								<Table

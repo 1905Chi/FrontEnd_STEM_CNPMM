@@ -11,7 +11,7 @@ import './Submit.css';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import Loading from '../../../../components/Loading';
-import {selectsubmition, selectexam,selectquestionChoose} from '../../../../redux/Exam'
+import {selectsubmition, selectexam,selectquestionChoose,deletequestionChoose} from '../../../../redux/Exam'
 
 export default function Submit() {
 	const [submition, setsubmition] = useState();
@@ -23,6 +23,7 @@ export default function Submit() {
 	const [targetTime, setTargetTime] = useState();
 	const [loading, setloading] = useState(false);
 	const [iscreate, setiscreate] = useState(false);
+	const [selectedAnswers, setSelectedAnswers] = useState([]);
 	const dispatch = useDispatch();
 	const onFinish = () => {
 		setloading(true);
@@ -50,7 +51,7 @@ export default function Submit() {
 
 	useEffect(() => {
 		const typesubmit = localStorage.getItem('typesubmit');
-
+		//dispatch(selectquestionChoose())
 		const headers = {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
@@ -82,6 +83,35 @@ export default function Submit() {
 					if (response.data.statusCode === 200) {
 						setsubmition(response.data.result);
 						dispatch(selectexam(response.data.result.questions));
+						var oldsubmisstion = []
+						response.data.result.questions.map((item) => {
+							var answer=[]
+							if (item.answers.length > 0) {
+								item.answers.map((answeritem) => {
+										
+									if (answeritem.checked && answer !== null) {
+										answer.push(answeritem.answer)
+									}
+									else if(answeritem.checked && answer === null){
+										answer.push(answeritem.answer)
+									}
+								});
+							}
+							if(answer.length>0){
+								oldsubmisstion.push({ questionId: item.submissionDetailId, answerIndex: answer })
+							}
+						})
+						if (oldsubmisstion.length > 0) {
+							setSelectedAnswers(oldsubmisstion);
+							//dispatch(selectquestionChoose());
+							oldsubmisstion.map((item) => {
+								dispatch(selectquestionChoose({id:item.questionId,answer:item.answerIndex.join(',')}));
+							})
+							
+						} else {
+							setSelectedAnswers([]);
+						}
+
 						var startat = moment(localStorage.getItem('StartAt'), 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
 						const now = new Date();
 						const nowTime =
@@ -110,10 +140,12 @@ export default function Submit() {
 				});
 		}
 	}, []);
-	const [selectedAnswers, setSelectedAnswers] = useState([]);
+	
 
 	const handleRadioChange = (questionId, answer, typeCode) => {
 		const oldSelectedAnswers = selectedAnswers;
+		
+
 		if (oldSelectedAnswers.filter((item) => item.questionId === questionId).length === 0) {
 			oldSelectedAnswers.push({ questionId: questionId, answerIndex: [answer] });
 		} else {
@@ -124,6 +156,8 @@ export default function Submit() {
 				oldSelectedAnswers.filter((item) => item.questionId === questionId)[0].answerIndex = oldSelectedAnswers
 					.filter((item) => item.questionId === questionId)[0]
 					.answerIndex.filter((item) => item !== answer);
+
+				
 				// else
 				// 	{
 				// 		oldSelectedAnswers.filter((item)=>item.questionId===questionId)[0].answerIndex=[];
@@ -142,6 +176,7 @@ export default function Submit() {
 		}
 
 		setSelectedAnswers(oldSelectedAnswers);
+		console.log(selectedAnswers);
 		if(selectedAnswers.filter((item) => item.questionId === questionId)[0].answerIndex.length>0){
 			const data={
 				id:questionId,
@@ -170,6 +205,7 @@ export default function Submit() {
 			.then((response) => {
 				if (response) {
 					console.log('xóa thành công');
+					dispatch(deletequestionChoose({id:questionId}));
 				} else {
 					console.log('xóa thất bại');
 				}

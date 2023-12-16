@@ -32,7 +32,7 @@ import { Dialog } from 'primereact/dialog';
 import moment from 'moment';
 import { selectFriendInvite, editSelectFriendInvite, selectselectFriendInvite } from '../../../redux/Friend';
 import anh_logo_1 from './../../../assets/images/anh_logo_1.jpg';
-import Loading  from '../../../components/Loading';
+import Loading from '../../../components/Loading';
 export default function LeftItemGroup() {
 	const { theme } = UseTheme();
 	const [inforGroup, setInforGroup] = useState(null);
@@ -47,9 +47,7 @@ export default function LeftItemGroup() {
 	const dispatch = useDispatch();
 	const [loading, setLoading] = useState(false);
 	const [checkedItems, setCheckedItems] = useState({});
-	const [listfriend, setListFriend] = useState([
-		
-	]);
+	const [listfriend, setListFriend] = useState([]);
 
 	const [listFriendSearch, setListFriendSearch] = useState([...listfriend]);
 	const listfriendSelected = useSelector(selectselectFriendInvite);
@@ -219,38 +217,40 @@ export default function LeftItemGroup() {
 	};
 	const inviteFriend = () => {
 		setLoading(true);
-		try{
-			
+		try {
 			if (listfriendSelected && listfriendSelected.length > 0) {
-			listfriendSelected.map((item, index) => {
-			Api.post(url + 'api/v1/group-members/invite', { groupId: uuid, userId: item.id }, { headers: headers })
-				.then((response) => {
-					if (response.data.statusCode === 200) {
-						toast.success(response.data.message);
-					} else {
-						toast.error(response.data.message);
-					}
-				})
-				.catch((error) => {
-					toast.error(error);
+				listfriendSelected.map((item, index) => {
+					Api.post(
+						url + 'api/v1/group-members/invite',
+						{ groupId: uuid, userId: item.id },
+						{ headers: headers }
+					)
+						.then((response) => {
+							if (response.data.statusCode === 200) {
+								toast.success(response.data.message);
+							} else {
+								toast.error(response.data.message);
+							}
+						})
+						.catch((error) => {
+							toast.error(error);
+						});
 				});
-			});
-		}}
-		catch(error){
+			}
+		} catch (error) {
 			toast.error(error);
-		}
-		finally{
+		} finally {
 			setLoading(false);
 			setVisible(false);
 		}
-		
-		
 	};
 	return (
 		<>
-		{loading ? <Loading/> : null}
+			{loading ? <Loading /> : null}
 			<Dialog
-				 header={<div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '1.5em' }}>Mời thành viên</div>}
+				header={
+					<div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '1.5em' }}>Mời thành viên</div>
+				}
 				visible={visible}
 				style={{ width: '50vw', height: '60vh' }}
 				onHide={() => {
@@ -260,14 +260,16 @@ export default function LeftItemGroup() {
 				<div className="body-invite-friend" style={{ position: 'relative' }}>
 					<div className="left-invite-friend" style={{ position: 'relative' }}>
 						<input placeholder="Tìm bạn bè" onChange={Search()} style={{ position: 'sticky' }} />
-						<span style={{marginBottom:'15px'}}>Gợi ý</span>
+						<span style={{ marginBottom: '15px' }}>Gợi ý</span>
 						{listFriendSearch && listFriendSearch.length > 0 ? (
 							<div style={{ height: '30vh', overflowY: 'scroll' }}>
 								{listFriendSearch.map((item, index) => {
 									return (
-										<div style={{ display: 'flex', marginRight: '15px', marginBottom:'15px' }}>
+										<div style={{ display: 'flex', marginRight: '15px', marginBottom: '15px' }}>
 											<Avatar src={item.avatarUrl} alt="avatar" />
-											<span style={{ margin: '0 15px', paddingTop: '12px' }}>{item.firstName} {item.lastName}</span>
+											<span style={{ margin: '0 15px', paddingTop: '12px' }}>
+												{item.firstName} {item.lastName}
+											</span>
 
 											<Checkbox
 												style={{ marginLeft: 'auto' }}
@@ -288,11 +290,13 @@ export default function LeftItemGroup() {
 						</p>
 						{listfriendSelected && listfriendSelected.length > 0 ? (
 							<div style={{ height: '30vh', overflowY: 'scroll' }}>
-								{  listfriendSelected.map((item, index) => {
+								{listfriendSelected.map((item, index) => {
 									return (
-										<div style={{ display: 'flex', marginRight: '15px' , marginBottom:'15px' }}>
+										<div style={{ display: 'flex', marginRight: '15px', marginBottom: '15px' }}>
 											<Avatar src={item.avatarUrl} alt="avatar" />
-											<span style={{ margin: '0 15px', paddingTop: '12px' }}>{item.firstName} {item.lastName}</span>
+											<span style={{ margin: '0 15px', paddingTop: '12px' }}>
+												{item.firstName} {item.lastName}
+											</span>
 											<button
 												style={{ marginLeft: 'auto', backgroundColor: 'blanchedalmond' }}
 												onClick={() => {
@@ -308,7 +312,7 @@ export default function LeftItemGroup() {
 						) : null}
 					</div>
 				</div>
-				<div className="footer-invite-friend" style={{textAlign:'center'}}>
+				<div className="footer-invite-friend" style={{ textAlign: 'center' }}>
 					<button style={{ backgroundColor: 'e6e6e6' }}>
 						<strong>Hủy</strong>
 					</button>
