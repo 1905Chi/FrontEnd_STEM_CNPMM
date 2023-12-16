@@ -63,7 +63,7 @@ const privateRoutes2page = [
 
 	{ path: '/exam/:id/submit/', component: Submit, Left: LeftSubmit },
 	{ path: '/classes', component: Class, Left: RightClass },
-	{ path: '/groups', component: Home, Left: LeftsGroup },
+	{ path: '/groups', component: Class, Left: LeftsGroup },
 	{ path: '/search', component: MainSearch, Left: LeftSearch },
 ];
 const private1page = [
