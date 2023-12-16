@@ -19,7 +19,7 @@ import { selecteventGroup } from './../../../redux/EventGroup';
 import { selectMemberGroup } from './../../../redux/MemberGroup';
 import { selectMemberGroupRequest } from './../../../redux/MemberGroup';
 import { selectUser, selectselectUser } from './../../../redux/MemberGroup';
-import { selectOption } from '../../../redux/Group';
+import { selectOption,selectSelectedOption } from '../../../redux/Group';
 import { useLocation } from 'react-router-dom';
 import { selectPostGroup } from '../../../redux/Group';
 import { selectexam } from '../../../redux/Exam';
@@ -48,7 +48,7 @@ export default function LeftItemGroup() {
 	const [loading, setLoading] = useState(false);
 	const [checkedItems, setCheckedItems] = useState({});
 	const [listfriend, setListFriend] = useState([]);
-
+	const selectedOption = useSelector(selectSelectedOption);
 	const [listFriendSearch, setListFriendSearch] = useState([...listfriend]);
 	const listfriendSelected = useSelector(selectselectFriendInvite);
 	const headers = {
@@ -390,7 +390,7 @@ export default function LeftItemGroup() {
 							{role === 'GROUP_ADMIN' || role === 'GROUP_MEMBER' || role === 'GROUP_OWNER' ? (
 								<div>
 									<div
-										className="custom-option-group"
+										className={`custom-option-group ${selectedOption === 'post' ? 'active' : ''}`}
 										onClick={() => {
 											dispatch(selectOption('post'));
 										}}
@@ -399,7 +399,7 @@ export default function LeftItemGroup() {
 										<span className="option-label-group">Bài viết</span>
 									</div>
 									<div
-										className="custom-option-group"
+										className={`custom-option-group ${selectedOption === 'question' ? 'active' : ''}`}
 										onClick={() => {
 											dispatch(selectOption('question'));
 										}}
@@ -408,7 +408,7 @@ export default function LeftItemGroup() {
 										<span className="option-label-group">Câu hỏi</span>
 									</div>
 									<div
-										className="custom-option-group"
+										className={`custom-option-group ${selectedOption === 'member' ? 'active' : ''}`}
 										onClick={() => {
 											dispatch(selectOption('member'));
 										}}
@@ -419,7 +419,7 @@ export default function LeftItemGroup() {
 
 									{isClassesPath ? (
 										<div
-											className="custom-option-group"
+										className={`custom-option-group ${selectedOption === 'exam' ? 'active' : ''}`}
 											onClick={() => {
 												dispatch(selectOption('exam'));
 											}}
@@ -429,7 +429,7 @@ export default function LeftItemGroup() {
 										</div>
 									) : null}
 									<div
-										className="custom-option-group"
+										className={`custom-option-group ${selectedOption === 'document' ? 'active' : ''}`}
 										onClick={() => {
 											dispatch(selectOption('document'));
 										}}
@@ -439,7 +439,7 @@ export default function LeftItemGroup() {
 									</div>
 
 									<div
-										className="custom-option-group"
+										className={`custom-option-group ${selectedOption === 'event' ? 'active' : ''}`}
 										onClick={() => {
 											dispatch(selectOption('event'));
 										}}
@@ -450,7 +450,7 @@ export default function LeftItemGroup() {
 									{role === 'GROUP_ADMIN' || role === 'GROUP_OWNER' ? (
 										<div>
 											<div
-												className="custom-option-group"
+												className={`custom-option-group ${selectedOption === 'manager-member' ? 'active' : ''}`}
 												onClick={() => {
 													dispatch(selectOption('manager-member'));
 												}}
@@ -459,7 +459,7 @@ export default function LeftItemGroup() {
 												<span className="option-label-group">Quản lý thành viên</span>
 											</div>
 											<div
-												className="custom-option-group"
+												className={`custom-option-group ${selectedOption === 'manager-group' ? 'active' : ''}`}
 												onClick={() => {
 													dispatch(selectOption('manager-group'));
 												}}

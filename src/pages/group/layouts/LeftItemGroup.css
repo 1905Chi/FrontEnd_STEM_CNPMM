@@ -56,3 +56,6 @@
 .footer-invite-friend button{
     border-radius: 5px;
 }
+
+.custom-option-group.active{
+    background-color: #e6e6e6; /* Đặt màu nền khi button được chọn */}
