@@ -18,6 +18,7 @@ import {
 const Left = () =>{
     const { theme } = UseTheme();
 	const navigate = useNavigate();
+	const user = JSON.parse(localStorage.getItem('user'));
     const openMessager = () => {
 		navigate('/messenger');
     };
@@ -38,6 +39,13 @@ const Left = () =>{
 			icon: FcSportsMode,
 			onClick: logoutHandler,
 		},
+		user.role === 'PARENT' ? {
+			title: 'Phụ huynh - Học sinh',
+			icon: FcCustomerSupport,
+			onClick: () => {
+				navigate('/parent');
+			},
+		} : null,
 	];
 
 	const listShortCutAction= [

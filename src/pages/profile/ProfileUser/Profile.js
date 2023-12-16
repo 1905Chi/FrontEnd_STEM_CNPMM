@@ -25,6 +25,7 @@ export default function Profile(props) {
 	const { uuid } = useParams();
 	// const user = useSelector(selectselectUser);
 	const [user, setUser] = useState();
+	console.log(user)
 	const friendOfFriend = useSelector(selectselectFriendOfFriend);
 
 	useEffect(() => {
@@ -32,22 +33,22 @@ export default function Profile(props) {
 			navigate('/profile');
 		} else if (uuid && uuid !== JSON.parse(localStorage.getItem('user')).id) {
 			dispatch(selectOptionProfile('introduce'));
-			Api.get(url + 'api/v1/users/' + uuid)
+			Api.get(url + 'api/v1/users/userDto/' + uuid)
 				.then((res) => {
 					// dispatch(selectUser(res.data));
-					console.log(res.data.result);
-					setUser(res.data.result);
+					console.log(res.data);
+					setUser(res.data);
 				})
 				.catch((err) => {
 					console.log(err);
 				});
 		} else {
 			dispatch(selectOptionProfile('introduce'));
-			Api.get(url + 'api/v1/users/' + props.id)
+			Api.get(url + 'api/v1/users/userDto/' + props.id)
 				.then((res) => {
 					// dispatch(selectUser(res.data));
-					console.log(res.data.result);
-					setUser(res.data.result);
+					console.log(res.data);
+					setUser(res.data);
 				})
 				.catch((err) => {
 					console.log(err);
@@ -151,15 +152,7 @@ export default function Profile(props) {
 							{' '}
 							<h3>Giới thiệu</h3>
 						</button>
-						<button
-							style={{ margin: '0px', borderRadius: '0px', backgroundColor: 'white' }}
-							onClick={() => {
-								dispatch(selectOptionProfile('post'));
-							}}
-						>
-							{' '}
-							<h3>Bài Viết</h3>
-						</button>
+						
 						<button
 							style={{ margin: '0px', borderRadius: '0px', backgroundColor: 'white' }}
 							onClick={() => {
@@ -169,14 +162,7 @@ export default function Profile(props) {
 							{' '}
 							<h3>Bạn bè</h3>
 						</button>
-						<button
-							style={{ margin: '0px', borderRadius: '0px', backgroundColor: 'white' }}
-							onClick={() => {
-								dispatch(selectOptionProfile('event'));
-							}}
-						>
-							<h3>Ảnh</h3>
-						</button>
+						
 					</div>
 					{selectedOption === 'introduce' ? (
 						<div style={{ margin: '125px 0 0 0' }}>

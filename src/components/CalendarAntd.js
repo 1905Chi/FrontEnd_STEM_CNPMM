@@ -49,13 +49,14 @@ const CalendarAntd = () => {
 			return listData;
 		} else if(listExam.length > 0) {
 			listExam.map((item) => {
-				const dateStart = item.staredAt;
-				// Tách các phần tử từ chuỗi
+				const dateStart = item.exam.startedAt;
+								// Tách các phần tử từ chuỗi
+				console.log(item)
 				const parts = dateStart.split(/[- :]/);
 
 				// Định dạng lại chuỗi ngày
 				const dateS = `${parts[1]}-${parts[0]}-${parts[2]}`;
-				const dateEnd = item.endedAt;
+				const dateEnd = item.exam.endedAt;
 				const parts1 = dateEnd.split(/[- :]/);
 				const dateE = `${parts1[1]}-${parts1[0]}-${parts1[2]}`;
 

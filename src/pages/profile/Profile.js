@@ -178,41 +178,7 @@ export default function Profile() {
 					}}
 					className="group-menu"
 				>
-					<button
-						style={{ margin: '0px', borderRadius: '0px', backgroundColor: 'white' }}
-						onClick={() => {
-							dispatch(selectOptionProfile('introduce'));
-						}}
-					>
-						
-						<h3>Giới thiệu</h3>
-					</button>
-					<button
-						style={{ margin: '0px', borderRadius: '0px', backgroundColor: 'white' }}
-						onClick={() => {
-							dispatch(selectOptionProfile('post'));
-						}}
-					>
-						
-						<h3>Bài Viết</h3>
-					</button>
-					<button
-						style={{ margin: '0px', borderRadius: '0px', backgroundColor: 'white' }}
-						onClick={() => {
-							dispatch(selectOptionProfile('member'));
-						}}
-					>
-						
-						<h3>Bạn bè</h3>
-					</button>
-					<button
-						style={{ margin: '0px', borderRadius: '0px', backgroundColor: 'white' }}
-						onClick={() => {
-							dispatch(selectOptionProfile('event'));
-						}}
-					>
-						<h3>Ảnh</h3>
-					</button>
+					
 				</div>
 				{selectedOption === 'introduce' ? (
 					<div style={{ margin: '125px 0 0 0' }}>
