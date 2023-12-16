@@ -68,7 +68,7 @@ export default function Exam() {
 				) : null}
 			</div>
 			<div className="exam-class__list">
-				{listExam.length > 0 &&
+				{listExam && listExam.length > 0 &&
 					listExam.map((item, index) => {
 						return (
 							<div className="exam-class__item" key={index} onClick={()=>{

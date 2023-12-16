@@ -14,7 +14,7 @@ export default function Class() {
 		else if(location.pathname.includes('groups')){
 			fetchgroup();
 		}
-	}, []);
+	}, [location]);
 
 	const fetchClass = async () => {
 		try {
@@ -46,7 +46,12 @@ export default function Class() {
 			});
 			console.log('Join class successfully: ');
 			if (response.data.statusCode === 200) {
-				fetchClass();
+				if(location.pathname.includes('classes')){
+					fetchClass();
+				}
+				else if(location.pathname.includes('groups')){
+					fetchgroup();
+				}
 			}
 		} catch (error) {
 			console.log('Failed to join class: ', error);
