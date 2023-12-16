@@ -68,7 +68,16 @@ const Topbar = (props) => {
 					},
 				},
 			]);
-		} else if (role ===undefined || role=== null|| role === 'TEACHER' || role === 'STUDENT' || role === 'PARENT' ||user.role === 'TEACHER' || user.role === 'STUDENT' || user.role === 'PARENT') {
+		} else if (
+			role === undefined ||
+			role === null ||
+			role === 'TEACHER' ||
+			role === 'STUDENT' ||
+			role === 'PARENT' ||
+			user.role === 'TEACHER' ||
+			user.role === 'STUDENT' ||
+			user.role === 'PARENT'
+		) {
 			setItems([
 				{
 					label: 'Trang chủ',
@@ -92,8 +101,7 @@ const Topbar = (props) => {
 					},
 				},
 			]);
-		}
-		else{
+		} else {
 			setItems([
 				{
 					label: 'Trang chủ',
@@ -254,7 +262,13 @@ const Topbar = (props) => {
 						<button className="menu-option-item" onClick={openEditProfile}>
 							<CiEdit className="iocon-pr" /> <span>Chỉnh sửa thông tin cá nhân</span>
 						</button>
-						<button className="menu-option-item">
+						<button
+							className="menu-option-item"
+							onClick={() => {
+								localStorage.clear();
+								navigate('/login');
+							}}
+						>
 							<IoExitOutline className="iocon-pr" />
 							<span>Đăng xuất</span>
 						</button>

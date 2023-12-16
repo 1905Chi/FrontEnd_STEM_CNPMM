@@ -32,7 +32,7 @@ export default function EditProfile({ onCancel }) {
 	const [editaddress, setEditaddress] = useState(false);
 	const user = JSON.parse(localStorage.getItem('user'));
 	const [loading, setLoading] = useState(false); // Trạng thái loading
-	
+
 	const [isSaving, setIsSaving] = useState(false);
 	console.log(isSaving);
 	const saveUpdate = (values) => {
@@ -47,10 +47,10 @@ export default function EditProfile({ onCancel }) {
 				values.phone = user.phone;
 			} else values.phone = '';
 		}
-		if (values.dob === undefined || values.dob === '' || values.dob === null) {
+		if (values.date_picker === undefined || values.date_picker === '' || values.date_picker === null) {
 			if (user.dob !== null && user.dob !== undefined) {
-				values.dob = user.dob;
-			} else values.dob = '';
+				values.date_picker = user.dob;
+			} else values.date_picker = '';
 		}
 		if (values.gender === undefined || values.gender === '' || values === null) {
 			if (user.gender !== null && user.gender !== undefined) {
@@ -77,7 +77,7 @@ export default function EditProfile({ onCancel }) {
 			firstName: values.firstname,
 			lastName: values.lastname,
 			phone: values.phone,
-			dob: values.dob.format('YYYY-MM-DD'),
+			dob: values.date_picker.format('YYYY-MM-DD'),
 			gender: values.gender,
 			about: values.about,
 			workedAt: values.workAt,
@@ -90,11 +90,7 @@ export default function EditProfile({ onCancel }) {
 				'Content-Type': 'application/json',
 			},
 		};
-		if (isSaving === false) {
-			return; // Không thực hiện yêu cầu axios
-		}
 
-		setLoading(true);
 		Api.put(url + 'api/v1/users/profile', data, config)
 			.then((response) => {
 				// Xử lý kết quả sau khi gửi thành công
@@ -208,170 +204,179 @@ export default function EditProfile({ onCancel }) {
 			key: '1',
 			label: 'Cập nhật thông tin cá nhân',
 			children: (
-				<div className="information-profile">
-					<Form.Item
-						name="firstName"
-						label="Tên"
-						rules={[{ required: true, message: 'Vui lòng nhập tên của bạn!' }]}
-						className="form-item-register"
-					>
-						<Input placeholder="Tên" style={{ width: '180px' }}   defaultValue={user.firstName}/>
-					</Form.Item>
-					<Form.Item
-						name="lastName"
-						label="Họ và tên đệm"
-						rules={[{ required: true, message: 'Vui lòng nhập họ của bạn!' }]}
-						className="form-item-register"
-					>
-						<Input placeholder="Họ" style={{ width: '180px'  }} defaultValue={user.lastName} />
-					</Form.Item>
-
-					<Form.Item
-						name="phone"
-						label="Số điện thoại"
-						className="form-item-register"
-						rules={[
-							{
-								required: true,
-								message: 'Vui lòng nhập số điện thoại!',
-								whitespace: true,
-							},
-
-							{
-								pattern: /^0\d{9,9}$/, // Sử dụng biểu thức chính quy để kiểm tra số điện thoại bắt đầu bằng 0 và có tổng cộng từ 10 đến 11 ký tự
-								message: 'Số điện thoại không hợp lệ!',
-							},
-						]}
-					>
-						<Input placeholder="Số điện thoại" style={{ width: '180px' }}  defaultValue={user.phone}/>
-					</Form.Item>
-					<Form.Item name="date_picker" {...config} className="form-item-register"
-					label='Ngày sinh'>
-						<DatePicker
-							format="DD-MM-YYYY"
-							style={{ width: '180px' }}
-							placeholder="Ngày tháng năm sinh"
-							onChange={(date) => setCurrentDate(date)}
-							disabledDate={isDateDisabled}
-							
-						/>
-					</Form.Item>
-					<Form.Item
-						className="form-item-register"
-						label="Tỉnh thành"
-						name="province"
-						rules={[{ required: true, message: 'Vui lòng chọn tỉnh thành!' }]}
-					>
-						<Select
-							showSearch
-							style={{ width: '180px' }}
-							placeholder="Tỉnh thành"
-							onChange={(value) => {
-								handleChangeProvince(value);
-								setSchools([]);
-								setDistricts([]);
-							}}
-							defaultValue={user.province}
+				<Form name="register" onFinish={saveUpdate} scrollToFirstError>
+					<div className="information-profile">
+						<Form.Item
+							name="firstName"
+							label="Tên"
+							rules={[{ required: true, message: 'Vui lòng nhập tên của bạn!' }]}
+							className="form-item-register"
 						>
-							{provinces.map((grade) => (
-								<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
-									{grade.name}
-								</Option>
-							))}
-						</Select>
-					</Form.Item>
-					<Form.Item
-						className="form-item-register"
-						name="district"
-						label="Quận huyện"
-						rules={[{ required: true, message: 'Vui lòng chọn quận huyện!' }]}
-						
-					>
-						<Select
-							showSearch
-							style={{ width: '180px' }}
-							placeholder="Quận huyện"
-							onChange={(value) => {
-								handleChangeDistrict(value);
-								setSchools([]);
-							}}
-							defaultValue={user.district}
+							<Input placeholder="Tên" style={{ width: '180px' }} defaultValue={user.firstName} />
+						</Form.Item>
+						<Form.Item
+							name="lastName"
+							label="Họ và tên đệm"
+							rules={[{ required: true, message: 'Vui lòng nhập họ của bạn!' }]}
+							className="form-item-register"
 						>
-							{districts.map((grade) => (
-								<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
-									{grade.name}
-								</Option>
-							))}
-						</Select>
-					</Form.Item>
-					<Form.Item
-						name="school"
-						label="Trường học"
-						rules={[{ required: true, message: 'Vui lòng chọn trường học!' }]}
-						className="form-item-register"
-					>
-						<Select showSearch style={{ width: '180px' }} placeholder="Trường học" onChange={handleChange}
-						defaultValue={user.school}>
-							{schools.map((grade) => (
-								<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
-									{grade.name}
-								</Option>
-							))}
-						</Select>
-					</Form.Item>
-					<Form.Item
-						name="grade"
-						label="Khối lớp"
-						rules={[{ required: true, message: 'Vui lòng chọn khối lớp!' }]}
-						className="form-item-register"
-					>
-						<Select showSearch style={{ width: '180px' }} placeholder="Khối lớp" onChange={handleChange} 
-						defaultValue={user.grade}>
-							{grade.map((grade) => (
-								<Option value={grade} key={grade} style={{ color: 'black' }}>
-									{grade}
-								</Option>
-							))}
-						</Select>
-					</Form.Item>
-					<Form.Item
-						name="gender"
-						label="Giới tính"
-						defaultValue={user.gender}
-						rules={[
-							{
-								required: true,
-								message: 'Chọn giới tính',
-							},
-						]}
-						className="form-item-register"
-					>
-						<div>
-							<Radio.Group defaultValue="MALE" style={{ width: '180px' }}>
-								<Tooltip title="Nam">
-									<Radio.Button value="MALE">
-										<FcManager />
-									</Radio.Button>
-								</Tooltip>
-								<Tooltip title="Nữ">
-									<Radio.Button value="FEMALE">
-										<FcBusinesswoman />
-									</Radio.Button>
-								</Tooltip>
-								<Tooltip title="Khác">
-									<Radio.Button value="OTHER">
-										<AiFillQuestionCircle />
-									</Radio.Button>
-								</Tooltip>
-							</Radio.Group>
-						</div>
-					</Form.Item>
-					<Form.Item>
-						<Button type="primary" htmlType="submit" className="login-form-button">
-							Lưu
-						</Button>
-					</Form.Item>
-				</div>
+							<Input placeholder="Họ" style={{ width: '180px' }} defaultValue={user.lastName} />
+						</Form.Item>
+
+						<Form.Item
+							name="phone"
+							label="Số điện thoại"
+							className="form-item-register"
+							rules={[
+								{
+									required: true,
+									message: 'Vui lòng nhập số điện thoại!',
+									whitespace: true,
+								},
+
+								{
+									pattern: /^0\d{9,9}$/, // Sử dụng biểu thức chính quy để kiểm tra số điện thoại bắt đầu bằng 0 và có tổng cộng từ 10 đến 11 ký tự
+									message: 'Số điện thoại không hợp lệ!',
+								},
+							]}
+						>
+							<Input placeholder="Số điện thoại" style={{ width: '180px' }} defaultValue={user.phone} />
+						</Form.Item>
+						<Form.Item name="date_picker" {...config} className="form-item-register" label="Ngày sinh">
+							<DatePicker
+								format="DD-MM-YYYY"
+								style={{ width: '180px' }}
+								placeholder="Ngày tháng năm sinh"
+								onChange={(date) => setCurrentDate(date)}
+								disabledDate={isDateDisabled}
+							/>
+						</Form.Item>
+						<Form.Item
+							className="form-item-register"
+							label="Tỉnh thành"
+							name="province"
+							rules={[{ required: true, message: 'Vui lòng chọn tỉnh thành!' }]}
+						>
+							<Select
+								showSearch
+								style={{ width: '180px' }}
+								placeholder="Tỉnh thành"
+								onChange={(value) => {
+									handleChangeProvince(value);
+									setSchools([]);
+									setDistricts([]);
+								}}
+								defaultValue={user.province}
+							>
+								{provinces.map((grade) => (
+									<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
+										{grade.name}
+									</Option>
+								))}
+							</Select>
+						</Form.Item>
+						<Form.Item
+							className="form-item-register"
+							name="district"
+							label="Quận huyện"
+							rules={[{ required: true, message: 'Vui lòng chọn quận huyện!' }]}
+						>
+							<Select
+								showSearch
+								style={{ width: '180px' }}
+								placeholder="Quận huyện"
+								onChange={(value) => {
+									handleChangeDistrict(value);
+									setSchools([]);
+								}}
+								defaultValue={user.district}
+							>
+								{districts.map((grade) => (
+									<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
+										{grade.name}
+									</Option>
+								))}
+							</Select>
+						</Form.Item>
+						<Form.Item
+							name="school"
+							label="Trường học"
+							rules={[{ required: true, message: 'Vui lòng chọn trường học!' }]}
+							className="form-item-register"
+						>
+							<Select
+								showSearch
+								style={{ width: '180px' }}
+								placeholder="Trường học"
+								onChange={handleChange}
+								defaultValue={user.school}
+							>
+								{schools.map((grade) => (
+									<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
+										{grade.name}
+									</Option>
+								))}
+							</Select>
+						</Form.Item>
+						<Form.Item
+							name="grade"
+							label="Khối lớp"
+							rules={[{ required: true, message: 'Vui lòng chọn khối lớp!' }]}
+							className="form-item-register"
+						>
+							<Select
+								showSearch
+								style={{ width: '180px' }}
+								placeholder="Khối lớp"
+								onChange={handleChange}
+								defaultValue={user.grade}
+							>
+								{grade.map((grade) => (
+									<Option value={grade} key={grade} style={{ color: 'black' }}>
+										{grade}
+									</Option>
+								))}
+							</Select>
+						</Form.Item>
+						<Form.Item
+							name="gender"
+							label="Giới tính"
+							defaultValue={user.gender}
+							rules={[
+								{
+									required: true,
+									message: 'Chọn giới tính',
+								},
+							]}
+							className="form-item-register"
+						>
+							<div>
+								<Radio.Group defaultValue="MALE" style={{ width: '180px' }}>
+									<Tooltip title="Nam">
+										<Radio.Button value="MALE">
+											<FcManager />
+										</Radio.Button>
+									</Tooltip>
+									<Tooltip title="Nữ">
+										<Radio.Button value="FEMALE">
+											<FcBusinesswoman />
+										</Radio.Button>
+									</Tooltip>
+									<Tooltip title="Khác">
+										<Radio.Button value="OTHER">
+											<AiFillQuestionCircle />
+										</Radio.Button>
+									</Tooltip>
+								</Radio.Group>
+							</div>
+						</Form.Item>
+						<Form.Item>
+							<Button type="primary" htmlType="submit" className="login-form-button">
+								Lưu
+							</Button>
+						</Form.Item>
+					</div>
+				</Form>
 			),
 		},
 		{
@@ -439,7 +444,12 @@ export default function EditProfile({ onCancel }) {
 								<Input.Password placeholder="Nhập lại mật khẩu" style={{ width: '180px' }} />
 							</Form.Item>
 							<Form.Item>
-								<Button type="primary" htmlType="submit" className="login-form-button">
+								<Button
+									type="primary"
+									htmlType="submit"
+									className="login-form-button"
+									onClick={saveUpdate}
+								>
 									Lưu
 								</Button>
 							</Form.Item>
