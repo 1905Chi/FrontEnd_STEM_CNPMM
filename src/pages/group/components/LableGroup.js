@@ -6,10 +6,9 @@ import anh_logo_1 from '../../../assets/images/anh_logo_1.jpg';
 export default function LableGroup({ image, name, id, type }) {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const isclass = location.pathname.includes('classes') ? true : false;
 
 	const linktogroup = () => {
-		if (type !== null || isclass === true) {
+		if (type === true) {
 			navigate(`/classes/${id}`);
 		} else {
 			navigate(`/groups/${id}`);

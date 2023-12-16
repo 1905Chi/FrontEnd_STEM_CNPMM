@@ -147,7 +147,7 @@ const LeftsGroup = () => {
 										image={mygroup.avatar_url}
 										name={mygroup.name}
 										id={mygroup.id}
-										type={mygroup.type}
+										type={mygroup.isClass}
 									/>
 								);
 							})}
@@ -172,7 +172,7 @@ const LeftsGroup = () => {
 										image={group.avatar_url}
 										name={group.name}
 										id={group.id}
-										type={group.type}
+										type={group.isClass}
 									/>
 								);
 							})}
@@ -197,7 +197,7 @@ const LeftsGroup = () => {
 										image={group.avatar_url}
 										name={group.name}
 										id={group.id}
-										type={group.type}
+										type={group.isClass}
 									/>
 								);
 							})}
