@@ -14,35 +14,61 @@ import LableGroup from '../pages/group/components/LableGroup';
 export default function Right() {
 	const dispatch = useDispatch();
 	const friendRequest = useSelector(selectselectFriendRequest);
-	console.log(friendRequest);
 	const [lisstInvite, setListInvite] = useState();
-	console.log(lisstInvite);
+	const [listRelationShip, setListRelationShip] = useState()
 	const accept = (status, id) => () => {
 		if (status === 'ACCEPT') {
 			const headers = {
 				'Content-Type': 'application/json',
 				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 			};
-			Api.put(url + 'api/v1/friendships/accept/friend', { friend_id: id }, { headers: headers })
+			// Api.put(url + 'api/v1/friendships/accept/friend', { friend_id: id }, { headers: headers })
+			// 	.then((res) => {
+			// 		toast.success('Đã chấp nhận lời mời kết bạn');
+			// 		dispatch(editFriendRequest(id));
+			// 		dispatch(selectOption('all'));
+			// 	})
+			// 	.catch((err) => {
+			// 		toast.error('Đã xảy ra lỗi');
+			
+			// 	});
+				Api.put(url + 'api/v1/friend-requests/accept/'+id, { headers: headers })
 				.then((res) => {
 					toast.success('Đã chấp nhận lời mời kết bạn');
-					dispatch(editFriendRequest(id));
-					dispatch(selectOption('all'));
+					callApifriendRequest();
 				})
 				.catch((err) => {
 					toast.error('Đã xảy ra lỗi');
-				});
+				});	
 		}
 		if (status === 'REJECT') {
 			const headers = {
 				'Content-Type': 'application/json',
 				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 			};
-			Api.put(url + 'api/v1/friendships/decline/friend', { friend_id: id }, { headers: headers })
+			// Api.put(url + 'api/v1/friendships/decline/friend', { friend_id: id }, { headers: headers })
+			// 	.then((res) => {
+			// 		toast.success('Đã xóa lời mời kết bạn');
+			// 		dispatch(editFriendRequest(id));
+			// 		dispatch(selectOption('all'));
+			// 	})
+			// 	.catch((err) => {
+			// 		toast.error('Đã xảy ra lỗi');
+			// 	});
+				// Api.put(url + 'api/v1/friend-requests/reject/', { friend_id: id }, { headers: headers })
+				// .then((res) => {
+				// 	toast.success('Đã xóa lời mời kết bạn');
+				// 	dispatch(editFriendRequest(id));
+				// 	dispatch(selectOption('all'));
+				// })
+				// .catch((err) => {
+				// 	toast.error('Đã xảy ra lỗi');
+				// });
+				Api.put(url + 'api/v1/friend-requests/reject/'+id, { headers: headers })
 				.then((res) => {
 					toast.success('Đã xóa lời mời kết bạn');
-					dispatch(editFriendRequest(id));
-					dispatch(selectOption('all'));
+					callApifriendRequest();
+					
 				})
 				.catch((err) => {
 					toast.error('Đã xảy ra lỗi');
@@ -68,17 +94,29 @@ export default function Right() {
 	useEffect(() => {
 		callApifriendRequest();
 		callApiListInvite();
+		callRelationShip();
 	}, []);
 	const callApifriendRequest = () => {
-		Api.get(url + 'api/v1/friendships/friend/pending', { headers: headers })
+		Api.get(url + 'api/v1/users/friend-requests', { headers: headers })
 			.then((res) => {
 				console.log(res.data);
-				dispatch(selectFriendRequest(res.data.friendWithAuthor));
+				dispatch(selectFriendRequest(res.data.result));
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	};
+	// const callApifriendRequest = () => {
+	// 	Api.get(url + 'api/v1/friendships/friend/pending', { headers: headers })
+	// 		.then((res) => {
+	// 			console.log(res.data);
+	// 			dispatch(selectFriendRequest(res.data.friendWithAuthor));
+	// 		})
+	// 		.catch((err) => {
+	// 			console.log(err);
+	// 		});
+	// };
+
 
 	const callApiListInvite = () => {
 		Api.get(url + 'api/v1/group-member-invitations', { headers: headers })
@@ -90,6 +128,17 @@ export default function Right() {
 			});
 	};
 
+	const callRelationShip = () => {
+		Api.get(url+ 'api/v1/relationships/student/relationship-requests', { headers: headers })
+		.then((res) => {
+			setListRelationShip(res.data.result);
+		})
+		.catch((err) => {
+			console.log(err);
+		}
+		)
+	}
+
 	return (
 		<>
 			<div className="friend-request">
@@ -97,9 +146,10 @@ export default function Right() {
 					<p>Lời mời kết bạn</p>
 				</div>
 				{friendRequest &&
+					friendRequest.length > 0 &&
 					friendRequest.map(
 						(item, index) => (
-							// item.status === 'PENDING' ? (
+							item.status === 'PENDING' ? (
 							<div
 								className="friend-request__item"
 								key={item.id}
@@ -109,12 +159,12 @@ export default function Right() {
 							>
 								<div style={{ flex: '2', margin: '15px', marginTop: '18px' }}>
 									<div className="friend-request__item__avatar">
-										<Avatar src={item.avartarUrl} alt="" />
+										<Avatar src={item.sender.avartarUrl} alt="" />
 									</div>
 								</div>
 								<div className="friend-request__item__button">
 									<div className="friend-request__item__name">
-										<p>{item.firstName + ' ' + item.lastName}</p>
+										<p>{item.sender.firstName + ' ' + item.sender.lastName}</p>
 									</div>
 									<div style={{ textAlign: 'start' }}>
 										<button
@@ -135,8 +185,9 @@ export default function Right() {
 								</div>
 							</div>
 						)
-						// ) : null
-					)}
+						 : null
+
+					))}
 				{lisstInvite && lisstInvite.length > 0 && (
 					<div className="friend-request__title">
 						<p>Lời mời tham gia nhom lop</p>

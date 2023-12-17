@@ -30,7 +30,7 @@ const CreateQuiz = () => {
 			name: values.name,
 			description: values.description,
 			duration: Number(values.duration),
-			staredAt: values.staredAt.format('DD-MM-YYYY HH:mm:ss:SSSSSS'),
+			startedAt: values.startedAt.format('DD-MM-YYYY HH:mm:ss:SSSSSS'),
 			endedAt: values.endedAt.format('DD-MM-YYYY HH:mm:ss:SSSSSS'),
 			isEnabled: true,
 			level: values.level,
@@ -168,7 +168,7 @@ const CreateQuiz = () => {
 					<InputNumber min={1} placeholder="Nhập số lượng câu hỏi mỗi bài kiểm tra" style={{ width: '60%' }} />
 				</Form.Item>
 
-				<Form.Item name="staredAt" rules={[{ required: true, message: 'Vui lòng nhập thời gian bắt đầu!' }]}>
+				<Form.Item name="startedAt" rules={[{ required: true, message: 'Vui lòng nhập thời gian bắt đầu!' }]}>
 					<DatePicker placeholder="Chọn thời gian bắt đầu" showTime />
 				</Form.Item>
 				<Form.Item name="endedAt" rules={[{ required: true, message: 'Vui lòng nhập thời gian kết thúc!' }]}>

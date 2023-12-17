@@ -15,9 +15,10 @@ import {
 	FcSettings,
 	FcSportsMode,
 } from 'react-icons/fc';
-const Left = () =>{
+export default function Left  () {
     const { theme } = UseTheme();
 	const navigate = useNavigate();
+	const user = JSON.parse(localStorage.getItem('user'));
     const openMessager = () => {
 		navigate('/messenger');
     };
@@ -38,14 +39,21 @@ const Left = () =>{
 			icon: FcSportsMode,
 			onClick: logoutHandler,
 		},
-	];
-
-	const listShortCutAction= [
-		{
+		user.role === 'PARENT' ? {
+			title: 'Phụ huynh - Học sinh',
+			icon: FcCustomerSupport,
+			onClick: () => {
+				navigate('/parent');
+			},
+		} : {
 			title: 'Cài đặt',
 			icon: FcSettings,
 			href: '/settings',
 		},
+	];
+
+	const listShortCutAction= [
+		
 		{
 			title: 'Bạn bè',
 			icon: FaUserFriends,
@@ -144,4 +152,3 @@ const Left = () =>{
 		</Space>
 	);
 }
-export default Left;

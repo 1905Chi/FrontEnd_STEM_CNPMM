@@ -40,6 +40,7 @@ export default function AddFile(props) {
 	const Save = () => {
 		if (selectedFile) {
 			const formData = new FormData();
+			
 			for (let i = 0; i < selectedFile.length; i++) {
 				formData.append('mediaFiles', selectedFile[i]);
 			}
@@ -48,7 +49,7 @@ export default function AddFile(props) {
 			formData.append('groupId', uuid);
 			
 			
-			formData.append('TypeCode', 'post');
+			formData.append('typeName', 'POST');
 			formData.append('content', '');
 			const data = formData;
 			Api.post(url + 'api/v1/posts', data, {

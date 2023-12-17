@@ -66,9 +66,17 @@ export default function LeftItemGroup() {
 			})
 			.catch((error) => {
 				toast.error(error);
+				const isclass= location.pathname.includes('classes');
+				if(isclass){
 				setTimeout(() => {
-					navigate('/group/');
+					navigate('/classes/');
 				}, 3000);
+			}
+			else{
+				setTimeout(() => {
+					navigate('/groups/');
+				}, 3000);
+			}
 			});
 	};
 

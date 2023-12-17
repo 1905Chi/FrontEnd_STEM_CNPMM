@@ -42,8 +42,8 @@ import User from '../pages/user/User';
 import Subject from '../pages/subject/Subject';
 import Address from '../pages/address/Address';
 import ManageGroup from '../pages/manageGroup/ManageGroup';
-
-
+import Parent from  '../pages/user/Parent'
+import RightParent from '../pages/user/layouts/RightParent';
 
 const privateRoutes = [
 	{ path: '/home', component: Home, Left: Left, Right: Right },
@@ -51,6 +51,8 @@ const privateRoutes = [
 	{ path: '/groups/:uuid', component: MainGroup, Left: LeftItemGroup, Right: RightItemGroup },
 	{ path: '/classes/:uuid', component: MainGroup, Left: LeftItemGroup, Right: RightItemGroup },
 	{ path: '/messenger', component: Main, Left: LeftMessenger, Right: RightMessenger },
+	{ path: '/parent', component: Parent, Left: Left ,Right:RightParent},
+
 ];
 
 const privateRoutes2page = [
@@ -58,13 +60,15 @@ const privateRoutes2page = [
 	{ path: '/groups/create', component: CreateGroup, Left: LeftCreateGroup },
 	{ path: '/classes/create', component: CreateGroup, Left: LeftCreateGroup },
 	{ path: '/friends', component: MainFriend, Left: LeftFriend },
-	{ path: '/profile/:uuid', component: ProfileUser, Left: Left },
+	
 	{ path: '/classes/:uuid/edit-exam/:id', component: EditExam, Left: LeftEditExam },
 
 	{ path: '/exam/:id/submit/', component: Submit, Left: LeftSubmit },
 	{ path: '/classes', component: Class, Left: RightClass },
 	{ path: '/groups', component: Class, Left: LeftsGroup },
 	{ path: '/search', component: MainSearch, Left: LeftSearch },
+	
+
 ];
 const private1page = [
 	{ path: '/classes/:uuid/exam/createquiz', component: CreateQuiz },
@@ -74,6 +78,7 @@ const private1page = [
 	{ path: '/subjects', component: Subject, Left: Left },
 	{ path: '/addresses', component: Address, Left: Left },
 	{ path: '/manage/groups', component: ManageGroup },
+	{ path: '/profile/:uuid', component: ProfileUser },
 ];
 const publicRoutes = [
 	{ path: '/login', component: Login },

@@ -1,1 +1,2 @@
-export const url = "http://192.168.1.36:8081/";
+export const url = "http://localhost:8080/";
+export const anh_logo='https://res.cloudinary.com/djzwxw0ao/image/upload/v1696942528/uqbxidtwcdbqn8glt6we.jpg'

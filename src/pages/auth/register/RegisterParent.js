@@ -78,6 +78,10 @@ export default function RegisterParent(props) {
 		const data = {
 			email: values.email,
 			password: values.password,
+			firstName: values.firstName,
+			lastName: values.lastName,
+			phone: values.phone,
+			dob: values.date_picker.format('YYYY-MM-DD'),
 			role: values.roles,
 		};
 		const config = {

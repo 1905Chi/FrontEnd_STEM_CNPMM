@@ -22,6 +22,7 @@ export default function MainSearch() {
 	const group = useSelector(selectselectgroup);
 	const classs = useSelector(selectselectclass);
 	const people = useSelector(selectselectSearchpeople);
+	const user = JSON.parse(localStorage.getItem('user'));
 	const Requestfriend = async (id) => {
 		const headers = {
 			'Content-Type': 'application/json',
@@ -68,7 +69,18 @@ export default function MainSearch() {
 	//             console.log(err);
 	//         }
 	//     }
-
+	const requestParent	= async (id) => {
+		Api.post(url+'api/v1/relationships/'+id,  {
+			'Content-Type': 'application/json',
+			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+		})
+		.then((res) => {
+			toast.success('Đã gửi lời mời');
+		})
+		.catch((err) => {
+			toast.error('Đã xảy ra lỗi');
+		});
+	}
 	return (
 		<div className="search-main">
 			{selectedOption === 'all' && (
@@ -177,6 +189,7 @@ export default function MainSearch() {
 										) : item.isFriend === -1 ? (
 											<button>Đã gửi lời mời</button>
 										) : null}
+										{item.role==='STUDENT' && user.role==='PARENT' ? <button onClick={() => requestParent(item.id)}>phụ huynh- học sinh</button>: null}
 									</div>
 								))}
 						</div>

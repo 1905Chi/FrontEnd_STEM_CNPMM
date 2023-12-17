@@ -199,6 +199,8 @@ export default function EditProfile({ onCancel }) {
 	const handleChange = (value) => {
 		console.log(`selected ${value}`);
 	};
+	const UpdatePass = () => {
+	}
 	const items = [
 		{
 			key: '1',
@@ -448,7 +450,7 @@ export default function EditProfile({ onCancel }) {
 									type="primary"
 									htmlType="submit"
 									className="login-form-button"
-									onClick={saveUpdate}
+									onClick={UpdatePass}
 								>
 									Lưu
 								</Button>
