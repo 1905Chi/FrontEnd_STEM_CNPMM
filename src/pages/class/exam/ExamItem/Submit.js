@@ -25,6 +25,8 @@ export default function Submit() {
 	const [iscreate, setiscreate] = useState(false);
 	const [selectedAnswers, setSelectedAnswers] = useState([]);
 	const dispatch = useDispatch();
+	const typesubmit = localStorage.getItem('typesubmit');
+	const [submissionDetailId, setsubmissionDetailId] = useState();
 	const onFinish = () => {
 		setloading(true);
 		Api.post(url + 'api/v1/submissions/submit?submissionId=' + localStorage.getItem('submissionId'), {
@@ -50,7 +52,7 @@ export default function Submit() {
 	};
 
 	useEffect(() => {
-		const typesubmit = localStorage.getItem('typesubmit');
+		
 		//dispatch(selectquestionChoose())
 		const headers = {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
@@ -65,6 +67,7 @@ export default function Submit() {
 						setTargetTime(Number(localStorage.getItem('duration')) * 60 * 1000);
 						dispatch(selectexam(response.data.result.questions));
 						localStorage.setItem('typesubmit' , 'continue');
+						
 						setiscreate(true);
 						
 					} else {
@@ -138,6 +141,24 @@ export default function Submit() {
 				.catch((error) => {
 					toast.error(error);
 				});
+		}
+
+		if(typesubmit==='review'){
+			Api.get(url +`api/v1/submission-details/detail/${localStorage.getItem('submissionId')}`, { headers: headers })
+			.then((response) => {
+				if(response.data.success=== true)
+				setsubmissionDetailId(response.data.result.submissionDetail);
+				else{
+					toast.error(response.data.message);
+					setTimeout(() => {
+					window.history.back();
+					}, 3000);
+				}
+			})
+			.catch((error) => {
+				window.history.back();
+			});
+
 		}
 	}, []);
 	
@@ -215,7 +236,7 @@ export default function Submit() {
 
 	return (
 		<div className="submit-sipn">
-			{submition === null || !submition ? (<Skeleton active />):
+			{submition === null || !submition  && typesubmit!=='review' ? (<Skeleton active />) ? typesubmit==='create' || typesubmit==='continue' : 
 			<div>
 			<Countdown title="Thời gian còn lại" value={Date.now() + targetTime} onFinish={onFinish} />
 			{loading ? <Loading /> : null}
@@ -265,7 +286,9 @@ export default function Submit() {
 					</div>
 				))}
 			<button onClick={onFinish}>Submit</button>
-			</div>}
+			</div> : <div>
+
+				</div>}
 			<ToastContainer />
 		</div>
 	);
