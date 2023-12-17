@@ -14,10 +14,8 @@ import LableGroup from '../pages/group/components/LableGroup';
 export default function Right() {
 	const dispatch = useDispatch();
 	const friendRequest = useSelector(selectselectFriendRequest);
-	console.log(friendRequest);
 	const [lisstInvite, setListInvite] = useState();
-	const [listRelationShip, setListRelationShip] = useState();
-	console.log(lisstInvite);
+	const [listRelationShip, setListRelationShip] = useState()
 	const accept = (status, id) => () => {
 		if (status === 'ACCEPT') {
 			const headers = {

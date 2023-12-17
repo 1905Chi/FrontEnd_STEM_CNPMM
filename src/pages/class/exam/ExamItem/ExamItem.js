@@ -27,7 +27,7 @@ export default function ExamItem(props) {
 	const [converArray, setconverArray] = useState();
 	const CreateSubmit = () => {
 		localStorage.setItem('typesubmit', 'create');
-		localStorage.setItem('StartAt', examId.exam.staredAt);
+		localStorage.setItem('StartAt', examId.exam.startedAt);
 		localStorage.setItem('duration', examId.exam.duration);
 		setTimeout(() => {
 			navigate('/exam/' + id + '/submit');
@@ -56,7 +56,7 @@ export default function ExamItem(props) {
 					setExamId(response.data.result);
 					dispatch(selectexam(response.data.result));
 					const startTime = moment(
-						response.data.result.exam.staredAt,
+						response.data.result.exam.startedAt,
 						'DD-MM-YYYY HH:mm:ss:SSSSSS'
 					).valueOf();
 
@@ -275,7 +275,7 @@ export default function ExamItem(props) {
 					</div>
 					<div className="exam-item-infor">
 						<div className="exam-item__title">
-							<p>Thời gian bắt đầu: {examId.exam.staredAt}</p>
+							<p>Thời gian bắt đầu: {examId.exam.startedAt}</p>
 							<p>Thời gian kết thúc: {examId.exam.endedAt}</p>
 						</div>
 						<div className="exam-item__content">

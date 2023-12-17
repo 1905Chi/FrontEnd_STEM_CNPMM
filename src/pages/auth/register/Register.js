@@ -309,7 +309,7 @@ export default function Register(props) {
 									}}
 								>
 									{provinces.map((grade) => (
-										<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
+										<Option value={grade.name} key={grade.id} style={{ color: 'black' }}>
 											{grade.name}
 										</Option>
 									))}
@@ -330,7 +330,7 @@ export default function Register(props) {
 									}}
 								>
 									{districts.map((grade) => (
-										<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
+										<Option value={grade.name} key={grade.id} style={{ color: 'black' }}>
 											{grade.name}
 										</Option>
 									))}
@@ -348,7 +348,7 @@ export default function Register(props) {
 									onChange={handleChange}
 								>
 									{schools.map((grade) => (
-										<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
+										<Option value={grade.name} key={grade.id} style={{ color: 'black' }}>
 											{grade.name}
 										</Option>
 									))}

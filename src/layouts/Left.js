@@ -15,7 +15,7 @@ import {
 	FcSettings,
 	FcSportsMode,
 } from 'react-icons/fc';
-const Left = () =>{
+export default function Left  () {
     const { theme } = UseTheme();
 	const navigate = useNavigate();
 	const user = JSON.parse(localStorage.getItem('user'));
@@ -45,15 +45,15 @@ const Left = () =>{
 			onClick: () => {
 				navigate('/parent');
 			},
-		} : null,
-	];
-
-	const listShortCutAction= [
-		{
+		} : {
 			title: 'Cài đặt',
 			icon: FcSettings,
 			href: '/settings',
 		},
+	];
+
+	const listShortCutAction= [
+		
 		{
 			title: 'Bạn bè',
 			icon: FaUserFriends,
@@ -152,4 +152,3 @@ const Left = () =>{
 		</Space>
 	);
 }
-export default Left;

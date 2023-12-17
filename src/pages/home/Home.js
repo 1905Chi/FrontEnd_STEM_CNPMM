@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import anh_logo_1 from '../../../src/assets/images/anh_logo_1.jpg';
-import Post from './components/Post';
 import PostItem from './components/PostItem';
 import { ToastContainer, toast } from 'react-toastify';
-import Editor from './components/Editor';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectselectuser, selectuser } from '../../redux/User';
 import Api from '../../api/Api';

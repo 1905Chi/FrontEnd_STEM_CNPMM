@@ -64,7 +64,7 @@ export default function Submit() {
 						localStorage.setItem('submissionId', response.data.result.submissionId);
 						setTargetTime(Number(localStorage.getItem('duration')) * 60 * 1000);
 						dispatch(selectexam(response.data.result.questions));
-						localStorage.removeItem('typesubmit');
+						localStorage.setItem('typesubmit' , 'continue');
 						setiscreate(true);
 						
 					} else {
