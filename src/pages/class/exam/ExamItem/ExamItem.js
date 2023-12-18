@@ -43,6 +43,15 @@ export default function ExamItem(props) {
 			navigate('/exam/' + id + '/submit');
 		}, 3000);
 	};
+	const ReviewExam = () => {
+		localStorage.setItem('typesubmit', 'review');
+		localStorage.setItem('StartAt', examId.submission.startedAt);
+		localStorage.setItem('submissionId', examId.submission.id);
+		localStorage.setItem('duration', examId.exam.duration);
+		setTimeout(() => {
+			navigate('/exam/' + id + '/submit');
+		}, 3000);
+	};
 
 	useEffect(() => {
 		const headers = {
@@ -254,7 +263,7 @@ export default function ExamItem(props) {
 			checkClose(closeAt) 
 				?
 				<span>
-					<button className="exam-item__button__start" onClick={() => {}}>
+					<button className="exam-item__button__start" onClick={ReviewExam}>
 						Xem lại bài làm{' '}
 					</button>
 				</span>

@@ -19,7 +19,7 @@ import { selecteventGroup } from './../../../redux/EventGroup';
 import { selectMemberGroup } from './../../../redux/MemberGroup';
 import { selectMemberGroupRequest } from './../../../redux/MemberGroup';
 import { selectUser, selectselectUser } from './../../../redux/MemberGroup';
-import { selectOption,selectSelectedOption } from '../../../redux/Group';
+import { selectOption, selectSelectedOption } from '../../../redux/Group';
 import { useLocation } from 'react-router-dom';
 import { selectPostGroup } from '../../../redux/Group';
 import { selectexam } from '../../../redux/Exam';
@@ -66,17 +66,16 @@ export default function LeftItemGroup() {
 			})
 			.catch((error) => {
 				toast.error(error);
-				const isclass= location.pathname.includes('classes');
-				if(isclass){
-				setTimeout(() => {
-					navigate('/classes/');
-				}, 3000);
-			}
-			else{
-				setTimeout(() => {
-					navigate('/groups/');
-				}, 3000);
-			}
+				const isclass = location.pathname.includes('classes');
+				if (isclass) {
+					setTimeout(() => {
+						navigate('/classes/');
+					}, 3000);
+				} else {
+					setTimeout(() => {
+						navigate('/groups/');
+					}, 3000);
+				}
 			});
 	};
 
@@ -94,10 +93,28 @@ export default function LeftItemGroup() {
 					dispatch(selectUser(response.data.result.user));
 				} else {
 					toast.error(response.data.message);
+					if (isClassesPath) {
+						setTimeout(() => {
+							navigate('/classes/');
+						}, 1000);
+					} else {
+						setTimeout(() => {
+							navigate('/groups/');
+						}, 1000);
+					}
 				}
 			})
 			.catch((error) => {
-				toast.error(error);
+				toast.error('Không thể truy cập nhóm ! Nhóm không tồn tại');
+				if (isClassesPath) {
+					setTimeout(() => {
+						navigate('/classes/');
+					}, 2000);
+				} else {
+					setTimeout(() => {
+						navigate('/groups/');
+					}, 2000);
+				}
 			});
 		Api.get(url + 'api/v1/group-members?groupId=' + uuid, { headers: headers })
 			.then((response) => {
@@ -142,10 +159,8 @@ export default function LeftItemGroup() {
 			})
 			.catch((error) => {
 				console.log(error);
-			})
-			.finally(() => {
-				dispatch(selectOption('post'));
 			});
+
 		if (isClassesPath) {
 			Api.get(url + 'api/v1/exams/group/' + uuid, { headers: headers })
 				.then((response) => {
@@ -407,7 +422,9 @@ export default function LeftItemGroup() {
 										<span className="option-label-group">Bài viết</span>
 									</div>
 									<div
-										className={`custom-option-group ${selectedOption === 'question' ? 'active' : ''}`}
+										className={`custom-option-group ${
+											selectedOption === 'question' ? 'active' : ''
+										}`}
 										onClick={() => {
 											dispatch(selectOption('question'));
 										}}
@@ -427,7 +444,9 @@ export default function LeftItemGroup() {
 
 									{isClassesPath ? (
 										<div
-										className={`custom-option-group ${selectedOption === 'exam' ? 'active' : ''}`}
+											className={`custom-option-group ${
+												selectedOption === 'exam' ? 'active' : ''
+											}`}
 											onClick={() => {
 												dispatch(selectOption('exam'));
 											}}
@@ -437,7 +456,9 @@ export default function LeftItemGroup() {
 										</div>
 									) : null}
 									<div
-										className={`custom-option-group ${selectedOption === 'document' ? 'active' : ''}`}
+										className={`custom-option-group ${
+											selectedOption === 'document' ? 'active' : ''
+										}`}
 										onClick={() => {
 											dispatch(selectOption('document'));
 										}}
@@ -458,7 +479,9 @@ export default function LeftItemGroup() {
 									{role === 'GROUP_ADMIN' || role === 'GROUP_OWNER' ? (
 										<div>
 											<div
-												className={`custom-option-group ${selectedOption === 'manager-member' ? 'active' : ''}`}
+												className={`custom-option-group ${
+													selectedOption === 'manager-member' ? 'active' : ''
+												}`}
 												onClick={() => {
 													dispatch(selectOption('manager-member'));
 												}}
@@ -467,7 +490,9 @@ export default function LeftItemGroup() {
 												<span className="option-label-group">Quản lý thành viên</span>
 											</div>
 											<div
-												className={`custom-option-group ${selectedOption === 'manager-group' ? 'active' : ''}`}
+												className={`custom-option-group ${
+													selectedOption === 'manager-group' ? 'active' : ''
+												}`}
 												onClick={() => {
 													dispatch(selectOption('manager-group'));
 												}}

@@ -61,7 +61,7 @@ function Login() {
 								localStorage.setItem('user', JSON.stringify(response.data.result));
 								dispatch(selectuser(response.data.result));
 								//	localStorage.setItem('use',createJwtToken(response.data.result))
-								window.location.href = '/home';
+								navigate('/home');
 							} else {
 								toast.error(response.data.message);
 							}

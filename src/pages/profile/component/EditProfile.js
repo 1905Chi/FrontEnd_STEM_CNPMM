@@ -32,57 +32,50 @@ export default function EditProfile({ onCancel }) {
 	const [editaddress, setEditaddress] = useState(false);
 	const user = JSON.parse(localStorage.getItem('user'));
 	const [loading, setLoading] = useState(false); // Trạng thái loading
-
+	const [provinceItem, setprovicesItem] = useState({}); // Thông tin người dùng
+	const [districtsItem, setdistrictsItem] = useState({}); // Thông tin người dùng
+	const [schoolsItem, setschoolsItem] = useState({}); // Thông tin người dùng
 	const [isSaving, setIsSaving] = useState(false);
 	console.log(isSaving);
 	const saveUpdate = (values) => {
-		if (values.firstname === undefined || values.firstname === '' || values.firstname === null) {
-			values.firstname = user.firstName;
+		setLoading(true);
+		let data = {};
+		if (user.role === 'PARENT') {
+			data = {
+				firstName: values.firstname ? values.firstname : user.firstName,
+				lastName: values.lastname ? values.lastname : user.lastName,
+				phone: values.phone ? values.phone : user.phone,
+				dob: values.date_picker? values.date_picker.format('YYYY-MM-DD') : user.dob,
+				gender: values.gender ? values.gender : user.gender,
+			};
 		}
-		if (values.lastname === undefined || values.lastname === '' || values.lastname === null) {
-			values.lastname = user.lastName;
+		if (user.role === 'STUDENT') {
+			data = {
+				firstName: values.firstname ? values.firstname : user.firstName,
+				lastName: values.lastname ? values.lastname : user.lastName,
+				phone: values.phone ? values.phone : user.phone,
+				dob: values.date_picker ? values.date_picker.format('YYYY-MM-DD') : user.dob,
+				gender: values.gender ? values.gender : user.gender,
+				provinces: values.province ? provinceItem: user.province,
+				districts: values.district ? districtsItem : user.district,
+				schools: values.school ? schoolsItem : user.school,
+				grade: values.grade ? values.grade : user.grade,
+			};
 		}
-		if (values.phone === undefined || values.phone === '' || values.phone === null) {
-			if (user.phone !== null && user.phone !== undefined) {
-				values.phone = user.phone;
-			} else values.phone = '';
+		if (user.role === 'TEACHER') {
+			data = {
+				firstName: values.firstname ? values.firstname : user.firstName,
+				lastName: values.lastname ? values.lastname : user.lastName,
+				phone: values.phone ? values.phone : user.phone,
+				dob: values.date_picker ? values.date_picker.format('YYYY-MM-DD') : user.dob,
+				gender: values.gender ? values.gender : user.gender,
+				provinces: values.province ? provinceItem : user.province,
+				districts: values.district ? districtsItem : user.district,
+				schools: values.school ? schoolsItem : user.school,
+				grade: values.grade ? values.grade : user.grade,
+				subject: values.subject ? values.subject : user.subject,
+			};
 		}
-		if (values.date_picker === undefined || values.date_picker === '' || values.date_picker === null) {
-			if (user.dob !== null && user.dob !== undefined) {
-				values.date_picker = user.dob;
-			} else values.date_picker = '';
-		}
-		if (values.gender === undefined || values.gender === '' || values === null) {
-			if (user.gender !== null && user.gender !== undefined) {
-				values.gender = user.gender;
-			} else values.gender = 'MALE';
-		}
-		if (values.about === undefined || values.about === '' || values.about === null) {
-			if (user.about !== null && user.about !== undefined) {
-				values.about = user.about;
-			} else values.about = '';
-		}
-		if (values.workAt === undefined || values.workAt === '' || values.workAt === null) {
-			if (user.workAt !== null && user.workAt !== undefined) {
-				values.workAt = user.workAt;
-			} else values.workAt = '';
-		}
-		if (values.adsress === undefined || values.adsress === '' || values.adsress === null) {
-			if (user.address !== null && user.address !== undefined) {
-				values.adsress = user.address;
-			} else values.adsress = '';
-		}
-
-		const data = {
-			firstName: values.firstname,
-			lastName: values.lastname,
-			phone: values.phone,
-			dob: values.date_picker.format('YYYY-MM-DD'),
-			gender: values.gender,
-			about: values.about,
-			workedAt: values.workAt,
-			address: values.adsress,
-		};
 		console.log(data);
 		const config = {
 			headers: {
@@ -148,6 +141,9 @@ export default function EditProfile({ onCancel }) {
 	};
 
 	const handleChangeProvince = async (currentProvince) => {
+		console.log(currentProvince);
+		console.log(provinces)
+		setprovicesItem(provinces.filter((item) => item.id === currentProvince)[0].name);
 		await axios
 			.get(url + `api/v1/addresses/districtsByProvince?pId=${currentProvince}`)
 			.then((response) => {
@@ -158,6 +154,7 @@ export default function EditProfile({ onCancel }) {
 			});
 	};
 	const handleChangeDistrict = (value) => {
+		setdistrictsItem(districts.filter((item) => item.id === value)[0].name);
 		axios
 			.get(url + `api/v1/addresses/schoolsByDistrict?dId=${value}`)
 			.then((response) => {
@@ -191,16 +188,15 @@ export default function EditProfile({ onCancel }) {
 		rules: [
 			{
 				type: 'object',
-				required: true,
+				required: false,
 				message: 'Chọn ngày tháng năm sinh!',
 			},
 		],
 	};
 	const handleChange = (value) => {
-		console.log(`selected ${value}`);
+		setschoolsItem(schools.filter((item) => item.name === value)[0].name);
 	};
-	const UpdatePass = () => {
-	}
+	const UpdatePass = () => {};
 	const items = [
 		{
 			key: '1',
@@ -211,7 +207,7 @@ export default function EditProfile({ onCancel }) {
 						<Form.Item
 							name="firstName"
 							label="Tên"
-							rules={[{ required: true, message: 'Vui lòng nhập tên của bạn!' }]}
+							rules={[{ required: false, message: 'Vui lòng nhập tên của bạn!' }]}
 							className="form-item-register"
 						>
 							<Input placeholder="Tên" style={{ width: '180px' }} defaultValue={user.firstName} />
@@ -219,7 +215,7 @@ export default function EditProfile({ onCancel }) {
 						<Form.Item
 							name="lastName"
 							label="Họ và tên đệm"
-							rules={[{ required: true, message: 'Vui lòng nhập họ của bạn!' }]}
+							rules={[{ required: false, message: 'Vui lòng nhập họ của bạn!' }]}
 							className="form-item-register"
 						>
 							<Input placeholder="Họ" style={{ width: '180px' }} defaultValue={user.lastName} />
@@ -231,7 +227,7 @@ export default function EditProfile({ onCancel }) {
 							className="form-item-register"
 							rules={[
 								{
-									required: true,
+									required: false,
 									message: 'Vui lòng nhập số điện thoại!',
 									whitespace: true,
 								},
@@ -253,100 +249,127 @@ export default function EditProfile({ onCancel }) {
 								disabledDate={isDateDisabled}
 							/>
 						</Form.Item>
-						<Form.Item
-							className="form-item-register"
-							label="Tỉnh thành"
-							name="province"
-							rules={[{ required: true, message: 'Vui lòng chọn tỉnh thành!' }]}
-						>
-							<Select
-								showSearch
-								style={{ width: '180px' }}
-								placeholder="Tỉnh thành"
-								onChange={(value) => {
-									handleChangeProvince(value);
-									setSchools([]);
-									setDistricts([]);
-								}}
-								defaultValue={user.province}
+						{user.role === 'STUDENT' || user.role === 'TEACHER' ? (
+							<div className='stu-tea'>
+								<Form.Item
+									className="form-item-register"
+									label="Tỉnh"
+									name="province"
+									rules={[{ required: false, message: 'Vui lòng chọn tỉnh thành!' }]}
+								>
+									<Select
+										showSearch
+										style={{ width: '180px' }}
+										placeholder="Tỉnh"
+										
+										onChange={(value) => {
+											handleChangeProvince(value);
+											setSchools([]);
+											setDistricts([]);
+										}}
+										defaultValue={user.province}
+									>
+										{provinces.map((grade) => (
+											<Option value={grade.id} key={grade.id} id={grade.name} style={{ color: 'black' }}>
+												{grade.name} 
+											</Option>
+										))}
+									</Select>
+								</Form.Item>
+								<Form.Item
+									className="form-item-register"
+									name="district"
+									label="Quận"
+									rules={[{ required: false, message: 'Vui lòng chọn quận huyện!' }]}
+								>
+									<Select
+										showSearch
+										style={{ width: '180px' }}
+										placeholder="Quận huyện"
+										onChange={(value) => {
+											handleChangeDistrict(value);
+											setSchools([]);
+										}}
+										defaultValue={user.district}
+									>
+										{districts.map((grade) => (
+											<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
+												{grade.name}
+											</Option>
+										))}
+									</Select>
+								</Form.Item>
+								<Form.Item
+									name="school"
+									label="Trường học"
+									rules={[{ required: false, message: 'Vui lòng chọn trường học!' }]}
+									className="form-item-register"
+								>
+									<Select
+										showSearch
+										style={{ width: '180px' }}
+										placeholder="Trường học"
+										onChange={handleChange}
+										defaultValue={user.school}
+									>
+										{schools.map((grade) => (
+											<Option value={grade.name} key={grade.id} style={{ color: 'black' }}>
+												{grade.name}
+											</Option>
+										))}
+									</Select>
+								</Form.Item>
+								<Form.Item
+									name="grade"
+									label="Khối"
+									rules={[{ required: false, message: 'Vui lòng chọn khối lớp!' }]}
+									className="form-item-register"
+								>
+									<Select
+										showSearch
+										style={{ width: '180px' }}
+										placeholder="Khối lớp"
+										onChange={handleChange}
+										defaultValue={user.grade}
+									>
+										{grade.map((grade) => (
+											<Option value={grade} key={grade} style={{ color: 'black' }}>
+												{grade}
+											</Option>
+										))}
+									</Select>
+								</Form.Item>
+							</div>
+						) : null}
+						{user.role === 'TEACHER' ? (
+							<Form.Item
+								name="subject"
+								label="Môn"
+								rules={[{ required: false, message: 'Vui lòng chọn môn học!' }]}
+								className="form-item-register"
 							>
-								{provinces.map((grade) => (
-									<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
-										{grade.name}
-									</Option>
-								))}
-							</Select>
-						</Form.Item>
-						<Form.Item
-							className="form-item-register"
-							name="district"
-							label="Quận huyện"
-							rules={[{ required: true, message: 'Vui lòng chọn quận huyện!' }]}
-						>
-							<Select
-								showSearch
-								style={{ width: '180px' }}
-								placeholder="Quận huyện"
-								onChange={(value) => {
-									handleChangeDistrict(value);
-									setSchools([]);
-								}}
-								defaultValue={user.district}
-							>
-								{districts.map((grade) => (
-									<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
-										{grade.name}
-									</Option>
-								))}
-							</Select>
-						</Form.Item>
-						<Form.Item
-							name="school"
-							label="Trường học"
-							rules={[{ required: true, message: 'Vui lòng chọn trường học!' }]}
-							className="form-item-register"
-						>
-							<Select
-								showSearch
-								style={{ width: '180px' }}
-								placeholder="Trường học"
-								onChange={handleChange}
-								defaultValue={user.school}
-							>
-								{schools.map((grade) => (
-									<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
-										{grade.name}
-									</Option>
-								))}
-							</Select>
-						</Form.Item>
-						<Form.Item
-							name="grade"
-							label="Khối lớp"
-							rules={[{ required: true, message: 'Vui lòng chọn khối lớp!' }]}
-							className="form-item-register"
-						>
-							<Select
-								showSearch
-								style={{ width: '180px' }}
-								placeholder="Khối lớp"
-								onChange={handleChange}
-								defaultValue={user.grade}
-							>
-								{grade.map((grade) => (
-									<Option value={grade} key={grade} style={{ color: 'black' }}>
-										{grade}
-									</Option>
-								))}
-							</Select>
-						</Form.Item>
+								<Select
+									showSearch
+									style={{ width: '180px' }}
+									placeholder="Môn học"
+									onChange={handleChange}
+									defaultValue={user.subject}
+								>
+									{grade.map((grade) => (
+										<Option value={grade} key={grade} style={{ color: 'black' }}>
+											{grade}
+										</Option>
+									))}
+								</Select>
+							</Form.Item>
+						) : null}
 						<Form.Item
 							name="gender"
 							label="Giới tính"
 							defaultValue={user.gender}
 							rules={[
 								{
-									required: true,
+									required: false,
 									message: 'Chọn giới tính',
 								},
 							]}
@@ -392,7 +415,7 @@ export default function EditProfile({ onCancel }) {
 								name="oldpassword"
 								rules={[
 									{
-										required: true,
+										required: false,
 										message: 'vui lòng nhập mật khẩu!',
 									},
 									{
@@ -410,7 +433,7 @@ export default function EditProfile({ onCancel }) {
 								name="newpassword"
 								rules={[
 									{
-										required: true,
+										required: false,
 										message: 'vui lòng nhập mật khẩu!',
 									},
 									{
@@ -429,7 +452,7 @@ export default function EditProfile({ onCancel }) {
 								hasFeedback
 								rules={[
 									{
-										required: true,
+										required: false,
 										message: 'Vui lòng xác nhận lại mật khẩu!',
 									},
 									({ getFieldValue }) => ({
