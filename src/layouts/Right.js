@@ -22,57 +22,57 @@ export default function Right() {
 				'Content-Type': 'application/json',
 				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 			};
-			// Api.put(url + 'api/v1/friendships/accept/friend', { friend_id: id }, { headers: headers })
-			// 	.then((res) => {
-			// 		toast.success('Đã chấp nhận lời mời kết bạn');
-			// 		dispatch(editFriendRequest(id));
-			// 		dispatch(selectOption('all'));
-			// 	})
-			// 	.catch((err) => {
-			// 		toast.error('Đã xảy ra lỗi');
-			
-			// 	});
-				Api.put(url + 'api/v1/friend-requests/accept/'+id, { headers: headers })
+			Api.put(url + 'api/v1/friendships/accept/friend', { friend_id: id }, { headers: headers })
 				.then((res) => {
 					toast.success('Đã chấp nhận lời mời kết bạn');
-					callApifriendRequest();
+					dispatch(editFriendRequest(id));
+					dispatch(selectOption('all'));
 				})
 				.catch((err) => {
 					toast.error('Đã xảy ra lỗi');
-				});	
+			
+				});
+				// Api.put(url + 'api/v1/friend-requests/accept/'+id, { headers: headers })
+				// .then((res) => {
+				// 	toast.success('Đã chấp nhận lời mời kết bạn');
+				// 	callApifriendRequest();
+				// })
+				// .catch((err) => {
+				// 	toast.error('Đã xảy ra lỗi');
+				// });	
 		}
 		if (status === 'REJECT') {
 			const headers = {
 				'Content-Type': 'application/json',
 				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 			};
-			// Api.put(url + 'api/v1/friendships/decline/friend', { friend_id: id }, { headers: headers })
-			// 	.then((res) => {
-			// 		toast.success('Đã xóa lời mời kết bạn');
-			// 		dispatch(editFriendRequest(id));
-			// 		dispatch(selectOption('all'));
-			// 	})
-			// 	.catch((err) => {
-			// 		toast.error('Đã xảy ra lỗi');
-			// 	});
-				// Api.put(url + 'api/v1/friend-requests/reject/', { friend_id: id }, { headers: headers })
-				// .then((res) => {
-				// 	toast.success('Đã xóa lời mời kết bạn');
-				// 	dispatch(editFriendRequest(id));
-				// 	dispatch(selectOption('all'));
-				// })
-				// .catch((err) => {
-				// 	toast.error('Đã xảy ra lỗi');
-				// });
-				Api.put(url + 'api/v1/friend-requests/reject/'+id, { headers: headers })
+			Api.put(url + 'api/v1/friendships/decline/friend', { friend_id: id }, { headers: headers })
 				.then((res) => {
 					toast.success('Đã xóa lời mời kết bạn');
-					callApifriendRequest();
-					
+					dispatch(editFriendRequest(id));
+					dispatch(selectOption('all'));
 				})
 				.catch((err) => {
 					toast.error('Đã xảy ra lỗi');
 				});
+				Api.put(url + 'api/v1/friend-requests/reject/', { friend_id: id }, { headers: headers })
+				.then((res) => {
+					toast.success('Đã xóa lời mời kết bạn');
+					dispatch(editFriendRequest(id));
+					dispatch(selectOption('all'));
+				})
+				.catch((err) => {
+					toast.error('Đã xảy ra lỗi');
+				});
+				// Api.put(url + 'api/v1/friend-requests/reject/'+id, { headers: headers })
+				// .then((res) => {
+				// 	toast.success('Đã xóa lời mời kết bạn');
+				// 	callApifriendRequest();
+					
+				// })
+				// .catch((err) => {
+				// 	toast.error('Đã xảy ra lỗi');
+				// });
 		}
 	};
 	const acceptInvite = (status, id) => () => {
@@ -96,26 +96,26 @@ export default function Right() {
 		callApiListInvite();
 		callRelationShip();
 	}, []);
-	const callApifriendRequest = () => {
-		Api.get(url + 'api/v1/users/friend-requests', { headers: headers })
-			.then((res) => {
-				console.log(res.data);
-				dispatch(selectFriendRequest(res.data.result));
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
 	// const callApifriendRequest = () => {
-	// 	Api.get(url + 'api/v1/friendships/friend/pending', { headers: headers })
+	// 	Api.get(url + 'api/v1/users/friend-requests', { headers: headers })
 	// 		.then((res) => {
 	// 			console.log(res.data);
-	// 			dispatch(selectFriendRequest(res.data.friendWithAuthor));
+	// 			dispatch(selectFriendRequest(res.data.result));
 	// 		})
 	// 		.catch((err) => {
 	// 			console.log(err);
 	// 		});
 	// };
+	const callApifriendRequest = () => {
+		Api.get(url + 'api/v1/friendships/friend/pending', { headers: headers })
+			.then((res) => {
+				console.log(res.data);
+				dispatch(selectFriendRequest(res.data.friendWithAuthor));
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 ///call api mời tham gia class/ group
 	const callApiListInvite = () => {

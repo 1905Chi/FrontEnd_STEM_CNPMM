@@ -71,7 +71,7 @@ export default function Profile() {
 	};
 
 	return (
-		<div className='profile-self'>
+		<div className="profile-self">
 			{isEdit ? <EditProfile onCancel={cancel}></EditProfile> : null}
 			{isEditAvatar ? (
 				<EditAvatar onCancel={cancelFormAvatar} changeAvatar={changeAvatar} avatar={avatar}></EditAvatar>
@@ -120,7 +120,7 @@ export default function Profile() {
 					className="group-menu"
 				></div>
 				{selectedOption === 'introduce' ? (
-					<div className="introduce" style={{ justifyContent: 'center', display: 'flex' , marginTop:'8rem'}}>
+					<div className="introduce" style={{ justifyContent: 'center', display: 'flex', marginTop: '8rem' }}>
 						<div style={{ textAlign: 'start' }}>
 							{user.phone ? (
 								<div style={{ width: '100%', margin: '5px 0' }}>
@@ -169,7 +169,7 @@ export default function Profile() {
 								</span>
 							</div>
 
-							{user.parents ? (
+							{user.parents != undefined ? (
 								<div style={{ width: '100%', margin: '5px 0' }}>
 									<span
 										style={{ fontWeight: 'bold' }}
@@ -181,7 +181,7 @@ export default function Profile() {
 									</span>
 								</div>
 							) : null}
-							{user.children !== null ? (
+							{user.children !== undefined ? (
 								<div style={{ width: '100%', margin: '5px 0' }}>
 									<span style={{ fontWeight: 'bold' }}>
 										Con: {`${user.children[0].firstName} ${user.children[0].lastName}`}

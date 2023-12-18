@@ -133,7 +133,7 @@ const RightClass = () => {
 						style={{ textAlign: 'center' }}
 					/>
 				</div>
-				{role && role === 'TEACHER' ? (
+				{(role && role === 'TEACHER') || localStorage.getItem('role') === 'TEACHER' ? (
 					<div className="button-add" onClick={create}>
 						<Button
 							type="primary"
