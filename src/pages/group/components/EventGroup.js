@@ -116,7 +116,11 @@ export default function EventGroup() {
 				})
 				.catch((error) => {
 					toast.error(error.message);
-				})				
+				})	
+
+				.finally(() => {
+					setOpen(false);
+				});			
 		}
 	};
 	const CallApiEvent = () => {
@@ -230,11 +234,11 @@ export default function EventGroup() {
 				<div className="event-upcoming-main">
 					<div className="header-envent-title">
 						<h3 style={{ marginLeft: '22px' }}>Sự kiện sắp diễn ra</h3>
-						{role === 'GROUP_ADMIN' || role === 'GROUP_OWNER' ? (
+						
 						<button className="btn btn-primary" onClick={openCreateEvent}>
 							Thêm sự kiện
 						</button>
-						) : null}
+					
 					</div>
 					{event.map((event, index) => (
 						<div className="event-upcoming__item">
@@ -249,20 +253,24 @@ export default function EventGroup() {
 								</div>
 							</div>
 							<div style={{ flex: 3 }}>
-								{role === 'GROUP_ADMIN' || role === 'GROUP_OWNER' ? (
+								{role === 'GROUP_ADMIN' || role === 'GROUP_OWNER' || event.author.id=== JSON.parse(localStorage.getItem('user')).id ? (
 									<>
+										{role === 'GROUP_ADMIN' || role === 'GROUP_OWNER' ? (
 										<button
 											style={{ fontSize: '30px', backgroundColor: 'white', color: 'red' }}
 											onClick={() => deleteEvent(event)}
 										>
 											<MdDeleteForever />
 										</button>
+										) : null}
+										{event.author.id=== JSON.parse(localStorage.getItem('user')).id ? (
 										<button
 											style={{ fontSize: '30px', backgroundColor: 'white', color: 'green' }}
 											onClick={() => openEditEvent(event)}
 										>
 											<CiEdit />
-										</button>
+										</button>)
+										: null}
 									</>
 								) : null}
 							</div>
