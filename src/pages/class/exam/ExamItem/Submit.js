@@ -249,7 +249,7 @@ export default function Submit() {
 	};
 
 	return (
-		<div className="submit-sipn">
+		<div className="submit-sipn" style={{width:'72vw'}}>
 			{submition === null && typesubmit !== 'review' ? (
 				<Skeleton active />
 			) : (	typesubmit === 'create' || typesubmit === 'continue' ? (
@@ -331,6 +331,7 @@ export default function Submit() {
 										<div
 											className="quest-content"
 											dangerouslySetInnerHTML={{ __html: item.question }}
+											style={{marginTop:'15px'}}
 										/>
 									</div>
 									<div style={{ display: 'flex', marginLeft: '20px', marginBottom: '15px' }}>
