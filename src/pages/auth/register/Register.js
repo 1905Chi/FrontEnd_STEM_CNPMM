@@ -26,7 +26,9 @@ export default function Register(props) {
 	const [grade, setGrade] = useState(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']);
 	const [isRegisterForParent, setIsRegisterForParent] = useState(false);
 	const [currentDate, setCurrentDate] = useState(moment());
-
+	const [provinceItem, setprovicesItem] = useState({}); // Thông tin người dùng
+	const [districtsItem, setdistrictsItem] = useState({}); // Thông tin người dùng
+	const [schoolsItem, setschoolsItem] = useState({});
 	// Hàm kiểm tra xem ngày có phải đã diễn ra hay không
 	const isDateDisabled = (date) => {
 		return date.isAfter(moment()); // Trả về true nếu ngày là ngày tương lai
@@ -47,6 +49,8 @@ export default function Register(props) {
 	};
 
 	const handleChangeProvince = async (currentProvince) => {
+		setprovicesItem(provinces.filter((item) => item.id === currentProvince)[0].name);
+
 		await axios
 			.get(url + `api/v1/addresses/districtsByProvince?pId=${currentProvince}`)
 			.then((response) => {
@@ -57,6 +61,7 @@ export default function Register(props) {
 			});
 	};
 	const handleChangeDistrict = (value) => {
+		setdistrictsItem(districts.filter((item) => item.id === value)[0].name);
 		console.log(`selected ${value}`);
 		axios
 			.get(url + `api/v1/addresses/schoolsByDistrict?dId=${value}`)
@@ -309,7 +314,7 @@ export default function Register(props) {
 									}}
 								>
 									{provinces.map((grade) => (
-										<Option value={grade.name} key={grade.id} style={{ color: 'black' }}>
+										<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
 											{grade.name}
 										</Option>
 									))}
@@ -330,7 +335,7 @@ export default function Register(props) {
 									}}
 								>
 									{districts.map((grade) => (
-										<Option value={grade.name} key={grade.id} style={{ color: 'black' }}>
+										<Option value={grade.id} key={grade.id} style={{ color: 'black' }}>
 											{grade.name}
 										</Option>
 									))}

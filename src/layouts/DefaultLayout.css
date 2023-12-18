@@ -9,41 +9,33 @@
 .content {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
   position: relative;
-  height: 100vh;
-  overflow-y: scroll;
+}
 
-  
+.sider-left,
+.sider-right,
+.content-main {
+  position: fixed;
+  top: 5rem;
+  bottom: 0;
+  overflow-y: auto;
+  z-index: 10;
 }
 
 .sider-left {
-  position: relative; 
-  top:65px;
-  flex: 2.3;
-  padding-left: 15px;
-  overflow-y: auto; /* Cho phép thanh cuộn dọc cho cả hai phần */
-  max-height: calc(100vh );
-
+  left: 0;
+  width: 20rem;
 }
 
 .sider-right {
-  position: relative; 
-  top:65px;
-  flex:2.3;
-  overflow-y: auto; /* Cho phép thanh cuộn dọc cho cả hai phần */
-
+  right: 0;
+  width: 20rem;
 }
 
-
-
-
-.content-main{
-
-  position: relative  ; 
-  margin: 25px 15px 0 15px;
-  top:65px;
-  flex: 5.4; 
-  overflow-y: auto; /* Cho phép thanh cuộn dọc cho cả hai phần */
-  height: auto;
- 
+.content-main {
+  left: 22rem; /* Độ rộng của .sider-left */
+  right: 22rem; /* Độ rộng của .sider-right */
+  width: auto; /* Có thể thay đổi độ rộng theo nhu cầu */
 }

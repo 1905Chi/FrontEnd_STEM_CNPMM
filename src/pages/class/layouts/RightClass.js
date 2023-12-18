@@ -117,9 +117,8 @@ const RightClass = () => {
 					position: 'fixed',
 					top: '74px',
 					zIndex: '700',
-					width: '25%',
+					width: '20rem',
 					backgroundColor: 'white',
-					marginLeft: '15px',
 				}}
 			>
 				{loading ? ( // Nếu đang loading thì hiển thị component loading
