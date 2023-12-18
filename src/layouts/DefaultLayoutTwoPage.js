@@ -10,7 +10,7 @@ export default function DefaultLayoutTwoPage({ Left, children }) {
 					<div theme="light" style={{left:'20px', width:'25%', marginLeft:'20px'}}>
 						{Left}
 					</div>
-					<div className style={{right:'2rem', width:'75%', marginRight:'20px'}}>  {children} </div>
+					<div className="content-main-1"> {children} </div>
 				
 				</div>
 			</div>

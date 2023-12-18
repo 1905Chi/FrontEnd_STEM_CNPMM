@@ -50,11 +50,12 @@ export default function Profile(props) {
 	}, [props.id, uuid]);
 
 	const CallApiprofile = async (id) => {
-		Api.get(url + 'api/v1/users/userDto/' + id)
+		Api.get(url + 'api/v1/users/' + id)
 				.then((res) => {
 					// dispatch(selectUser(res.data));
-					 setUser(res.data);
-					CallApilistFriend(res.data);				
+					 setUser(res.data.result);
+					 console.log('dada',res.data);
+					CallApilistFriend(res.data.result);				
 				})
 				.catch((err) => {
 					console.log(err);
@@ -78,13 +79,14 @@ export default function Profile(props) {
 		}
 	};
 	const CallApilistFriend = async (user) => {
+		console.log('user',user);
 		if (uuid && uuid !== JSON.parse(localStorage.getItem('user')).id) {
 			Api.get(url + 'api/v1/users/friends-of-user?uId=' + uuid)
 				.then((res) => {
 					const validateFriendshipPromises = res.data.result.map(async (user) => {
 						try {
-						  const friendshipResponse = await Api.get(url + 'api/v1/friendships/validate?friendId=' + user.id, { headers });
-						  const isFriend = friendshipResponse.data.result === true ? 1 : 0; // 1 đã kết bạn , 0 chưa kết bạn
+						  const friendshipResponse = await Api.get(url + 'api/v1/friendships/validate?friendId=' + user.user.id, { headers });
+						  const isFriend = friendshipResponse.data.result.isFriend === true ? 1 : 0; // 1 đã kết bạn , 0 chưa kết bạn
 						  return { ...user, isFriend };
 						} catch (err) {
 						  console.error(err);

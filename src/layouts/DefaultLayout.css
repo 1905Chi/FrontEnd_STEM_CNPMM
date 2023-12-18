@@ -26,7 +26,7 @@
 
 .sider-left {
   left: 0;
-  width: 20rem;
+  width: 22rem;
 }
 
 .sider-right {
@@ -38,4 +38,13 @@
   left: 22rem; /* Độ rộng của .sider-left */
   right: 22rem; /* Độ rộng của .sider-right */
   width: auto; /* Có thể thay đổi độ rộng theo nhu cầu */
+}
+.content-main-1 {
+  left: 22rem; /* Độ rộng của .sider-left */
+  width: auto; /* Có thể thay đổi độ rộng theo nhu cầu */
+  position: fixed;
+  top: 5rem;
+  bottom: 0;
+  overflow-y: auto;
+  z-index: 10;
 }

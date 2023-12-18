@@ -4,6 +4,7 @@ position: relative;
     border-radius: 10px;
     margin: 10px;
     height: 100vh;
+    width: 22rem;
     overflow-y: scroll;
 }
 .left-friend h2{

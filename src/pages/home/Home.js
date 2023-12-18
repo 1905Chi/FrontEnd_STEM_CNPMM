@@ -83,7 +83,6 @@ function Home() {
 			const response = await Api.get(`home-posts`, { headers: headers });
 			if (response.data.statusCode === 200) {
 				setListpost(response.data.result);
-				
 			} else {
 				console.log(response.error);
 			}
@@ -116,28 +115,31 @@ function Home() {
 	return (
 		<>
 			<div className="home-page">
-				{listpost ===null   ? <Skeleton active /> : null}
-				{listpost !==null && listpost.length >0 &&  listpost.map((post, index) => {
-					return (
-						<PostItem
-							key={index}
-							id={post.post.id}
-							authorId={post.post.authorId}
-							authorFirstName={post.post.authorFirstName}
-							authorLastName={post.post.authorLastName}
-							authorAvatar={post.post.authorAvatar}
-							type={post.post.type}
-							refUrls={post.post.refUrls}
-							totalReactions={post.post.totalReactions}
-							totalComments={post.post.totalComments}
-							createdAt={post.post.createdAt}
-							updatedAt={post.post.updatedAt}
-							content={post.post.content}
-							comments={post.post.comments}
-							reaction={post.reaction}
-						/>
-					);
-				})}
+				{listpost === null ? <Skeleton active /> : null}
+				{listpost !== null &&
+					listpost.length > 0 &&
+					listpost.map((post, index) => {
+						console.log('postR', post);
+						return (
+							<PostItem
+								key={index}
+								id={post.post.id}
+								authorId={post.post.authorId}
+								authorFirstName={post.post.authorFirstName}
+								authorLastName={post.post.authorLastName}
+								authorAvatar={post.post.authorAvatar}
+								type={post.post.type}
+								refUrls={post.post.refUrls}
+								totalReactions={post.post.totalReactions}
+								totalComments={post.post.totalComments}
+								createdAt={post.post.createdAt}
+								updatedAt={post.post.updatedAt}
+								content={post.post.content}
+								comments={post.post.comments}
+								reaction={post.reaction}
+							/>
+						);
+					})}
 				<ToastContainer />
 			</div>
 		</>

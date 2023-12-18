@@ -13,13 +13,24 @@ import Editor from './Editor';
 import LabelFile from '../../profile/component/LabelFile';
 import { toast } from 'react-toastify';
 function PostItem(props) {
-	console.log(props);
-	const [isLiked, setIsLiked] = useState(props.reaction !== null && props.reaction !== undefined  && props.reaction==='LIKE'? true : false); // Trạng thái ban đầu là "không thích"
+	console.log('props', props);
+	const [myReaction, setMyReaction] = useState(props.reaction);
+	const [isLiked, setIsLiked] = useState(
+		props.reaction !== null &&
+			props.reaction !== undefined &&
+			(props.reaction === 'LIKE' || props.reaction.type === 'LIKE')
+			? true
+			: false
+	); // Trạng thái ban đầu là "không thích"
 	const [isEditPost, setisEditPost] = useState(false); // Trạng thái ban đầu là "không chỉnh sửa"
 	const [contentPost, setContentPost] = useState(props.content);
 	const [idComment, setIdComment] = useState(null);
 	const [responseComement, setResponseComement] = useState(false);
 	const [xemthem, setXemthem] = useState(false);
+	const [countReaction, setCountReaction] = useState(props.totalReactions);
+	console.log('isLike', isLiked);
+	console.log('myReaction', myReaction);
+
 	const [ListReaction, setListReaction] = useState([
 		{
 			key: '1',
@@ -43,34 +54,55 @@ function PostItem(props) {
 	}
 
 	function handleLike() {
-		setIsLiked(!isLiked); // Đảo ngược trạng thái khi nút "like" được nhấn
 		const headers = {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			conttentType: 'application/json',
 		};
-		let data = {};
-		if (isLiked === false) {
-			data = {
-				postId: props.id,
-				typeName: 'LIKE',
-			};
+		let data = {
+			postId: props.id,
+			typeName: 'LIKE',
+		};
+		// if (isLiked === false) {
+		// 	data = {
+		// 		postId: props.id,
+		// 		typeName: 'LIKE',
+		// 	};
+		// } else {
+		// 	data = {
+		// 		postId: props.id,
+		// 		typeName: 'DISLIKE',
+		// 	};
+		// }
+		if (myReaction) {
+			Api.delete(url + `api/v1/reactions/${myReaction.id}`, { headers: headers })
+				.then((response) => {
+					if (response.data.statusCode === 200) {
+						toast.success(response.data.message);
+						setCountReaction(response.data.result.count);
+						setMyReaction(null);
+					} else {
+						console.log(response.error);
+					}
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 		} else {
-			data = {
-				postId: props.id,
-				typeName: 'DISLIKE',
-			};
+			Api.put(url + 'api/v1/reactions', data, { headers: headers })
+				.then((response) => {
+					if (response.data.statusCode === 200) {
+						toast.success(response.data.message);
+						setCountReaction(response.data.result.count);
+						setMyReaction(response.data.result.reaction);
+					} else {
+						console.log(response.error);
+					}
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 		}
-		Api.put(url + 'api/v1/reactions', data, { headers: headers })
-			.then((response) => {
-				if (response.data.statusCode === 200) {
-					toast.success(response.data.message);
-				} else {
-					console.log(response.error);
-				}
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		setIsLiked(!isLiked); // Đảo ngược trạng thái khi nút "like" được nhấn
 	}
 	const deletePost = () => {
 		const headers = {
@@ -266,9 +298,7 @@ function PostItem(props) {
 						pointAtCenter: true,
 					}}
 				>
-					<Button style={{ backgroundColor: 'aliceblue', border: 'none' }}>
-						{props.totalReactions} likes
-					</Button>
+					<Button style={{ backgroundColor: 'aliceblue', border: 'none' }}>{countReaction} likes</Button>
 				</Dropdown>
 			</div>
 
