@@ -117,7 +117,7 @@ export default function Right() {
 	// 		});
 	// };
 
-
+///call api mời tham gia class/ group
 	const callApiListInvite = () => {
 		Api.get(url + 'api/v1/group-member-invitations', { headers: headers })
 			.then((res) => {
