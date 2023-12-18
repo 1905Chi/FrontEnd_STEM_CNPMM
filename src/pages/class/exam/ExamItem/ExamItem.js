@@ -31,7 +31,7 @@ export default function ExamItem(props) {
 		localStorage.setItem('duration', examId.exam.duration);
 		setTimeout(() => {
 			navigate('/exam/' + id + '/submit');
-		}, 3000);
+		}, 1000);
 	};
 
 	const Continue = () => {
@@ -41,7 +41,7 @@ export default function ExamItem(props) {
 		localStorage.setItem('duration', examId.exam.duration);
 		setTimeout(() => {
 			navigate('/exam/' + id + '/submit');
-		}, 3000);
+		}, 1000);
 	};
 	const ReviewExam = () => {
 		localStorage.setItem('typesubmit', 'review');
@@ -50,7 +50,7 @@ export default function ExamItem(props) {
 		localStorage.setItem('duration', examId.exam.duration);
 		setTimeout(() => {
 			navigate('/exam/' + id + '/submit');
-		}, 3000);
+		}, 1000);
 	};
 
 	useEffect(() => {
@@ -115,7 +115,7 @@ export default function ExamItem(props) {
 				toast.error(error);
 			});
 
-		if (user.role === 'TEACHER') {
+		if (user.role === 'TEACHER' || localStorage.getItem('role') === 'TEACHER') {
 			Api.get(url + 'api/v1/submissions/list/' + id, { headers: headers })
 				.then((response) => {
 					if (response.data.statusCode === 200) {
@@ -291,14 +291,14 @@ export default function ExamItem(props) {
 							<p>{examId.exam.description}</p>
 							<p>Thời gian làm bài: {examId.exam.duration} phút</p>
 						</div>
-						{examId && examId.submission === null && user.role === 'STUDENT' && isWithinTimeRange ? (
+						{examId && examId.submission === null &&( user.role === 'STUDENT' || localStorage.getItem('role')==='STUDENT' ) && isWithinTimeRange ? (
 							<div className="exam-item__button">
 								<button className="exam-item__button__start" onClick={CreateSubmit}>
 									Bắt đầu làm bài
 								</button>
 							</div>
 						) : null}
-						{user.role === 'TEACHER' ? (
+						{user.role === 'TEACHER' || localStorage.getItem('role')==='TEACHER' ? (
 							<div>
 								<div style={{ display: 'flex', justifyContent: 'center' }}>
 									<div className="exam-item__button">
@@ -320,7 +320,7 @@ export default function ExamItem(props) {
 								<div></div>
 							</div>
 						) : null}
-						{user.role === 'STUDENT' &&
+						{(user.role === 'STUDENT' || localStorage.getItem('role')==='STUDENT') &&
 						examId &&
 						examId.submission !== null &&
 						examId.submission.endedAt === null &&
@@ -335,7 +335,7 @@ export default function ExamItem(props) {
 								</button>
 							</div>
 						) : null}
-						{user.role === 'STUDENT' &&
+						{(user.role === 'STUDENT' || localStorage.getItem('role')==='STUDENT') &&
 						examId &&
 						examId.submission !== null ? (
 							<div className="exam-item__button">
@@ -348,7 +348,7 @@ export default function ExamItem(props) {
 								/>
 							</div>
 						) : null}
-						{user.role === 'TEACHER' ? (
+						{(user.role === 'TEACHER' || localStorage.getItem('role')==='TEACHER') ? (
 							<div style={{ textAlign: 'center' }}>
 								<h3>Danh sách bài làm</h3>
 

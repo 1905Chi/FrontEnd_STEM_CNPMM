@@ -57,7 +57,7 @@ export default function Exam() {
 				<h2 style={{ textAlign: 'start', margin: '15px', borderBottom: '3px solid', padding: '15px', flex: 7 }}>
 					Bài kiểm tra
 				</h2>
-				{user && user.role === 'TEACHER' ? (
+				{user && user.role === 'TEACHER'|| localStorage.getItem('role')==='TEACHER'  ? (
 					<div className="exam-class__create">
 						<button className="exam-class__button" onClick={openEdttor}>
 							+
@@ -70,23 +70,23 @@ export default function Exam() {
 					listExam.map((item, index) => {
 						return (
 							<div className="exam-class__item" key={index} onClick={()=>{
-								navigate('/classes/' + uuid + '/exam/'+item.exam.id);
+								navigate('/classes/' + uuid + '/exam/'+item.id);
 							}}>
 								<div className="infor-exam">
-									<p> Tên bài kiểm tra: <strong>{item.exam.name}</strong></p>
-									<p>Mô tả: <span style={{fontStyle:'italic'}}>{item.exam.description}</span></p>
-									{WithinTimeRang(item.exam.startedAt, item.exam.endedAt) ? (
+									<p> Tên bài kiểm tra: <strong>{item.name}</strong></p>
+									<p>Mô tả: <span style={{fontStyle:'italic'}}>{item.description}</span></p>
+									{WithinTimeRang(item.startedAt, item.endedAt) ? (
 										<p > Trạng thái: <strong style={{ color: 'green' }}>Đang diễn ra</strong></p>
 									) : (
 										<p > Trạng thái: <strong style={{ color: 'red' }}>Đã kết thúc</strong></p>
 									)}
 									<p>
-										Thời gian: <strong>{item.exam.startedAt} - {item.exam.endedAt}</strong> 
+										Thời gian: <strong>{item.startedAt} - {item.endedAt}</strong> 
 									</p>
 								</div>
 								<div className='exam-detal'>
-									<p>Số câu: <strong>{item.exam.numberOfQuestion}</strong></p>
-									<p>Thời gian làm bài: <strong>{item.exam.duration} </strong>phút</p>
+									<p>Số câu: <strong>{item.numberOfQuestions}</strong></p>
+									<p>Thời gian làm bài: <strong>{item.duration} </strong>phút</p>
 
 								</div>
 							</div>

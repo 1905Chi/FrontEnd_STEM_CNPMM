@@ -1,16 +1,16 @@
 import React from 'react';
-import './DefaultLayout.css';
+
 
 export default function DefaultLayoutTwoPage({ Left, children }) {
 	return (
 		<>
-			<div>
+			<div style={{marginTop:'5rem'}}>
 				
-				<div className="content">
-					<div theme="light" className="sider-left">
+				<div className="content-2page" style={{display:'flex'}}>
+					<div theme="light" style={{left:'20px', width:'25%', marginLeft:'20px'}}>
 						{Left}
 					</div>
-					<div className="content-main"> {children} </div>
+					<div className style={{right:'2rem', width:'75%', marginRight:'20px'}}>  {children} </div>
 				
 				</div>
 			</div>
