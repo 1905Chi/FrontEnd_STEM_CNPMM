@@ -10,9 +10,16 @@ import { useDispatch } from 'react-redux';
 import {editPostGroup} from '../../../redux/Group'
 import { toast, ToastContainer } from 'react-toastify';
 import Loading from '../../../components/Loading';
+import { selectPostGroup } from '../../../redux/Group';
+import { useSelector } from 'react-redux';
+import { selectSelectedPostGroup } from '../../../redux/Group';
 export default function Editor(props) {
 	const [value, setValue] = useState(props.data || '');
 	const { uuid } = useParams();
+	const headers = {
+		Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+		'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
+	};
 	const reactQuillRef = useRef(null);
 	const dispatch = useDispatch();
 	const [isLoading, setIsLoading] = useState(false);
@@ -111,7 +118,8 @@ export default function Editor(props) {
 			Api.put(url + 'api/v1/posts', data, { headers: headers })
 				.then((response) => {
 					if (response.data.statusCode === 200) {
-						console.log(response.data.result);
+						toast.success('Sửa bài thành công');
+						callapiPost();
 					} else {
 						console.log(response.error);
 					}
@@ -126,7 +134,7 @@ export default function Editor(props) {
 		} else {
 		
 			const stringValue = value.toString();
-			console.log(stringValue);
+			console.log(props.type);
 			const data = {
 				content: stringValue,
 				groupId: uuid,
@@ -143,6 +151,7 @@ export default function Editor(props) {
 					if (response.data.statusCode === 200) {
 						console.log(response.data.post);
 						toast.success('Đăng bài thành công');
+						callapiPost();
 						
 					} else {
 						console.log(response.error);
@@ -172,7 +181,19 @@ export default function Editor(props) {
 		});
 		props.cancel();
 	};
-
+	const callapiPost = async () => {
+		Api.get(url + 'api/v1/posts?' + 'groupId=' + uuid, { headers: headers })
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					dispatch(selectPostGroup(response.data.result));
+				} else {
+					console.log(response.error);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
 	const imageHandler = useCallback(() => {
 		const input = document.createElement('input');
 		input.setAttribute('type', 'file');

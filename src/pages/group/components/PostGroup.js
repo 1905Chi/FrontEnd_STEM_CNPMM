@@ -11,7 +11,7 @@ import { selectSelectedPostGroup } from '../../../redux/Group';
 export default function PostGroup() {
 	const [open, setOpen] = useState(false);
 	const postgroup = useSelector(selectSelectedPostGroup);
-	console.log(postgroup);
+	
 	const [post, setPost] = useState([]);
 
 	// const fetchPostGroup = async () => {

@@ -17,12 +17,16 @@ import 'moment/locale/vi'; // Chọn ngôn ngữ cho moment, ví dụ: tiếng V
 import { CiEdit } from 'react-icons/ci';
 import { useEffect } from 'react';
 import { selectselecteventGroup } from '../../../redux/EventGroup';
+import { useDispatch } from 'react-redux';
+import { selecteventGroup } from '../../../redux/EventGroup';
+
 import { Dialog } from 'primereact/dialog';
 export default function EventGroup() {
 	const [open, setOpen] = useState(false);
 	const [editEventData, setEditEventData] = useState(null);
 	const memberGroup = useSelector(selectselectMemberGroup);
 	const [role, setRole] = useState('GUEST');
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		memberGroup.map((member) => {
@@ -42,6 +46,8 @@ export default function EventGroup() {
 		setEditEventData(null);
 		setOpen(true);
 	};
+
+	
 	const deleteEvent = (value) => {
 		const headers = {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
@@ -51,6 +57,7 @@ export default function EventGroup() {
 			.then((response) => {
 				if (response.data.statusCode === 200) {
 					toast.success('Xóa sự kiện thành công');
+					CallApiEvent();
 				}
 			})
 			.catch((error) => {
@@ -77,6 +84,7 @@ export default function EventGroup() {
 				.then((response) => {
 					if (response.data.statusCode === 200) {
 						toast.success('Chỉnh sửa sự kiện thành công');
+						CallApiEvent();
 					} else {
 						toast.error(response.data.message);
 					}
@@ -99,19 +107,35 @@ export default function EventGroup() {
 			Api.post(url + 'api/v1/events', data, { headers: headers })
 				.then((response) => {
 					if (response.data.statusCode === 200) {
-						toast.success('Tạo sự kiện thành công');
+						toast.success('Tạo sự kiện thành công !');
+						console.log(response.data.result);
+						CallApiEvent();
 					} else {
 						toast.error(response.data.message);
 					}
 				})
 				.catch((error) => {
 					toast.error(error.message);
-				})
-				.finally(() => {
-					setOpen();
-				});
+				})				
 		}
 	};
+	const CallApiEvent = () => {
+		const headers = {
+			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+			conttentType: 'application/json',
+		};
+		Api.get(url + 'api/v1/events?groupId=' + uuid, { headers: headers })
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					dispatch(selecteventGroup(response.data.result));
+				} else {
+					toast.error(response.data.message);
+				}
+			})
+			.catch((error) => {
+				toast.error(error);
+			});
+	}
 
 	return (
 		<div>
@@ -206,9 +230,11 @@ export default function EventGroup() {
 				<div className="event-upcoming-main">
 					<div className="header-envent-title">
 						<h3 style={{ marginLeft: '22px' }}>Sự kiện sắp diễn ra</h3>
+						{role === 'GROUP_ADMIN' || role === 'GROUP_OWNER' ? (
 						<button className="btn btn-primary" onClick={openCreateEvent}>
 							Thêm sự kiện
 						</button>
+						) : null}
 					</div>
 					{event.map((event, index) => (
 						<div className="event-upcoming__item">

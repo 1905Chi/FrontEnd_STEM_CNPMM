@@ -29,7 +29,7 @@ const uploadToCloudinary = async (file,uuid) => {
     }
   } catch (error) {
     // Xử lý lỗi khác nếu cần.
-    console.error(error.message);
+    console.error(error);
     throw new Error('Failed to upload file');
   }
 };
