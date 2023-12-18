@@ -447,7 +447,7 @@ export default function EditProfile({ onCancel }) {
 							</Form.Item>
 							<Form.Item
 								name="confirm-newpassword"
-								dependencies={['password']}
+								dependencies={['newpassword']}
 								hasFeedback
 								rules={[
 									{

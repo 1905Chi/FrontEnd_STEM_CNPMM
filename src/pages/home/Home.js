@@ -119,7 +119,7 @@ function Home() {
 				{listpost !== null &&
 					listpost.length > 0 &&
 					listpost.map((post, index) => {
-						console.log('postR', post);
+						
 						return (
 							<PostItem
 								key={index}

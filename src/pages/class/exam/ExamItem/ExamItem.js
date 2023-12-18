@@ -231,7 +231,7 @@ export default function ExamItem(props) {
 			key: 'action',
 			render: (text, record) => (
 				<span>
-					<button className="exam-item__button__start" onClick={() => {}}>
+					<button className="exam-item__button__start" onClick={ReviewExam}>
 						Xem
 					</button>
 				</span>

@@ -28,8 +28,6 @@ function PostItem(props) {
 	const [responseComement, setResponseComement] = useState(false);
 	const [xemthem, setXemthem] = useState(false);
 	const [countReaction, setCountReaction] = useState(props.totalReactions);
-	console.log('isLike', isLiked);
-	console.log('myReaction', myReaction);
 
 	const [ListReaction, setListReaction] = useState([
 		{
@@ -281,12 +279,17 @@ function PostItem(props) {
 			</div>
 
 			<div className="file-post">
-				{props.refUrls &&
-					props.refUrls.map((item, index) => {
-						const indexAfterNumbers = item.indexOf('_') + 1;
-						const truncatedFileName = item.slice(indexAfterNumbers);
-						return <LabelFile key={index} type={'docx'} filename={truncatedFileName} link={item} />;
-					})}
+				{props?.refUrls && props.refUrls.length > 0 && props.refUrls !== null
+					? props.refUrls.map((item, index) => {
+							if (item !== null) {
+								console.log('item', item);
+								const indexAfterNumbers = item.indexOf('_') + 1;
+								const truncatedFileName = item.slice(indexAfterNumbers);
+								return <LabelFile key={index} type={'docx'} filename={truncatedFileName} link={item} />;
+							}
+							return null;
+					  })
+					: null}
 			</div>
 			<div>
 				<Dropdown

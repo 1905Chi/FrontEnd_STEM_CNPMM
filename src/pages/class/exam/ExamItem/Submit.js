@@ -265,6 +265,8 @@ export default function Submit() {
 									<div
 										className="quest-content"
 										dangerouslySetInnerHTML={{ __html: question.content }}
+										style={{marginTop:'15px'}}
+
 									/>
 								</div>
 

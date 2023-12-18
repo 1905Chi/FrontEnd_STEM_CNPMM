@@ -39,7 +39,7 @@ export default function Left  () {
 			icon: FcSportsMode,
 			onClick: logoutHandler,
 		},
-		user.role === 'PARENT' ? {
+		user.role === 'PARENT' || localStorage.getItem('role')==='PARENT'? {
 			title: 'Phụ huynh - Học sinh',
 			icon: FcCustomerSupport,
 			onClick: () => {
