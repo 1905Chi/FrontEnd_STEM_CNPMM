@@ -42,6 +42,6 @@
   top:65px;
   flex: 5.4; 
   overflow-y: auto; /* Cho phép thanh cuộn dọc cho cả hai phần */
-  max-height: calc(100vh );
+  height: auto;
  
 }

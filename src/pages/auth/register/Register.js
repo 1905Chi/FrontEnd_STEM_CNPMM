@@ -109,10 +109,10 @@ export default function Register(props) {
 				lastName: values.lastName_parent ? values.lastName_parent : null,
 				gender: values.gender_parent ? values.gender_parent : null,
 				phone: values.phone_parent ? values.phone_parent : null,
-				dob: values.date_parent.format('DD-MM-YYYY') ? values.date_parent.format('DD-MM-YYYY') : null,
+				dob: values.date_parent ? values.date_parent.format('DD-MM-YYYY') : null,
 			},
 		};
-		let datapatent;
+		
 
 		const config = {
 			headers: {

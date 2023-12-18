@@ -14,7 +14,7 @@ import LabelFile from '../../profile/component/LabelFile';
 import { toast } from 'react-toastify';
 function PostItem(props) {
 	console.log(props);
-	const [isLiked, setIsLiked] = useState(props.reaction !== null && props.reaction !== undefined ? true : false); // Trạng thái ban đầu là "không thích"
+	const [isLiked, setIsLiked] = useState(props.reaction !== null && props.reaction !== undefined  && props.reaction==='LIKE'? true : false); // Trạng thái ban đầu là "không thích"
 	const [isEditPost, setisEditPost] = useState(false); // Trạng thái ban đầu là "không chỉnh sửa"
 	const [contentPost, setContentPost] = useState(props.content);
 	const [idComment, setIdComment] = useState(null);

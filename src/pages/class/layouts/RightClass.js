@@ -37,7 +37,7 @@ const RightClass = () => {
 	const dispatch = useDispatch();
 	const searchClass = (e) => {
 		if (e.target.value === '') {
-			setClassJoin(mygroup);
+			setListClassJoin(mygroup);
 			return;
 		}
 		setListClassJoin(mygroup.filter((item) => item.name.toLowerCase().includes(e.target.value.toLowerCase())));
@@ -50,7 +50,8 @@ const RightClass = () => {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
 		};
-		Api.get(url + 'api/v1/groups', { headers })
+		Api.get(url + 'api/v1/groups/classesByRole', { headers })
+	//	Api.get(url + 'api/v1/groups/', { headers })
 			.then(async (response) => {
 				if (response.data.statusCode === 200) {
 					let MYGROUP = [];
@@ -110,6 +111,7 @@ const RightClass = () => {
 
 	return (
 		<>
+		<div >
 			<div
 				style={{
 					position: 'fixed',
@@ -158,7 +160,7 @@ const RightClass = () => {
 										image={mygroup.avatarUrl}
 										name={mygroup.name}
 										id={mygroup.id}
-										type={mygroup.type}
+										type={mygroup.isClass}
 									/>
 								);
 							})}
@@ -166,6 +168,7 @@ const RightClass = () => {
 				</div>
 
 				<ToastContainer />
+			</div>
 			</div>
 		</>
 	);

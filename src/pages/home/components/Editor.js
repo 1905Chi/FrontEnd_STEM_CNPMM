@@ -71,7 +71,7 @@ export default function Editor(props) {
 			console.log(stringValue);
 			setIsLoading(true);
 			const data = {
-				post_id: props.idPost,
+				postId: props.idPost,
 				content: stringValue,
 				
 			}
@@ -79,7 +79,7 @@ export default function Editor(props) {
 				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 				'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
 			};
-			Api.post(url + 'comment', data, { headers: headers })
+			Api.post(url + 'api/v1/comments/commentPost', data, { headers: headers })
 				.then((response) => {
 					if (response.data.statusCode === 200) {
 						toast.success('Bình luận thành công');

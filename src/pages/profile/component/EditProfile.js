@@ -141,8 +141,7 @@ export default function EditProfile({ onCancel }) {
 	};
 
 	const handleChangeProvince = async (currentProvince) => {
-		console.log(currentProvince);
-		console.log(provinces)
+		
 		setprovicesItem(provinces.filter((item) => item.id === currentProvince)[0].name);
 		await axios
 			.get(url + `api/v1/addresses/districtsByProvince?pId=${currentProvince}`)
