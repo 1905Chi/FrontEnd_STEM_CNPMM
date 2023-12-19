@@ -59,6 +59,10 @@ export default function Editor(props) {
 					if (response.data.statusCode === 200) {
 						console.log(response.data.message);
 						dispatch(editPostGroup(response.data.result));
+						if(props.homePosts)
+						{
+							props.homePosts();
+						}
 						setValue('');
 					} else {
 						console.log(response.error);
@@ -90,6 +94,10 @@ export default function Editor(props) {
 				.then((response) => {
 					if (response.data.statusCode === 200) {
 						toast.success('Bình luận thành công');
+						if(props.homePosts)
+						{
+							props.homePosts();
+						}
 					} else {
 						console.log(response.error);
 					}
@@ -119,6 +127,10 @@ export default function Editor(props) {
 				.then((response) => {
 					if (response.data.statusCode === 200) {
 						toast.success('Sửa bài thành công');
+						if(props.homePosts)
+						{
+							props.homePosts();
+						}
 						callapiPost();
 					} else {
 						console.log(response.error);
@@ -151,6 +163,10 @@ export default function Editor(props) {
 					if (response.data.statusCode === 200) {
 						console.log(response.data.post);
 						toast.success('Đăng bài thành công');
+						if(props.homePosts)
+						{
+							props.homePosts();
+						}
 						callapiPost();
 						
 					} else {
@@ -194,6 +210,7 @@ export default function Editor(props) {
 				console.log(error);
 			});
 	}
+	
 	const imageHandler = useCallback(() => {
 		const input = document.createElement('input');
 		input.setAttribute('type', 'file');

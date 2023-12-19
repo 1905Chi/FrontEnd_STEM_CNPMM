@@ -6,6 +6,7 @@ import { selectselectuser, selectuser } from '../../redux/User';
 import Api from '../../api/Api';
 import { url } from '../../constants/Constant';
 import { Skeleton } from 'antd';
+import { selectPostHome } from '../../redux/Group';
 //import { verifyJwtToken } from '../../api/Jwt';
 function Home() {
 	const [ispost, setIspost] = useState(false);
@@ -35,6 +36,7 @@ function Home() {
 		// }).catch((error) => {
 		//   console.log(error);
 		// });
+		dispatch(selectPostHome(homePosts));
 	}, []);
 	useEffect(() => {
 		homePosts();

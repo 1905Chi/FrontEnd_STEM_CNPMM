@@ -9,7 +9,7 @@ import Editor from './Editor';
 import Api from '../../../api/Api';
 import { url } from '../../../constants/Constant';
 import { toast, ToastContainer } from 'react-toastify';
-export default function CommentPost({user,idPost}) {
+export default function CommentPost({user,idPost, homePosts}) {
 
 	const [value, setValue] = useState('');
 	const [showEditor, setShowEditor] = useState(false);
@@ -30,6 +30,7 @@ const openEditor = () => {
 						cancel={closeEditor}
 						editcontent={setValue}
 						idPost={idPost}
+						homePosts={homePosts}
 						
 					/>
 				) : (

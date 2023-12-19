@@ -12,8 +12,11 @@ import { url } from '../../../constants/Constant';
 import Editor from './Editor';
 import LabelFile from '../../profile/component/LabelFile';
 import { toast } from 'react-toastify';
+import {ueseSelector, useSelector} from 'react-redux'
+import {selectselctPostHome} from '../../../redux/Group'
 function PostItem(props) {
 	console.log('props', props);
+	
 	const [myReaction, setMyReaction] = useState(props.reaction);
 	const [isLiked, setIsLiked] = useState(
 		props.reaction !== null &&
@@ -92,6 +95,7 @@ function PostItem(props) {
 						toast.success(response.data.message);
 						setCountReaction(response.data.result.count);
 						setMyReaction(response.data.result.reaction);
+						
 					} else {
 						console.log(response.error);
 					}
@@ -111,6 +115,11 @@ function PostItem(props) {
 			.then((response) => {
 				if (response.data.statusCode === 200) {
 					console.log(response.data.result);
+					if(props.homePosts)
+					{
+						props.homePosts();
+					}
+					
 				} else {
 					console.log(response.error);
 				}
@@ -225,10 +234,12 @@ function PostItem(props) {
 					editcontent={EditContentPost}
 					index={props.id}
 					type={props.type}
+					homePosts={props.homePosts}
+					
 				></Editor>
 			) : null}
 			{responseComement ? (
-				<Editor cancel={openComment} idComment={idComment}>
+				<Editor cancel={openComment} idComment={idComment} homePosts={props.homePosts}>
 					{' '}
 				</Editor>
 			) : null}
@@ -395,7 +406,7 @@ function PostItem(props) {
 					))}
 				</div>
 			) : null}
-			<CommentPost user={props.authorAvatar} idPost={props.id} />
+			<CommentPost user={props.authorAvatar} idPost={props.id}  homePosts={props.homePosts}/>
 		</div>
 	);
 }
