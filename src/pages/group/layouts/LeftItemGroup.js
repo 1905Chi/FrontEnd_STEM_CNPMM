@@ -514,7 +514,7 @@ export default function LeftItemGroup() {
 					</div>
 				)}
 
-				<ToastContainer />
+				<ToastContainer style={{zIndex:'1000'}} />
 			</div>
 		</>
 	);

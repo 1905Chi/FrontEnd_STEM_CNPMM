@@ -22,7 +22,7 @@ export default function Right() {
 				'Content-Type': 'application/json',
 				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 			};
-			Api.put(url + 'api/v1/friendships/accept/friend', { friend_id: id }, { headers: headers })
+			Api.post(url + 'api/v1/friendships/accept/friend', { friend_id: id }, { headers: headers })
 				.then((res) => {
 					toast.success('Đã chấp nhận lời mời kết bạn');
 					dispatch(editFriendRequest(id));
@@ -45,7 +45,7 @@ export default function Right() {
 				'Content-Type': 'application/json',
 				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 			};
-			Api.put(url + 'api/v1/friendships/decline/friend', { friend_id: id }, { headers: headers })
+			Api.post(url + 'api/v1/friendships/decline/friend', { friend_id: id }, { headers: headers })
 				.then((res) => {
 					toast.success('Đã xóa lời mời kết bạn');
 					dispatch(editFriendRequest(id));
@@ -54,7 +54,7 @@ export default function Right() {
 				.catch((err) => {
 					toast.error('Đã xảy ra lỗi');
 				});
-			Api.put(url + 'api/v1/friend-requests/reject/', { friend_id: id }, { headers: headers })
+			Api.post(url + 'api/v1/friend-requests/reject/', { friend_id: id }, { headers: headers })
 				.then((res) => {
 					toast.success('Đã xóa lời mời kết bạn');
 					dispatch(editFriendRequest(id));
