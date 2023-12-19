@@ -81,7 +81,7 @@ export default function RegisterParent(props) {
 			firstName: values.firstName,
 			lastName: values.lastName,
 			phone: values.phone,
-			dob: values.date_picker.format('YYYY-MM-DD'),
+			dob: values.date_picker.format('MM-DD-YYYY'),
 			role: values.roles,
 		};
 		const config = {
@@ -93,7 +93,7 @@ export default function RegisterParent(props) {
 			.post(url + 'api/v1/auth/register-parent', data, config)
 			.then((response) => {
 				// Xử lý kết quả sau khi gửi thành công
-				if (response.data.statusCode === 200) {
+				if (response.data.statusCode === 200 || response.data.statusCode === 201) {
 					toast.success(response.data.message);
 					setTimeout(() => {
 						navigate('/login');

@@ -101,7 +101,7 @@ export default function Register(props) {
 				lastName: values.lastName,
 				gender: values.gender,
 				phone: values.phone,
-				dob: values.date_picker.format('DD-MM-YYYY'),
+				dob: values.date_picker.format('MM-DD-YYYY'),
 				province: values.province,
 				district: values.district,
 				school: values.school,
@@ -114,7 +114,7 @@ export default function Register(props) {
 				lastName: values.lastName_parent ? values.lastName_parent : null,
 				gender: values.gender_parent ? values.gender_parent : null,
 				phone: values.phone_parent ? values.phone_parent : null,
-				dob: values.date_parent ? values.date_parent.format('DD-MM-YYYY') : null,
+				dob: values.date_parent ? values.date_parent.format('MM-DD-YYYY') : null,
 			},
 		};
 		
@@ -129,7 +129,7 @@ export default function Register(props) {
 			.post(url + 'api/v1/auth/register-student', data, config)
 			.then((response) => {
 				// Xử lý kết quả sau khi gửi thành công
-				if (response.data.statusCode === 200) {
+				if (response.data.statusCode === 200 || response.data.statusCode === 201) {
 					toast.success(response.data.message);
 					setTimeout(() => {
 						navigate('/login');

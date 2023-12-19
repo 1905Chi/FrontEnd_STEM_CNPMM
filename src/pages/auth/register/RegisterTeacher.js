@@ -40,7 +40,7 @@ export default function RegisterTeacher(props) {
 			.post(url + 'api/v1/auth/register-teacher', data, config)
 			.then((response) => {
 				// Xử lý kết quả sau khi gửi thành công
-				if (response.data.statusCode === 200) {
+				if (response.data.statusCode === 200 || response.data.statusCode === 201) {
 					toast.success(response.data.message);
 					setTimeout(() => {
 						navigate('/');
