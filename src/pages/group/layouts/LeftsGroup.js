@@ -134,7 +134,7 @@ const LeftsGroup = () => {
 			<div style={{ margin: '228px 0 0 0' }}>
 				{groupManage && groupManage.length > 0 ? (
 					<div className="your-group">
-						<div style={{ display: 'flex', justifyContent: 'space-around' }}>
+						<div style={{ display: 'flex', justifyContent: 'start', gap:'3rem' }}>
 							<h4>Nhóm do bạn quản lý</h4>
 							<h4 style={{ color: 'blue' }}>Xem thêm</h4>
 						</div>
@@ -154,7 +154,7 @@ const LeftsGroup = () => {
 				) : null}
 				{groupJoin && groupJoin.length > 0 ? (
 					<div className="your-group">
-						<div style={{ display: 'flex', justifyContent: 'space-around' }}>
+						<div style={{ display: 'flex', justifyContent: 'start', gap:'3rem' }}>
 							<h4>Nhóm bạn tham gia</h4>
 							<h4 style={{ color: 'blue' }}>Xem thêm</h4>
 						</div>
@@ -179,7 +179,7 @@ const LeftsGroup = () => {
 				) : null}
 				{groupCreate && groupCreate.length > 0 ? (
 					<div className="your-group">
-						<div style={{ display: 'flex', justifyContent: 'space-around' }}>
+						<div style={{ display: 'flex', justifyContent: 'start', gap:'3rem' }}>
 							<h4>Nhóm bạn tạo</h4>
 							<h4 style={{ color: 'blue' }}>Xem thêm</h4>
 						</div>

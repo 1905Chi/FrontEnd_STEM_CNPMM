@@ -334,15 +334,17 @@ const User = () => {
 						</div>
 					</div>
 					<Button
-						label="Khóa tài khoản"
-						className="p-button-rounded p-button-success"
+						type="primary"
+						style={{ width: '10rem' , marginTop: '1rem'}}
 						onClick={() => {
 							handleBanUser(selectedUser);
 							setVisible(false);
 							setReason('');
 							setSelectedUser();
 						}}
-					/>
+					>
+						Khóa tài khoản
+					</Button>
 				</Dialog>
 
 				<Dialog

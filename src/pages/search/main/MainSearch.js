@@ -6,7 +6,7 @@ import {
 	selectselectgroup,
 	selectselectpost,
 	selectselectSearchpeople,
-    editSearchPeople
+	editSearchPeople,
 } from '../../../redux/Search';
 import PostItem from '../../home/components/PostItem';
 import './MainSearch.css';
@@ -15,10 +15,13 @@ import { Avatar } from 'antd';
 import { toast, ToastContainer } from 'react-toastify';
 import Api from '../../../api/Api';
 import { url } from '../../../constants/Constant';
+import { useNavigate } from 'react-router-dom';
 export default function MainSearch() {
+	const navigate = useNavigate();
 	const selectedOption = useSelector(selectSelectedOption);
 	const dispatch = useDispatch();
 	const post = useSelector(selectselectpost);
+	console.log(post);
 	const group = useSelector(selectselectgroup);
 	const classs = useSelector(selectselectclass);
 	const people = useSelector(selectselectSearchpeople);
@@ -36,7 +39,7 @@ export default function MainSearch() {
 				},
 				{ Headers: headers }
 			).then((res) => {
-                dispatch(editSearchPeople({ id: id, isFriend: -1 }));
+				dispatch(editSearchPeople({ id: id, isFriend: -1 }));
 				toast.success('Gửi lời mời kết bạn thành công');
 			});
 		} catch (err) {
@@ -69,20 +72,26 @@ export default function MainSearch() {
 	//             console.log(err);
 	//         }
 	//     }
-	const requestParent	= async (id) => {
-		Api.post(url+'api/v1/relationships/'+id,  {
+	const requestParent = async (id) => {
+		Api.post(url + 'api/v1/relationships/' + id, {
 			'Content-Type': 'application/json',
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 		})
-		.then((res) => {
-			toast.success('Đã gửi lời mời');
-		})
-		.catch((err) => {
-			toast.error('Đã xảy ra lỗi');
-		});
-	}
+			.then((res) => {
+				toast.success('Đã gửi lời mời');
+			})
+			.catch((err) => {
+				toast.error('Đã xảy ra lỗi');
+			});
+	};
 	return (
-		<div className="search-main">
+		<div
+			className="search-main"
+			style={{
+				width: '75vw',
+				marginLeft: '50px',
+			}}
+		>
 			{selectedOption === 'all' && (
 				<div>
 					{post && post.length > 0 && (
@@ -90,12 +99,15 @@ export default function MainSearch() {
 							<h1>Bài viết</h1>
 							{post.map((item, index) => (
 								<PostItem
-									index={item.id}
-									content={item.content}
-									user={item.author}
-									likes={item.reactions}
-									type={item.type}
-									refUrls={item.refUrls}
+									index={item.post.id}
+									content={item.post.content}
+									user={item.post.author}
+									authorAvatar={item.post.authorAvatarUrl}
+									likes={item.post.reactions}
+									authorFirstName={item.post.authorFirstName}
+									authorLastName={item.post.authorLastName}
+									type={item.post.type}
+									refUrls={item.post.refUrls}
 								/>
 							))}
 						</div>
@@ -127,15 +139,13 @@ export default function MainSearch() {
 										{item.isFriend === 1 ? (
 											<button
 												onClick={() => {
-													navigator('/profile/' + item.id);
+													navigate('/profile/' + item.id);
 												}}
 											>
 												Trang cá nhân{' '}
 											</button>
 										) : item.isFriend === 0 ? (
-											<button onClick={() => Requestfriend(item.id)}>
-												Thêm bạn 
-											</button>
+											<button onClick={() => Requestfriend(item.id)}>Thêm bạn</button>
 										) : item.isFriend === -1 ? (
 											<button>Đã gửi lời mời</button>
 										) : null}
@@ -152,12 +162,15 @@ export default function MainSearch() {
 							<h1>Bài viết</h1>
 							{post.map((item, index) => (
 								<PostItem
-									index={item.id}
-									content={item.content}
-									user={item.author}
-									likes={item.reactions}
-									type={item.type}
-									refUrls={item.refUrls}
+									index={item.post.id}
+									content={item.post.content}
+									user={item.post.author}
+									authorAvatar={item.post.authorAvatarUrl}
+									likes={item.post.reactions}
+									authorFirstName={item.post.authorFirstName}
+									authorLastName={item.post.authorLastName}
+									type={item.post.type}
+									refUrls={item.post.refUrls}
 								/>
 							))}
 						</div>
@@ -177,19 +190,20 @@ export default function MainSearch() {
 										{item.isFriend === 1 ? (
 											<button
 												onClick={() => {
-													navigator('/profile/' + item.id);
+													navigate('/profile/' + item.id);
 												}}
 											>
 												Trang cá nhân{' '}
 											</button>
 										) : item.isFriend === 0 ? (
-											<button onClick={() => Requestfriend(item.id)}>
-												Thêm bạn 
-											</button>
+											<button onClick={() => Requestfriend(item.id)}>Thêm bạn</button>
 										) : item.isFriend === -1 ? (
 											<button>Đã gửi lời mời</button>
 										) : null}
-										{item.role==='STUDENT' && user.role==='PARENT' ? <button onClick={() => requestParent(item.id)}>phụ huynh- học sinh</button>: null}
+										{(item.role === 'STUDENT' && user.role === 'PARENT') ||
+										(item.role === 'STUDENT' && localStorage.getItem('role') === 'PARENT') ? (
+											<button onClick={() => requestParent(item.id)}>phụ huynh- học sinh</button>
+										) : null}
 									</div>
 								))}
 						</div>
@@ -233,7 +247,7 @@ export default function MainSearch() {
 					)}
 				</div>
 			)}
-            <ToastContainer />
+			<ToastContainer />
 		</div>
 	);
 }

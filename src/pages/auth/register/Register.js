@@ -117,7 +117,6 @@ export default function Register(props) {
 				dob: values.date_parent ? values.date_parent.format('MM-DD-YYYY') : null,
 			},
 		};
-		
 
 		const config = {
 			headers: {
@@ -129,7 +128,7 @@ export default function Register(props) {
 			.post(url + 'api/v1/auth/register-student', data, config)
 			.then((response) => {
 				// Xử lý kết quả sau khi gửi thành công
-				if (response.data.statusCode === 200 || response.data.statusCode === 201) {
+				if (response.data.statusCode === 201) {
 					toast.success(response.data.message);
 					setTimeout(() => {
 						navigate('/login');

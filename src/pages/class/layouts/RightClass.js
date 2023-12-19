@@ -147,7 +147,7 @@ const RightClass = () => {
 			</div>
 			<div style={{ margin: '210px 0 0 0' }}>
 				<div className="your-group">
-					<div style={{ display: 'flex', justifyContent: 'space-around' }}>
+					<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 						<h4>Lớp học của bạn</h4>
 					</div>
 					<div style={{ height: '30vh', overflowY: 'scroll' }}>
