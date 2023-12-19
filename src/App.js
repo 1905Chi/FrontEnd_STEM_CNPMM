@@ -45,7 +45,7 @@ export default function App() {
 								element={
 									isLogin ? (
 										<>
-											<Topbar />
+											
 											<DefaultLayout setIsLogin={setIsLogin} Left={<Left />} Right={<Right />}>
 												<Page />
 											</DefaultLayout>

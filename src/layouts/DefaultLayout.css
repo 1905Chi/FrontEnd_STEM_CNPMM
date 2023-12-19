@@ -6,13 +6,6 @@
   z-index: 100;
 }
 
-.content {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
 
 .sider-left,
 .sider-right,
@@ -26,14 +19,8 @@
 
 .sider-left {
   left: 0;
-  width: 22rem;
+  width: 12rem;
 }
-
-.sider-right {
-  right: 0;
-  width: 20rem;
-}
-
 .content-main {
   left: 22rem; /* Độ rộng của .sider-left */
   right: 22rem; /* Độ rộng của .sider-right */
@@ -56,4 +43,60 @@
   bottom: 0;
   overflow-y: auto;
   z-index: 1;
+}
+
+
+/* ///////////////////////////////////////////// */
+
+/* DefaultLayout.css */
+.content-main-child
+{
+  width: 70%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Ngăn chặn trình duyệt cuộn toàn bộ trang */
+}
+
+.layout-container {
+  display: flex;
+  height: 100vh; /* Sử dụng chiều cao 100% của viewport */
+}
+
+.header {
+  flex: 0 0 auto; /* Header không co giãn và không thay đổi kích thước */
+
+}
+
+.sider-left {
+  flex: 0 0 25vw; /* Sider trái có chiều rộng cố định */
+  overflow-y: auto; /* Cho phép cuộn nếu nội dung vượt quá chiều cao */
+ 
+
+}
+
+.content {
+  flex: 1; /* Content sẽ co giãn để điền vào phần còn lại của layout */
+  overflow-y: auto; /* Cho phép cuộn nếu nội dung vượt quá chiều cao */
+  padding: 24px;
+  
+}
+
+.sider-right {
+  flex: 0 0 25vw; /* Sider phải có chiều rộng cố định */
+  overflow-y: auto; /* Cho phép cuộn nếu nội dung vượt quá chiều cao */
+  margin-top: 5rem;
+ 
+}
+
+.footer {
+  flex: 0 0 auto; /* Footer không co giãn và không thay đổi kích thước */
+  background-color: #f0f2f5; /* Màu nền của Footer */
+  text-align: center;
+  padding: 10px;
+}
+
+.ant-layout-sider .ant-layout-sider-dark{
+  background-color: white;
 }

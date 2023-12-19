@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Button, Checkbox, Form, Input, Spin } from 'antd';
+import { Button, Form, Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { url } from '../../../constants/Constant';
 import { Link, useNavigate } from 'react-router-dom';
 import Loading from '../../../components/Loading';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectuser, selectselectuser } from '../../../redux/User';
-import { UseSelector } from 'react-redux/es/hooks/useSelector';
-//import { createJwtToken } from '../../../api/Jwt';
+import { useDispatch } from 'react-redux';
+import { selectuser } from '../../../redux/User';
+
 import './Login.css';
 
 function Login() {

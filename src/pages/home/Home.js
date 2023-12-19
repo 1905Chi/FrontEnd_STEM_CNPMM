@@ -139,6 +139,7 @@ function Home() {
 								content={post.post.content}
 								comments={post.post.comments}
 								reaction={post.reaction}
+								homePosts={homePosts}
 							/>
 						);
 					})}

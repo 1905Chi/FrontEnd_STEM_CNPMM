@@ -4,31 +4,27 @@ import axios from 'axios';
 import { FcManager } from 'react-icons/fc';
 import { FcBusinesswoman } from 'react-icons/fc';
 import { useState, useEffect } from 'react';
-import { PiStudentBold } from 'react-icons/pi';
-import { RiParentLine } from 'react-icons/ri';
+
 import { AiFillQuestionCircle } from 'react-icons/ai';
-import { LiaChalkboardTeacherSolid } from 'react-icons/lia';
+
 import { CloseOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import './Register.css';
 import { url } from '../../../constants/Constant';
 import Loading from '../../../components/Loading';
-import { GiCancel } from 'react-icons/gi';
 import moment from 'moment';
 
 export default function Register(props) {
 	const navigate = useNavigate();
 	const [provinces, setProvinces] = useState([]);
-	const [currentProvince, setCurrentProvince] = useState(1);
 	const [districts, setDistricts] = useState([]);
-	const [currentDistrict, setCurrentDistrict] = useState();
+
 	const [schools, setSchools] = useState([]);
 	const [grade, setGrade] = useState(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']);
 	const [isRegisterForParent, setIsRegisterForParent] = useState(false);
 	const [currentDate, setCurrentDate] = useState(moment());
-	const [provinceItem, setprovicesItem] = useState({}); // Thông tin người dùng
-	const [districtsItem, setdistrictsItem] = useState({}); // Thông tin người dùng
-	const [schoolsItem, setschoolsItem] = useState({});
+	const [provinceItem, setprovicesItem] = useState(); // Thông tin người dùng
+	const [districtsItem, setdistrictsItem] = useState(); // Thông tin người dùng
 	// Hàm kiểm tra xem ngày có phải đã diễn ra hay không
 	const isDateDisabled = (date) => {
 		return date.isAfter(moment()); // Trả về true nếu ngày là ngày tương lai
@@ -102,8 +98,8 @@ export default function Register(props) {
 				gender: values.gender,
 				phone: values.phone,
 				dob: values.date_picker.format('MM-DD-YYYY'),
-				province: values.province,
-				district: values.district,
+				province: provinceItem,
+				district: districtsItem,
 				school: values.school,
 				grade: values.grade,
 			},

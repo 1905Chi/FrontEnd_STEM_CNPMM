@@ -20,7 +20,6 @@ export default function VerifyForm(props) {
 	const [loading, setLoading] = useState(false); // Trạng thái loading
 	const [provinceItem, setprovicesItem] = useState({}); // Thông tin người dùng
 	const [districtsItem, setdistrictsItem] = useState({}); // Thông tin người dùng
-	const [schoolsItem, setschoolsItem] = useState({});
 	const [subjects, setSubjects] = useState([]);
 
 	const config = {

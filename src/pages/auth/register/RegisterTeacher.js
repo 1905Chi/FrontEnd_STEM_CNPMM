@@ -1,4 +1,4 @@
-import { Form, Input, Button, Radio, Tooltip, DatePicker, Select } from 'antd';
+import { Form, Input, Button,  } from 'antd';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -82,9 +82,6 @@ export default function RegisterTeacher(props) {
 
 		// Xử lý logic xác thực email ở đây (gửi email xác thực, kiểm tra địa chỉ email, vv.)
 		console.log(values);
-	};
-	const handleChange = (value) => {
-		console.log(`selected ${value}`);
 	};
 
 	return (
