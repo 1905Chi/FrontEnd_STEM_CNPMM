@@ -15,7 +15,6 @@ import { toast } from 'react-toastify';
 import {ueseSelector, useSelector} from 'react-redux'
 import {selectselctPostHome} from '../../../redux/Group'
 function PostItem(props) {
-	console.log('props', props);
 	
 	const [myReaction, setMyReaction] = useState(props.reaction);
 	const [isLiked, setIsLiked] = useState(
@@ -273,7 +272,7 @@ function PostItem(props) {
 					}}
 					style={{ border: 'none', flex: 1 }}
 				>
-					<Button style={{ color: 'black', backgroundColor: 'aliceblue', border: 'none', textAlign: 'end' }}>
+					<Button style={{ color: 'black', backgroundColor: 'white', border: 'none', textAlign: 'end' }}>
 						...
 					</Button>
 				</Dropdown>

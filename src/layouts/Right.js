@@ -7,12 +7,16 @@ import { selectselectFriendRequest } from '../redux/Friend';
 import { Avatar } from 'antd';
 import { selectFriend } from '../redux/Friend';
 import './../pages/friend/layouts/LeftFriend.css';
+import "./Right.css"
 import { toast, ToastContainer } from 'react-toastify';
 import { editFriendRequest } from '../redux/Friend';
 import { selectOption } from '../redux/Group';
 import LableGroup from '../pages/group/components/LableGroup';
+import { Empty } from 'antd';
+import { useNavigate } from 'react-router-dom';
 export default function Right() {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const friendRequest = useSelector(selectselectFriendRequest);
 	const [lisstInvite, setListInvite] = useState();
 	const [listRelationShip, setListRelationShip] = useState();
@@ -22,30 +26,30 @@ export default function Right() {
 				'Content-Type': 'application/json',
 				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 			};
-			Api.post(url + 'api/v1/friendships/accept/friend', { friend_id: id }, { headers: headers })
-				.then((res) => {
-					toast.success('Đã chấp nhận lời mời kết bạn');
-					dispatch(editFriendRequest(id));
-					dispatch(selectOption('all'));
-				})
-				.catch((err) => {
-					toast.error('Đã xảy ra lỗi');
-				});
-			// Api.put(url + 'api/v1/friend-requests/accept/'+id, { headers: headers })
-			// .then((res) => {
-			// 	toast.success('Đã chấp nhận lời mời kết bạn');
-			// 	callApifriendRequest();
-			// })
-			// .catch((err) => {
-			// 	toast.error('Đã xảy ra lỗi');
-			// });
+			// Api.post(url + 'api/v1/friendships/accept/friend', { friend_id: id }, { headers: headers })
+			// 	.then((res) => {
+			// 		toast.success('Đã chấp nhận lời mời kết bạn');
+			// 		dispatch(editFriendRequest(id));
+			// 		dispatch(selectOption('all'));
+			// 	})
+			// 	.catch((err) => {
+			// 		toast.error('Đã xảy ra lỗi');
+			// 	});
+			Api.put(url + 'api/v1/friend-requests/accept/'+id, { headers: headers })
+			.then((res) => {
+				toast.success('Đã chấp nhận lời mời kết bạn');
+				callApifriendRequest();
+			})
+			.catch((err) => {
+				toast.error('Đã xảy ra lỗi');
+			});
 		}
 		if (status === 'REJECT') {
 			const headers = {
 				'Content-Type': 'application/json',
 				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 			};
-			Api.post(url + 'api/v1/friendships/decline/friend', { friend_id: id }, { headers: headers })
+			Api.delete(url + 'api/v1/friend-requests/'+ id , { headers: headers })
 				.then((res) => {
 					toast.success('Đã xóa lời mời kết bạn');
 					dispatch(editFriendRequest(id));
@@ -54,24 +58,16 @@ export default function Right() {
 				.catch((err) => {
 					toast.error('Đã xảy ra lỗi');
 				});
-			Api.post(url + 'api/v1/friend-requests/reject/', { friend_id: id }, { headers: headers })
-				.then((res) => {
-					toast.success('Đã xóa lời mời kết bạn');
-					dispatch(editFriendRequest(id));
-					dispatch(selectOption('all'));
-				})
-				.catch((err) => {
-					toast.error('Đã xảy ra lỗi');
-				});
-			// Api.put(url + 'api/v1/friend-requests/reject/'+id, { headers: headers })
-			// .then((res) => {
-			// 	toast.success('Đã xóa lời mời kết bạn');
-			// 	callApifriendRequest();
+			
+			Api.put(url + 'api/v1/friend-requests/reject/'+id, { headers: headers })
+			.then((res) => {
+				toast.success('Đã xóa lời mời kết bạn');
+				callApifriendRequest();
 
-			// })
-			// .catch((err) => {
-			// 	toast.error('Đã xảy ra lỗi');
-			// });
+			})
+			.catch((err) => {
+				toast.error('Đã xảy ra lỗi');
+			});
 		}
 	};
 	const acceptInvite = (status, id) => () => {
@@ -106,10 +102,10 @@ export default function Right() {
 	// 		});
 	// };
 	const callApifriendRequest = () => {
-		Api.get(url + 'api/v1/friendships/friend/pending', { headers: headers })
+		Api.get(url + 'api/v1/users/friend-requests', { headers: headers })
 			.then((res) => {
-				console.log('adgs', res.data.friendWithAuthor);
-				dispatch(selectFriendRequest(res.data.friendWithAuthor));
+				console.log('adgs', res.data.result);
+				dispatch(selectFriendRequest(res.data.result));
 			})
 			.catch((err) => {
 				console.log(err);
@@ -126,7 +122,7 @@ export default function Right() {
 				console.log(err);
 			});
 	};
-
+////call api liên kết tài khoản phụ huynh học sinh
 	const callRelationShip = () => {
 		Api.get(url + 'api/v1/relationships/student/relationship-requests', { headers: headers })
 			.then((res) => {
@@ -141,12 +137,12 @@ export default function Right() {
 		<>
 			<div className="friend-request">
 				<div className="friend-request__title">
-					<p>Lời mời kết bạn</p>
+					<h3>Lời mời kết bạn</h3>
 				</div>
 				{friendRequest &&
-					friendRequest.length > 0 &&
+					friendRequest.length > 0 ?(
 					friendRequest.map((item, index) => (
-						// item.status === 'PENDING' ? (
+						 item.status === 'PENDING' ? (
 						<div
 							className="friend-request__item"
 							key={item.id}
@@ -156,12 +152,12 @@ export default function Right() {
 						>
 							<div style={{ flex: '2', margin: '15px', marginTop: '18px' }}>
 								<div className="friend-request__item__avatar">
-									<Avatar src={item.avartarUrl} alt="" />
+									<Avatar src={item.sender.avartarUrl} alt="" />
 								</div>
 							</div>
 							<div className="friend-request__item__button">
 								<div className="friend-request__item__name">
-									<p>{item.firstName + ' ' + item.lastName}</p>
+									<p>{item.sender.firstName + ' ' + item.sender.lastName}</p>
 								</div>
 								<div style={{ textAlign: 'start' }}>
 									<button
@@ -181,47 +177,43 @@ export default function Right() {
 								</div>
 							</div>
 						</div>
-						// )
-						//  : null
-					))}
-				{lisstInvite && lisstInvite.length > 0 && (
-					<div className="friend-request__title">
-						<p>Lời mời tham gia nhom lop</p>
-					</div>
-				)}
+						)
+						 : <div><Empty /></div>
+					))): <div><Empty /></div>}
+				
 
-				{lisstInvite &&
+					<div className="friend-request__title">
+						<h3>Lời mời tham gia nhóm </h3>
+					</div>
+			
+
+				{lisstInvite && lisstInvite.length > 0 ?(
 					lisstInvite.map((item, index) =>
 						item.state === 'PENDING' ? (
-							<div style={{ backgroundColor: 'aliceblue' }}>
+							<div style={{ backgroundColor: 'white' }} className='invite-group'>
 								<div
-									className="friend-request__item"
+									className="invite-request__item"
 									key={item.id}
 									onClick={() => {}}
 									style={{ border: 'none', marginBottom: '0px' }}
 								>
 									<div style={{ flex: '2', margin: '15px', marginTop: '18px', paddingBottom: '1px' }}>
-										<div className="friend-request__item__avatar">
-											<Avatar src={item.inviter.avartarUrl} alt="" />
+										<div className="invite-request__item__avatar">
+											<Avatar src={item.group.avatarUrl} alt="" />
 										</div>
 									</div>
-									<div className="friend-request__item__button">
-										<div className="friend-request__item__name">
-											<p>{item.inviter.firstName + ' ' + item.inviter.lastName}</p>
-											<strong>Mời bạn tham gia</strong>
+									<div className="invite-request__item__button">
+										<div className="invite-request__item__name">
+											<p style={{textAlign:'start', fontSize:'larger', fontWeight:'800', marginTop:'9.5%'}} onClick={()=>{navigate(`/profile/${item.inviter.id}`)}}>{item.inviter.firstName + ' ' + item.inviter.lastName}</p>
+											<span>Mời bạn tham gia </span><strong onClick={()=>{navigate(`/groups/${item.group.id}`)}}>{item.group.name}</strong>	
 										</div>
 									</div>
-								</div>
-								<LableGroup
-									id={item.group.id}
-									name={item.group.name}
-									image={item.group.avatarUrl}
-									style={{ backgroundColor: 'aliceblue' }}
-								/>
-								<div style={{ textAlign: 'center', marginBottom: '20px' }}>
+								</div>	
+								
+								<div style={{ textAlign: 'center', marginBottom: '20px', margin:'0 0 0 14%' }}>
 									<button
 										className="btn btn-primary"
-										style={{ backgroundColor: '#1677ff', width: '83px' }}
+										style={{ backgroundColor: '#1677ff', width: '83px', borderRadius: '0.5rem' }}
 										onClick={acceptInvite('ACCEPT', item.id)}
 									>
 										Chấp nhận
@@ -229,14 +221,14 @@ export default function Right() {
 									<button
 										className="btn btn-danger"
 										onClick={acceptInvite('REJECT', item.id)}
-										style={{ width: '64px' }}
+										style={{ width: '64px', borderRadius: '0.5rem' }}
 									>
 										Xóa
 									</button>
 								</div>
 							</div>
 						) : null
-					)}
+					)): <div><Empty /></div>}
 				<ToastContainer />
 			</div>
 		</>

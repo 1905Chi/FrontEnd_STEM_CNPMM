@@ -21,29 +21,30 @@ export default function LeftSearch() {
 	const searchValue = searchParams.get('search');
 	useEffect(() => {
 		dispatch(selectOption('all'));
-
+	/// bài viết
 		Api.get(url + 'api/v1/posts/search?query=' + searchValue)
 			.then((res) => {
+				
+				dispatch(selectpost(res.data));
 				console.log(res.data);
-				dispatch(selectpost(res.data.result.posts));
-				console.log(res.data.result.posts);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
-
+		// lớp học
 		Api.get(url + 'api/v1/groups/search?isClass=1&query=' + searchValue)
 			.then((res) => {
 				console.log(res.data);
 
-				dispatch(selectclass(res.data.result));
+				dispatch(selectclass(res.data));
 			})
 			.catch((err) => {
 				console.log(err);
 			});
+		// nhóm
 		Api.get(url + 'api/v1/groups/search?isClass=0&?query=' + searchValue)
 			.then((res) => {
-				dispatch(selectgroup(res.data.result));
+				dispatch(selectgroup(res.data));
 			})
 			.catch((err) => {
 				console.log(err);
@@ -60,7 +61,7 @@ export default function LeftSearch() {
 				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			};
 
-			const validateFriendshipPromises = usersResponse.data.result.map(async (user) => {
+			const validateFriendshipPromises = usersResponse.data.map(async (user) => {
 				try {
 					const friendshipResponse = await Api.get(url + 'api/v1/friendships/validate?friendId=' + user.id, {
 						headers,

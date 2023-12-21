@@ -117,7 +117,7 @@ function Login() {
 						/>
 					</div>
 					<div style={{ width: '75%' }}>
-						<h2> Đăng nhập </h2>
+						<h2 style={{ color: "#4949c1"}}> Đăng nhập </h2>
 						<Form name="basic" onFinish={onFinish} onFinishFailed={onFinishFailed}>
 							<Form.Item
 								name="email"

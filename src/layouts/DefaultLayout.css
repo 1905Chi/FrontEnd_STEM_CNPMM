@@ -19,7 +19,7 @@
 
 .sider-left {
   left: 0;
-  width: 12rem;
+  width: 20%;
 }
 .content-main {
   left: 22rem; /* Độ rộng của .sider-left */
@@ -100,3 +100,42 @@ body {
 .ant-layout-sider .ant-layout-sider-dark{
   background-color: white;
 }
+
+.body-web{
+  margin-top: 5%;
+}
+.left-web{
+
+  height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.right-web{
+  height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: fixed;
+  right: 0;
+  top: 5rem;
+  margin-right: 2%;
+  width: 25%;
+}
+
+.main-web-content{
+ 
+  width: 60%  ;
+  margin-left: 3.5%;
+  
+  
+}
+.main-web{
+  overflow-y: auto  ;
+  height: 84vh  ;
+  margin-top: 1%;
+
+}
+
+.left-web-content{
+  margin-left: 2%;
+}
+

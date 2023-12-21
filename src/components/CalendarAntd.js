@@ -27,6 +27,7 @@ const CalendarAntd = () => {
 		if (listEvent === null) {
 			return listData;
 		} else {
+			if(listEvent.length > 0){
 			listEvent.map((item) => {
 				const dateStart = item.startedAt;
 				// Tách các phần tử từ chuỗi
@@ -44,6 +45,7 @@ const CalendarAntd = () => {
 					console.log('khong co');
 				}
 			});
+		}
 		}
 		if (listExam === null) {
 			return listData;

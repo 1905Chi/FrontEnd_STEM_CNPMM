@@ -124,7 +124,7 @@ export default function Register(props) {
 			.post(url + 'api/v1/auth/register-student', data, config)
 			.then((response) => {
 				// Xử lý kết quả sau khi gửi thành công
-				if (response.data.statusCode === 201) {
+				if (response.data.statusCode === 201 || response.data.statusCode === 200) {
 					toast.success(response.data.message);
 					setTimeout(() => {
 						navigate('/login');

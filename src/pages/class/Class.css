@@ -8,7 +8,7 @@ flex-wrap:wrap;
 }
 .item-class{
     display: flex;
-    width: 49%; /* Đặt chiều rộng của mỗi item */
+    width: 77%; /* Đặt chiều rộng của mỗi item */
 
     margin-bottom: 10px; /* Tạo khoảng cách giữa các item */
     box-sizing: border-box; /* Đảm bảo padding và border không làm tăng kích thước thực sự của phần tử */

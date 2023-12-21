@@ -101,7 +101,7 @@ export default function Left  () {
 
 	return (
         
-		<Space  className="sidebar" direction="vertical" style={{ color: theme.foreground, background: theme.background }}>
+		<Space  className="sidebar" direction="vertical" style={{ color: theme.foreground, background: theme.background , width:'100%'}}>
 			{lists.map((list, index) => (
 				<List
 					key={index}

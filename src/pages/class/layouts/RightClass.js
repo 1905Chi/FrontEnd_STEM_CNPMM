@@ -50,7 +50,7 @@ const RightClass = () => {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
 		};
-		Api.get(url + 'api/v1/groups/classesByRole', { headers })
+		Api.get(url + 'api/v1/groups/myClasses', { headers })
 	//	Api.get(url + 'api/v1/groups/', { headers })
 			.then(async (response) => {
 				if (response.data.statusCode === 200) {

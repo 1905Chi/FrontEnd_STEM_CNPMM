@@ -16,15 +16,20 @@ import { toast, ToastContainer } from 'react-toastify';
 import Api from '../../../api/Api';
 import { url } from '../../../constants/Constant';
 import { useNavigate } from 'react-router-dom';
+import { Empty } from 'antd';
 export default function MainSearch() {
 	const navigate = useNavigate();
 	const selectedOption = useSelector(selectSelectedOption);
+	
 	const dispatch = useDispatch();
 	const post = useSelector(selectselectpost);
-	console.log(post);
+	
 	const group = useSelector(selectselectgroup);
+	
 	const classs = useSelector(selectselectclass);
+	
 	const people = useSelector(selectselectSearchpeople);
+	
 	const user = JSON.parse(localStorage.getItem('user'));
 	const Requestfriend = async (id) => {
 		const headers = {
@@ -88,7 +93,7 @@ export default function MainSearch() {
 		<div
 			className="search-main"
 			style={{
-				width: '75vw',
+				
 				marginLeft: '50px',
 			}}
 		>
@@ -99,15 +104,17 @@ export default function MainSearch() {
 							<h1>Bài viết</h1>
 							{post.map((item, index) => (
 								<PostItem
-									index={item.post.id}
-									content={item.post.content}
-									user={item.post.author}
-									authorAvatar={item.post.authorAvatarUrl}
-									likes={item.post.reactions}
-									authorFirstName={item.post.authorFirstName}
-									authorLastName={item.post.authorLastName}
-									type={item.post.type}
-									refUrls={item.post.refUrls}
+									index={item.id}
+									content={item.content}
+									authorId={item.authorId}
+									authorAvatar={item.authorAvatar}
+									likes={item.reactions}
+									authorFirstName={item.authorFirstName}
+									authorLastName={item.authorLastName}
+									totalReactions={item.totalReactions}
+									totalComments={item.totalComments}
+									type={item.type}
+									refUrls={item.refUrls}
 								/>
 							))}
 						</div>
@@ -116,7 +123,7 @@ export default function MainSearch() {
 						<div>
 							<h1>Nhóm</h1>
 							{group.map((item, index) => (
-								<LableGroup name={item.name} image={item.avatarUrl} id={item.id} type={item.subject} />
+								<LableGroup infor={item} type={item.isClass} />
 							))}
 						</div>
 					)}
@@ -124,7 +131,7 @@ export default function MainSearch() {
 						<div>
 							<h1>Lớp</h1>
 							{classs.map((item, index) => (
-								<LableGroup name={item.name} image={item.avatarUrl} id={item.id} type={item.subject} />
+								<LableGroup infor={item} type={item.isClass} />
 							))}
 						</div>
 					)}
@@ -157,24 +164,26 @@ export default function MainSearch() {
 			)}
 			{selectedOption === 'post' && (
 				<div>
-					{post && post.length > 0 && (
+					{post && post.length > 0 ? (
 						<div>
 							<h1>Bài viết</h1>
 							{post.map((item, index) => (
 								<PostItem
-									index={item.post.id}
-									content={item.post.content}
-									user={item.post.author}
-									authorAvatar={item.post.authorAvatarUrl}
-									likes={item.post.reactions}
-									authorFirstName={item.post.authorFirstName}
-									authorLastName={item.post.authorLastName}
-									type={item.post.type}
-									refUrls={item.post.refUrls}
-								/>
+								index={item.id}
+								content={item.content}
+								authorId={item.authorId}
+								authorAvatar={item.authorAvatar}
+								likes={item.reactions}
+								authorFirstName={item.authorFirstName}
+								authorLastName={item.authorLastName}
+								totalReactions={item.totalReactions}
+								totalComments={item.totalComments}
+								type={item.type}
+								refUrls={item.refUrls}
+							/>
 							))}
-						</div>
-					)}
+						</div>): <div> <h1><Empty/></h1></div>
+					}
 				</div>
 			)}
 			{selectedOption === 'people' && (
@@ -209,7 +218,7 @@ export default function MainSearch() {
 						</div>
 					) : (
 						<div>
-							<h1>Không có kết quả</h1>
+							<h1><Empty/></h1>
 						</div>
 					)}
 				</div>
@@ -221,12 +230,12 @@ export default function MainSearch() {
 						<div>
 							<h1>Lớp</h1>
 							{classs.map((item, index) => (
-								<LableGroup name={item.name} image={item.avatarUrl} id={item.id} type={item.subject} />
+								<LableGroup infor={item} type={item.isClass}/>
 							))}
 						</div>
 					) : (
 						<div>
-							<h1>Không có kết quả</h1>
+							<h1><Empty/></h1>
 						</div>
 					)}
 				</div>
@@ -237,12 +246,12 @@ export default function MainSearch() {
 						<div>
 							<h1>Nhóm</h1>
 							{group.map((item, index) => (
-								<LableGroup name={item.name} image={item.avatarUrl} id={item.id} type={item.subject} />
+								<LableGroup infor={item} type={item.isClass} />
 							))}
 						</div>
 					) : (
 						<div>
-							<h1>Không có kết quả</h1>
+							<h1><Empty/></h1>
 						</div>
 					)}
 				</div>
