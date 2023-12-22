@@ -45,7 +45,7 @@ const openEditor = () => {
 				
 			
 			<div className="input-comment">
-				<Input placeholder="Viết bình luận" className="input-comment-self"  style={{width:'450px',margin:'10px 35px',borderRadius:'15px'}} onClick={openEditor}/>
+				<Input placeholder="Viết bình luận" className="input-comment-self"  style={{width:'100%',margin:'10px 35px',borderRadius:'15px'}} onClick={openEditor}/>
 				</div>
 		
 		</div>

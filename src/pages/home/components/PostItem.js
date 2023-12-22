@@ -239,7 +239,7 @@ function PostItem(props) {
 			) : null}
 			{responseComement ? (
 				<Editor cancel={openComment} idComment={idComment} homePosts={props.homePosts}>
-					{' '}
+					
 				</Editor>
 			) : null}
 			<div className="user-info">
@@ -258,9 +258,10 @@ function PostItem(props) {
 						</p>
 					</a>
 					<p className="user-name" style={{ display: 'block' }}>
-						đã đăng {props.type === 'QUESTION' ? 'Câu hỏi' : null}{' '}
-						{props.type === 'POST' ? 'Bài viết' : null} trong nhóm
+						đã đăng {props.type === 'QUESTION' ? 'Câu hỏi' : null}
+						{props.type === 'POST' ? 'bài viết' : null} trong nhóm
 					</p>
+
 				</div>
 				<Dropdown
 					menu={{
@@ -311,7 +312,7 @@ function PostItem(props) {
 						pointAtCenter: true,
 					}}
 				>
-					<Button style={{ backgroundColor: 'aliceblue', border: 'none' }}>{countReaction} likes</Button>
+					<Button style={{ backgroundColor: 'white', border: 'none' }}>{countReaction} likes</Button>
 				</Dropdown>
 			</div>
 
@@ -344,7 +345,7 @@ function PostItem(props) {
 				<div>
 					{props.comments && props.comments.length > 1 ? (
 						<button className="comment-count" onClick={SeeMoreComent}>
-							{' '}
+							
 							Xem thêm {props.comments.length - 1} bình luận
 						</button>
 					) : null}
@@ -376,7 +377,7 @@ function PostItem(props) {
 			{props.comments && props.comments.length > 0 && xemthem === true ? (
 				<div>
 					<button className="comment-count" onClick={SeeMoreComent}>
-						{' '}
+						
 						Thu gọn
 					</button>
 					{props.comments.map((item, index) => (
@@ -405,7 +406,9 @@ function PostItem(props) {
 					))}
 				</div>
 			) : null}
+			<div style={{width:'75%'}}>
 			<CommentPost user={props.authorAvatar} idPost={props.id}  homePosts={props.homePosts}/>
+			</div>
 		</div>
 	);
 }

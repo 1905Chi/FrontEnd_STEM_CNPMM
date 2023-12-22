@@ -17,7 +17,7 @@ export default function LableGroup({ image, name, id, type, infor }) {
 
 	return (
 		<div>
-			{infor === null ? (
+			{infor === null || infor=== undefined ? (
 				<button className="labelItem" onClick={()=>{linktogroup(id)}}>
 					<div className="image-group">
 						<img className="img-gr" src={!image ? anh_logo_1 : image} alt="anh" />

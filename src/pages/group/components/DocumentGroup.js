@@ -56,7 +56,7 @@ export default function DocumentGroup() {
 		</div>
 	);
 	return (
-		<div>
+		<div style={{backgroundColor:'white', border:'1px solid e6e6e6', paddingTop:'15px'}}>
 			{isopenAddFile ? <AddFile onCancel={openAddFile}></AddFile> : null}
 			
 			<div className="document-group">

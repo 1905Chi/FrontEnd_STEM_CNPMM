@@ -18,7 +18,7 @@ export default function QuestionGroup() {
     return (
         <div>
             <div className="question-group">
-                <h2 style={{ textAlign: 'start', margin: '15px', borderBottom: '3px solid', padding: '15px' }}>Câu hỏi </h2>
+                <h2 style={{ textAlign: 'center', margin: '15px', borderBottom: '3px solid', padding: '15px' }}>Câu hỏi </h2>
                 
                 {open && <Editor cancel={openEdttor} type ="QUESTION" />}
                 <button className="question-group__button" onClick={openEdttor} cancel={openEdttor}>Đặt câu hỏi</button>

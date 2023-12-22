@@ -39,9 +39,33 @@ const CalendarAntd = () => {
 				const parts1 = dateEnd.split(/[- :]/);
 				const dateE = `${parts1[1]}-${parts1[0]}-${parts1[2]}`;
 
-				if (formattedDate === dateS || formattedDate === dateE) {
-					listData = [...listData, item];
-				} else {
+				
+
+				if (formattedDate === dateS ) {
+					let data= {
+						id:item.id,
+						name: item.name,
+						description:item.description +' bắt đầu',
+						startedAt:item.startedAt,
+						endedAt:item.endedAt,
+						
+					}
+					listData = [...listData, data];
+				} 
+				
+
+				else if( formattedDate === dateE){
+					let data= {
+						id:item.id,
+						name: item.name,
+						description:item.description +' kết thúc ',
+						startedAt:item.startedAt,
+						endedAt:item.endedAt,
+						
+					}
+					listData = [...listData, data];
+				}
+				else {
 					console.log('khong co');
 				}
 			});
@@ -52,7 +76,7 @@ const CalendarAntd = () => {
 		} else if(listExam.length > 0) {
 			listExam.map((item) => {
 				//const dateStart = item.exam.startedAt;
-				const dateStart = item.startedAt;
+				const dateStart = item.exam.startedAt;
 								// Tách các phần tử từ chuỗi
 				
 				const parts = dateStart.split(/[- :]/);
@@ -60,13 +84,36 @@ const CalendarAntd = () => {
 				// Định dạng lại chuỗi ngày
 				const dateS = `${parts[1]}-${parts[0]}-${parts[2]}`;
 				//const dateEnd = item.exam.endedAt;
-				const dateEnd = item.endedAt;
+				const dateEnd = item.exam.endedAt;
 				const parts1 = dateEnd.split(/[- :]/);
 				const dateE = `${parts1[1]}-${parts1[0]}-${parts1[2]}`;
 
-				if (formattedDate === dateS || formattedDate === dateE) {
-					listData = [...listData, item];
-				} else {
+				
+
+
+				if (formattedDate === dateS  ) {
+					let data= {
+						id:item.exam.id,
+						name: item.exam.name,
+						description:item.exam.description +' bắt đầu',
+						startedAt:item.exam.startedAt,
+						endedAt:item.exam.endedAt,
+						
+					}
+					listData = [...listData, data];
+				}
+				else if( formattedDate === dateE){
+					let data= {
+						id:item.exam.id,
+						name: item.exam.name,
+						description:item.exam.description + " kết thúc",
+						startedAt:item.exam.startedAt,
+						endedAt:item.exam.endedAt,
+						
+					}
+					listData = [...listData, data];
+				}
+				 else {
 					console.log('khong co');
 				}
 			});
@@ -160,7 +207,8 @@ const CalendarAntd = () => {
 											<li key={item.id} style={{ color: 'yellow' }}>
 												<Badge
 													status={item.name}
-													text={item.description}
+
+													text={ item.name +"-"+  item.description}
 													style={{ color: 'white' }}
 												/>
 											</li>

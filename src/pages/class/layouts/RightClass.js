@@ -51,29 +51,29 @@ const RightClass = () => {
 			'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
 		};
 		Api.get(url + 'api/v1/groups/myClasses', { headers })
-	//	Api.get(url + 'api/v1/groups/', { headers })
+				// Api.get(url + 'api/v1/groups/', { headers })
 			.then(async (response) => {
 				if (response.data.statusCode === 200) {
-					let MYGROUP = [];
+					// let MYGROUP = [];
 
-					response.data.result.GROUP_OWNER.map((item) => {
-						if (item.isClass) {
-							MYGROUP = [...MYGROUP, item];
-						}
-					});
-					response.data.result.GROUP_ADMIN.map((item) => {
-						if (item.isClass) {
-							MYGROUP = [...MYGROUP, item];
-						}
-					});
-					response.data.result.GROUP_MEMBER.map((item) => {
-						if (item.isClass) {
-							MYGROUP = [...MYGROUP, item];
-						}
-					});
+					// response.data.result.GROUP_OWNER.map((item) => {
+					// 	if (item.isClass) {
+					// 		MYGROUP = [...MYGROUP, item];
+					// 	}
+					// });
+					// response.data.result.GROUP_ADMIN.map((item) => {
+					// 	if (item.isClass) {
+					// 		MYGROUP = [...MYGROUP, item];
+					// 	}
+					// });
+					// response.data.result.GROUP_MEMBER.map((item) => {
+					// 	if (item.isClass) {
+					// 		MYGROUP = [...MYGROUP, item];
+					// 	}
+					// });
 
-					dispatch(selectGroupOwner(MYGROUP));
-					setListClassJoin(MYGROUP);
+					// dispatch(selectGroupOwner(MYGROUP));
+					setListClassJoin(response.data.result);
 				}
 			})
 			.catch(async (error) => {
@@ -111,28 +111,29 @@ const RightClass = () => {
 
 	return (
 		<>
-		<div >
-			<div
-				style={{
-					position: 'fixed',
-					top: '74px',
-					zIndex: '700',
-					width: '20rem',
-					backgroundColor: 'white',
-				}}
-			>
-				{loading ? ( // Nếu đang loading thì hiển thị component loading
-					<Loading Loading={loading}></Loading>
-				) : null}
-				<div className="header-left" style={{}}>
-					<h1 style={{ textAlign: 'center' }}>Lớp</h1>
+			<div>
+				<div
+					style={{
+						position: 'fixed',
+						top: '76px',
+						zIndex: '700',
+						width: '20.5%',
+						backgroundColor: 'white',
+					}}
+				>
+					{loading ? ( // Nếu đang loading thì hiển thị component loading
+						<Loading Loading={loading}></Loading>
+					) : null}
+					<div className="header-left" style={{}}>
+						<h1 style={{ textAlign: 'center', marginTop:'0' }}>Lớp</h1>
 
-					<Search
-						theme={theme}
-						placeholder="Tìm kiếm Lớp"
-						onChange={searchClass}
-						style={{ textAlign: 'center' }}
-					/>
+						<Search
+							theme={theme}
+							placeholder="Tìm kiếm Lớp"
+							onChange={searchClass}
+							style={{ textAlign: 'center', marginLeft:'1rem' }}
+						/>
+					</div>
 				</div>
 				{(role && role === 'TEACHER') || localStorage.getItem('role') === 'TEACHER' ? (
 					<div className="button-add" onClick={create}>
@@ -144,30 +145,31 @@ const RightClass = () => {
 						</Button>
 					</div>
 				) : null}
-			</div>
-			<div style={{ margin: '210px 0 0 0' }}>
-				<div className="your-group">
-					<div style={{ display: 'flex', justifyContent: 'space-between' }}>
-						<h4>Lớp học của bạn</h4>
+				<div style={{ margin: '24vh 0px 0px 0px' }}>
+					<div className="your-group">
+						<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+							<h3 style={{textAlign:'center', width:'100%', color: '#2424a5'}}>Lớp học của bạn</h3>
+						</div>
+						<div style={{ height: '30vh', overflowY: 'scroll' }}>
+							{listClassJoin &&
+								listClassJoin.map((mygroup, index) => {
+									return (
+										<div style={{marginRight:'1rem'}}>
+										<LableGroup
+											key={index}
+											image={mygroup.avatarUrl}
+											name={mygroup.name}
+											id={mygroup.id}
+											type={true}
+										/>
+										</div>
+									);
+								})}
+						</div>
 					</div>
-					<div style={{ height: '30vh', overflowY: 'scroll' }}>
-						{listClassJoin &&
-							listClassJoin.map((mygroup, index) => {
-								return (
-									<LableGroup
-										key={index}
-										image={mygroup.avatarUrl}
-										name={mygroup.name}
-										id={mygroup.id}
-										type={mygroup.isClass}
-									/>
-								);
-							})}
-					</div>
-				</div>
 
-				<ToastContainer />
-			</div>
+					<ToastContainer />
+				</div>
 			</div>
 		</>
 	);
