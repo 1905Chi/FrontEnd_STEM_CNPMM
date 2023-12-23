@@ -37,7 +37,7 @@ function Login() {
 				if (response.data.statusCode === 200) {
 					//navigate("/");
 					console.log('sdjiasd',response.data.result);
-					localStorage.setItem('accessToken', response.data.result.refreshToken);
+					localStorage.setItem('accessToken', response.data.result.accessToken);
 					console.log('accessToken', response.data.result.accessToken);
 					localStorage.setItem('refreshToken', response.data.result.refreshToken);
 					localStorage.setItem('role', response.data.result.role);

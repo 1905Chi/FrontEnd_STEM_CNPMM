@@ -83,7 +83,7 @@ export default function MainSearch() {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 		})
 			.then((res) => {
-				toast.success('Đã gửi lời mời');
+				toast.success('Đã gửi yêu cầu ');
 			})
 			.catch((err) => {
 				toast.error('Đã xảy ra lỗi');

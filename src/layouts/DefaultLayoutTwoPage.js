@@ -40,11 +40,11 @@ export default function DefaultLayoutTwoPage({ Left, children }) {
 				<Topbar />
 			</div>
 			<Row className="body-web">
-				<Col span={5} className="left-web">
+				<Col span={6} className="left-web">
 					<div className="left-web-content">{Left}</div>
 				</Col>
-				<Col span={19} className="main-web">
-					<div className="main-web-content" style={{width:'80%'}}>{children}</div>
+				<Col span={18} className="main-web">
+					<div className="main-web-content" style={{width:'92%'}}>{children}</div>
 				</Col>
 			</Row>
 			</div>

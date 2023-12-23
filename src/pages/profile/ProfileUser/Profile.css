@@ -18,9 +18,9 @@
     border: 5px solid white;
     border-radius: 50%;
     background: #fff;
-    position: obsolute;
+    position: absolute;
     top: 68%;
-    left: 50px;
+    left: -4%;
     transform: translateX(50% );
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     overflow: hidden;

@@ -34,7 +34,7 @@ export default function LeftEditExam() {
     const cancel = () => {
         setIsEdit(false);
     }
-	return(<div>
+	return(<div style={{marginleft:'5%'}}>
         <div className='back-to-exam'>
             <button className='back-to-exam-button' onClick={()=>{window.history.back()}}><RiArrowGoBackLine/> Quay lại</button>
         </div>

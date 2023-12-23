@@ -25,6 +25,7 @@ const RightClass = () => {
 	const [listClass, setListClass] = useState([]);
 	const [classJoin, setClassJoin] = useState([]);
 	const [listClassJoin, setListClassJoin] = useState();
+	const [mygroup, setMygroup] = useState([]);
 	const navigate = useNavigate();
 	const changeTheme = (value) => {
 		setTheme(value ? 'dark' : 'light');
@@ -43,7 +44,7 @@ const RightClass = () => {
 		setListClassJoin(mygroup.filter((item) => item.name.toLowerCase().includes(e.target.value.toLowerCase())));
 	};
 	const role = JSON.parse(localStorage.getItem('user')).role;
-	const mygroup = useSelector(selectSelectedGroupOwner);
+	
 
 	useEffect(() => {
 		const headers = {
@@ -74,6 +75,7 @@ const RightClass = () => {
 
 					// dispatch(selectGroupOwner(MYGROUP));
 					setListClassJoin(response.data.result);
+					setMygroup(response.data.result);
 				}
 			})
 			.catch(async (error) => {
@@ -117,7 +119,7 @@ const RightClass = () => {
 						position: 'fixed',
 						top: '76px',
 						zIndex: '700',
-						width: '20.5%',
+						width: '24.5%',
 						backgroundColor: 'white',
 					}}
 				>
@@ -135,17 +137,18 @@ const RightClass = () => {
 						/>
 					</div>
 				</div>
+				
+				<div style={{ margin: '20vh 0px 0px 0px' }}>
 				{(role && role === 'TEACHER') || localStorage.getItem('role') === 'TEACHER' ? (
 					<div className="button-add" onClick={create}>
 						<Button
 							type="primary"
-							style={{ width: '100%', marginTop: '10px', height: '50px', marginLeft: '0px' }}
+							style={{ width: '100%', marginTop: '10vh', height: '50px', marginLeft: '0px' }}
 						>
 							<span style={{ fontSize: '15px', fontWeight: '500' }}>+ Tạo Lớp </span>
 						</Button>
 					</div>
 				) : null}
-				<div style={{ margin: '24vh 0px 0px 0px' }}>
 					<div className="your-group">
 						<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 							<h3 style={{textAlign:'center', width:'100%', color: '#2424a5'}}>Lớp học của bạn</h3>

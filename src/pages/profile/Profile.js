@@ -93,7 +93,7 @@ export default function Profile() {
 						<span style={{ fontSize: '15px', color: 'white', margin: '0 5px 0 0' }}>Chỉnh sửa ảnh bìa</span>
 					</button>
 				</div>
-				<div>
+				<div style={{position:'relative'}}>
 					<div className="profile-picture">
 						<img src={avatar} alt="Profile Picture" />
 					</div>
@@ -169,7 +169,7 @@ export default function Profile() {
 								</span>
 							</div>
 
-							{user.parents != undefined ? (
+							{user.parents !== null ? (
 								<div style={{ width: '100%', margin: '5px 0' }}>
 									<span
 										style={{ fontWeight: 'bold' }}
@@ -177,11 +177,12 @@ export default function Profile() {
 											navigate(`/profile/${user.parents[0].id}`);
 										}}
 									>
-										Phụ huynh: {`${user.parents[0].firstName} ${user.parents[0].lastName}`}
+										Phụ huynh:
+										{`${user.parents[0].firstName} ${user.parents[0].lastName}`}
 									</span>
 								</div>
 							) : null}
-							{user.children !== undefined ? (
+							{user.children !== null ? (
 								<div style={{ width: '100%', margin: '5px 0' }}>
 									<span style={{ fontWeight: 'bold' }}>
 										Con: {`${user.children[0].firstName} ${user.children[0].lastName}`}

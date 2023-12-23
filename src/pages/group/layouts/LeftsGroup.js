@@ -45,9 +45,23 @@ const LeftsGroup = () => {
 		Api.get(url + 'api/v1/groups', { headers })
 			.then(async (response) => {
 				if (response.data.statusCode === 200) {
-					setGroupManage(response.data.result.GROUP_ADMIN);
-					setGroupJoin(response.data.result.GROUP_MEMBER);
-					setGroupCreate(response.data.result.GROUP_OWNER);
+					response.data.result.GROUP_ADMIN.forEach((element) => {
+						if (element.isClass === false) {
+							setGroupManage([...groupManage, element]);
+						}
+					});
+					response.data.result.GROUP_MEMBER.forEach((element) => {
+						if (element.isClass === false) {
+							setGroupJoin([...groupJoin, element]);
+						}
+						
+					});
+					response.data.result.GROUP_OWNER.forEach((element) => {
+						if (element.isClass === false) {
+							setGroupCreate([...groupCreate, element]);
+						}
+						
+					});
 				}
 			})
 			.catch(async (error) => {
@@ -108,9 +122,9 @@ const LeftsGroup = () => {
 			<div
 				style={{
 					position: 'fixed',
-					top: '74px',
+					top: '70px',
 					zIndex: '700',
-					width: '20rem',
+					width: '24.5%',
 					backgroundColor: 'white',
 				}}
 			>
@@ -134,7 +148,7 @@ const LeftsGroup = () => {
 			<div style={{ margin: '228px 0 0 0' }}>
 				{groupManage && groupManage.length > 0 ? (
 					<div className="your-group">
-						<div style={{ display: 'flex', justifyContent: 'start', gap: '3rem' }}>
+						<div style={{ display: 'flex', justifyContent: 'start', gap: '3rem', marginLeft:'12%' }}>
 							<h4>Nhóm do bạn quản lý</h4>
 							<h4 style={{ color: 'blue' }}>Xem thêm</h4>
 						</div>
@@ -154,7 +168,7 @@ const LeftsGroup = () => {
 				) : null}
 				{groupJoin && groupJoin.length > 0 ? (
 					<div className="your-group">
-						<div style={{ display: 'flex', justifyContent: 'start', gap: '3rem' }}>
+						<div style={{ display: 'flex', justifyContent: 'start', gap: '3rem' ,marginLeft:'12%'}}>
 							<h4>Nhóm bạn tham gia</h4>
 							<h4 style={{ color: 'blue' }}>Xem thêm</h4>
 						</div>
@@ -179,7 +193,7 @@ const LeftsGroup = () => {
 				) : null}
 				{groupCreate && groupCreate.length > 0 ? (
 					<div className="your-group">
-						<div style={{ display: 'flex', justifyContent: 'start', gap: '3rem' }}>
+						<div style={{ display: 'flex', justifyContent: 'start', gap: '3rem',marginLeft:'12%' }}>
 							<h4>Nhóm bạn tạo</h4>
 							<h4 style={{ color: 'blue' }}>Xem thêm</h4>
 						</div>

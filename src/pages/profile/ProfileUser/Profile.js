@@ -14,6 +14,7 @@ import { url } from '../../../constants/Constant';
 import { anh_logo } from '../../../constants/Constant';
 import { Tabs } from 'antd';
 import { toast, ToastContainer } from 'react-toastify';
+import { FaFacebookMessenger } from "react-icons/fa";
 import { Skeleton } from 'antd';
 export default function Profile(props) {
 	const dispatch = useDispatch();
@@ -74,8 +75,9 @@ export default function Profile(props) {
 	};
 	const CallApilistFriend = async (user) => {
 		console.log('user', user);
-		if (uuid && uuid !== JSON.parse(localStorage.getItem('user')).id) {
-			Api.get(url + 'api/v1/users/friends-of-user?uId=' + uuid)
+		if ((uuid && uuid !== JSON.parse(localStorage.getItem('user')).id )||(props.id && props.id !== JSON.parse(localStorage.getItem('user')).id))   {
+			const id= uuid ? uuid : props.id;
+			Api.get(url + 'api/v1/users/friends-of-user?uId=' + id)
 				.then((res) => {
 					// const validateFriendshipPromises = res.data.result.map(async (user) => {
 					// 	return { ...user.user, isFriend: user.isFriend };
@@ -185,6 +187,7 @@ export default function Profile(props) {
 										display: 'flex',
 										flexWrap: 'wrap',
 										overflowY: 'auto',
+										justifyContent: 'center',
 									}}
 								>
 									{listFriend &&
@@ -247,7 +250,8 @@ export default function Profile(props) {
 	};
 
 	const ValidateFriend = () => {
-		Api.get(url + 'api/v1/friendships/validate?friendId=' + uuid)
+		const id = uuid ? uuid : props.id;
+		Api.get(url + 'api/v1/friendships/validate?friendId=' + id)
 			.then((res) => {
 				setIsFriend(res.data.result ? true : false);
 			})
@@ -288,7 +292,7 @@ export default function Profile(props) {
 									<button style={{ maxWidth: '10%', backgroundColor: '0866ff' }} onClick={() => {}}>
 										Thêm bạn
 									</button>
-								) : null}
+								) : (<button onClick={()=>{navigate(`/messenger/u/${user.id}`)}}><FaFacebookMessenger style={{color:'white', backgroundColor:'blue'}}/> Nhắn tin</button>)}
 							</div>
 						</div>
 					</div>

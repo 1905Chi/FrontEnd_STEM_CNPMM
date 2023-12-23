@@ -258,8 +258,10 @@ function PostItem(props) {
 						</p>
 					</a>
 					<p className="user-name" style={{ display: 'block' }}>
-						đã đăng {props.type === 'QUESTION' ? 'Câu hỏi' : null}
-						{props.type === 'POST' ? 'bài viết' : null} trong nhóm
+						đã đăng {props.type === 'QUESTION' ? 'Câu hỏi ' : null}
+						{props.type === 'POST' && props.content!== null && props.content !== undefined  && props.content!=='' ? 'bài viết ' : null} 
+						{props.type === 'POST' && props.content === '' ?  'tài liệu ': null}
+						trong nhóm
 					</p>
 
 				</div>
