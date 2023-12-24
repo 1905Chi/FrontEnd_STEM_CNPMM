@@ -215,7 +215,7 @@ export default function ExamItem(props) {
 			dataIndex: 'firstName'+'lastName',
 			key: 'firstName' + ' ' + 'lastName',
 			render: (firstName, lastName) =>(
-				<span>{firstName + ' ' + lastName}</span>
+				<span>{firstName + ' ' + lastName}</span>	
 			)
 		},
 		{

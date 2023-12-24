@@ -32,7 +32,7 @@
     border-radius: 50%;
     background: #4d4b4b;
     position: absolute;
-    top: 8vh;
+    top: 1vh;
     left: 9vw;
     transform: translateX(50% );
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
@@ -44,7 +44,7 @@
 
 
   }
-  .cover-picture__button{
+  .cover-picture-self__button{
     width: 165px;
     border-top: 3px solid black;
    
