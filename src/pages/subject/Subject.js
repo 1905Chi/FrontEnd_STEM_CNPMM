@@ -41,15 +41,18 @@ const Subject = () => {
 
 	const fetchDetailSubject = async (id) => {
 		try {
-			const response = await Api.get(url + `api/v1/subjects/admin/get-subject/${id}`);
-			if (response.data.statusCode === 200) {
-				setDefaultValues({
-					code: response.data.result.code,
-					name: response.data.result.name,
-					description: response.data.result.description,
-				});
-				setVisibleEdit(true);
-			}
+			// const response = await Api.get(url + `api/v1/subjects/admin/get-subject/${id}`);
+			// if (response.data.statusCode === 200) {
+			// 	setDefaultValues({
+			// 		code: response.data.result.code,
+			// 		name: response.data.result.name,
+			// 		description: response.data.result.description,
+			// 	});
+			// 	setVisibleEdit(true);
+			// }
+
+		setDefaultValues(subject.filter((item) => item.id === id)[0]);
+		setVisibleEdit(true);
 		} catch (error) {
 			console.log(error);
 		}

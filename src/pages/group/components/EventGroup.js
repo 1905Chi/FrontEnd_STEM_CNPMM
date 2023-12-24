@@ -231,17 +231,17 @@ export default function EventGroup() {
 				<div className="Calendar-group">
 					<CalendarAntd />
 				</div>
-				<div className="event-upcoming-main">
+				<div className="event-upcoming-main" >
 					<div className="header-envent-title">
 						<h3 style={{ marginLeft: '22px' }}>Sự kiện sắp diễn ra</h3>
 						
-						<button className="btn btn-primary" onClick={openCreateEvent}>
+						<button className="btn btn-primary" onClick={openCreateEvent}  style={{backgroundColor:'#f4f6fa'}}>
 							Thêm sự kiện
 						</button>
 					
 					</div>
 					{event.map((event, index) => (
-						<div className="event-upcoming__item">
+						<div className="event-upcoming__item" style={{backgroundColor:'white'}}>
 							<div style={{ flex: 7 }}>
 								<div className="event-upcoming__item__title">
 									<p>Sự kiện: {event.name}</p>

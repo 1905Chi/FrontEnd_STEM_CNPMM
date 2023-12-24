@@ -34,7 +34,7 @@ const Topbar = (props) => {
 	const [historySearch, sethistorySearch] = useState(JSON.parse(localStorage.getItem('search')));
 	const [openMenu, setOpenMenu] = useState(false);
 	const [editprofile, setEditProfile] = useState(false);
-	const role = localStorage.getItem('role') ? localStorage.getItem('role') : null;
+	const role = localStorage.getItem('role') ? localStorage.getItem('role')? JSON.parse(localStorage.getItem('user')).role:JSON.parse(localStorage.getItem('user')).role : null;
 	const [isLogin, setIsLogin] = useState(localStorage.getItem('accessToken') ? true : false);
 	const [items, setItems] = useState([]);
 
@@ -129,7 +129,7 @@ const Topbar = (props) => {
 	};
 
 	useEffect(() => {
-		if (role === 'ADMIN' || JSON.parse(localStorage.getItem('user')).role === 'ADMIN') {
+		if (role !== null && role === 'ADMIN' ) {
 			setItems([
 				{
 					label: 'Trang chủ',

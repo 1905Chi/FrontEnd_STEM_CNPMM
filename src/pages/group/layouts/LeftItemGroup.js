@@ -195,11 +195,11 @@ export default function LeftItemGroup() {
 	};
 	const openDialogInviteMember = () => {
 		//dispatch(selectFriendInvite());
-		Api.get(url + 'api/v1/friendships/friend/accept', { headers: headers })
+		Api.get(url + 'api/v1/users/friends', { headers: headers })
 			.then((response) => {
 				if (response.data.statusCode === 200) {
-					setListFriend(response.data.friendWithAuthor);
-					setListFriendSearch(response.data.friendWithAuthor);
+					setListFriend(response.data.result);
+					setListFriendSearch(response.data.result);
 					setVisible(true);
 				} else {
 					toast.error(response.data.message);
