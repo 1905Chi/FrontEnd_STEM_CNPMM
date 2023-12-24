@@ -78,7 +78,7 @@ export default function MainSearch() {
 	//         }
 	//     }
 	const requestParent = async (id) => {
-		Api.post(url + 'api/v1/relationships/' + id, {
+		Api.post(url + 'api/v1/relationships' , {studentId:id}, {
 			'Content-Type': 'application/json',
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 		})
@@ -156,6 +156,10 @@ export default function MainSearch() {
 										) : item.isFriend === -1 ? (
 											<button>Đã gửi lời mời</button>
 										) : null}
+										{(item.role === 'STUDENT' && ( user.role === 'PARENT' || user.role==='TEACHER')) ||
+										(item.role === 'STUDENT' && (localStorage.getItem('role') === 'PARENT')  || localStorage.getItem('role')==='TEACHER')? (
+											<button onClick={() => requestParent(item.id)}>Phụ huynh- học sinh</button>
+										) : null}
 									</div>
 								))}
 						</div>
@@ -209,8 +213,8 @@ export default function MainSearch() {
 										) : item.isFriend === -1 ? (
 											<button>Đã gửi lời mời</button>
 										) : null}
-										{(item.role === 'STUDENT' && user.role === 'PARENT') ||
-										(item.role === 'STUDENT' && localStorage.getItem('role') === 'PARENT') ? (
+										{(item.role === 'STUDENT' && ( user.role === 'PARENT' || user.role==='TEACHER')) ||
+										(item.role === 'STUDENT' && (localStorage.getItem('role') === 'PARENT')  || localStorage.getItem('role')==='TEACHER')? (
 											<button onClick={() => requestParent(item.id)}>phụ huynh- học sinh</button>
 										) : null}
 									</div>

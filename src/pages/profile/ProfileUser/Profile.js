@@ -288,7 +288,7 @@ export default function Profile(props) {
 									{user.role === 'PARENT' ? '(Phụ huynh)' : null}
 									{user.role === 'STUDENT' ? '(Học sinh)' : null}
 								</p>
-								{!isFriend && uuid ? (
+								{!isFriend && (uuid || props.id) ? (
 									<button style={{ maxWidth: '10%', backgroundColor: '0866ff' }} onClick={() => {}}>
 										Thêm bạn
 									</button>

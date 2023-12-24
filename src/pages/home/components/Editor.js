@@ -32,7 +32,7 @@ export default function Editor(props) {
 	const cancel = () => {
 		if (props.cancel) props.cancel();
 	};
-	const Save = (e) => {
+	const Save = async (e) => {
 		setIsLoading(true);
 		e.preventDefault();
 		if(props.isQuiz){
@@ -162,12 +162,15 @@ export default function Editor(props) {
 				.then((response) => {
 					if (response.data.statusCode === 200) {
 						console.log(response.data.post);
-						toast.success('Đăng bài thành công');
+						 callapiPost();
+						setTimeout(() => {
+							toast.success('Đăng bài thành công');
+						}, 1000);
 						if(props.homePosts)
 						{
 							props.homePosts();
 						}
-						callapiPost();
+						
 						
 					} else {
 						console.log(response.error);

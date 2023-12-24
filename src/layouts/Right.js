@@ -21,6 +21,7 @@ export default function Right() {
 	const [countRequest, setCountRequest] = useState();
 	const [lisstInvite, setListInvite] = useState();
 	const [listRelationShip, setListRelationShip] = useState();
+	const [countRequestParent, setCountRequestParent] = useState();
 	const accept = (status, id) => () => {
 		if (status === 'ACCEPT') {
 			const headers = {
@@ -128,35 +129,55 @@ export default function Right() {
 		Api.get(url + 'api/v1/relationships/student/relationship-requests', { headers: headers })
 			.then((res) => {
 				setListRelationShip(res.data.result);
+				setCountRequestParent(res.data.result.filter((item) => item.accepted === false).length);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	};
-
+	const acceptRelation = (status, id) => () => {
+		if(status === 'ACCEPT'){
+			Api.put(url + 'api/v1/relationships/' + id, {isAccepted: true},{ headers: headers })
+				.then((res) => {
+					toast.success('Đã chấp nhận yêu cầu');
+					callRelationShip();
+				})
+				.catch((err) => {
+					toast.error('Đã xảy ra lỗi');
+				});
+		}
+		if(status === 'REJECT'){
+			Api.put(url + 'api/v1/relationships/' + id,{isAccepted: false}, { headers: headers })
+				.then((res) => {
+					toast.success('Đã xóa yêu cầu');
+					callRelationShip();
+				})
+				.catch((err) => {
+					toast.error('Đã xảy ra lỗi');
+				});
+		}
+	}
 	return (
 		<>
-			<div className="friend-request">
+			<div className="friend-request" style={{overflowY:'auto'}}>
 				<div className="friend-request__title">
 					<h3>Lời mời kết bạn</h3>
 				</div>
-				{friendRequest && friendRequest.length > 0 && countRequest>0 ? (
+				{friendRequest && friendRequest.length > 0 && countRequest > 0 ? (
 					friendRequest.map((item, index) =>
 						item.status === 'PENDING' ? (
 							<div
 								className="friend-request__item"
 								key={item.id}
-								onClick={() => {
-									dispatch(selectFriend(item.id));
-								}}
+								
 							>
-								<div style={{ flex: '2', margin: '15px', marginTop: '18px' }}>
+								<div style={{ flex: '2', margin: '15px', marginTop: '18px' }} onClick={()=>{navigate(`/profile/${item.sender.id}`)}}>
 									<div className="friend-request__item__avatar">
 										<Avatar src={item.sender.avartarUrl} alt="" />
 									</div>
 								</div>
-								<div className="friend-request__item__button">
-									<div className="friend-request__item__name">
+								<div className="friend-request__item__button" >
+									<div className="friend-request__item__name" onClick={()=>{navigate(`/profile/${item.sender.id}`)}}>
 										<p>{item.sender.firstName + ' ' + item.sender.lastName}</p>
 									</div>
 									<div style={{ textAlign: 'start' }}>
@@ -177,11 +198,58 @@ export default function Right() {
 									</div>
 								</div>
 							</div>
-						) : (
-							null
-						)
+						) : null
 					)
 				) : !friendRequest || friendRequest.length === 0 || countRequest === 0 ? (
+					<div>
+						<Empty />
+					</div>
+				) : (
+					<div>
+						<Empty />
+					</div>
+				)}
+				<div className="friend-request__title">
+					<h3>Yêu cầu liên kết tài khoản </h3>
+				</div>
+				{listRelationShip && listRelationShip.length > 0 && countRequestParent > 0 ? (
+					listRelationShip.map((item, index) =>
+						item.accepted === false? (
+							<div
+								className="friend-request__item"
+								key={item.id}
+								
+							>
+								<div style={{ flex: '2', margin: '15px', marginTop: '18px' }} onClick={()=>{navigate(`/profile/${item.parent.id}`)}}>
+									<div className="friend-request__item__avatar">
+										<Avatar src={item.parent.avartarUrl} alt="" />
+									</div>
+								</div>
+								<div className="friend-request__item__button" >
+									<div className="friend-request__item__name" onClick={()=>{navigate(`/profile/${item.parent.id}`)}}>
+										<p>{item.parent.firstName + ' ' + item.parent.lastName}</p>
+									</div>
+									<div style={{ textAlign: 'start' }}>
+										<button
+											className="btn btn-primary"
+											style={{ backgroundColor: '#1677ff', width: '83px' }}
+											onClick={acceptRelation('ACCEPT', item.id)}
+										>
+											Chấp nhận
+										</button>
+										<button
+											className="btn btn-danger"
+											onClick={acceptRelation('REJECT', item.id)}
+											style={{ width: '64px' }}
+										>
+											Xóa
+										</button>
+									</div>
+								</div>
+							</div>
+						) : null
+					)
+				) : !friendRequest || friendRequest.length === 0 || countRequestParent === 0 ? (
 					<div>
 						<Empty />
 					</div>
@@ -261,6 +329,7 @@ export default function Right() {
 						<Empty />
 					</div>
 				)}
+
 				<ToastContainer />
 			</div>
 		</>

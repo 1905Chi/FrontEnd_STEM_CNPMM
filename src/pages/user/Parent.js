@@ -70,7 +70,7 @@ export default function Parent() {
       localStorage.setItem('typesubmit', 'review');
       localStorage.setItem('StartAt', record.startedAt);
       localStorage.setItem('submissionId', record.id);
-      localStorage.setItem('duration', record.exam.duration);
+      
       setTimeout(() => {
         navigate('/exam/' + record.id + '/submit');
       }, 1000);

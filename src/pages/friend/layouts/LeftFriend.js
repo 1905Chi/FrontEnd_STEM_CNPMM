@@ -48,9 +48,11 @@ export default function LeftFriend() {
 					console.log(response.data.result)
 					 response.data.result.forEach((element) => {
 						if (element.status === 'PENDING'){
-						setFriendPending([...friendPending, element]);
-						console.log(element)
-						data=[...data,element]
+							const friend= friendPending
+							friend.push(element)
+						setFriendPending(friend);
+						
+						data=data.push(element)
 
 						}
 					});

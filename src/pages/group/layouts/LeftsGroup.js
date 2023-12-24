@@ -47,18 +47,24 @@ const LeftsGroup = () => {
 				if (response.data.statusCode === 200) {
 					response.data.result.GROUP_ADMIN.forEach((element) => {
 						if (element.isClass === false) {
-							setGroupManage([...groupManage, element]);
+							const group = groupManage
+							group.push(element)
+							setGroupManage(group);
 						}
 					});
 					response.data.result.GROUP_MEMBER.forEach((element) => {
 						if (element.isClass === false) {
-							setGroupJoin([...groupJoin, element]);
+							const group = groupCreate
+							group.push(element)
+							setGroupJoin(group);
 						}
 						
 					});
 					response.data.result.GROUP_OWNER.forEach((element) => {
 						if (element.isClass === false) {
-							setGroupCreate([...groupCreate, element]);
+							const group = groupCreate
+							group.push(element)
+							setGroupCreate( group);
 						}
 						
 					});

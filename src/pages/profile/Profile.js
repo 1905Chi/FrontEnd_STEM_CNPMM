@@ -88,16 +88,16 @@ export default function Profile() {
 					<div className="cover-photo">
 						<img src={coverPhoto} alt="Cover Photo" />
 					</div>
-					<button className="cover-picture__button" style={{ height: '40px' }} onClick={setEditCoverPhoto}>
+					<button className="cover-picture-self__button" style={{ height: '40px' }} onClick={setEditCoverPhoto}>
 						<AiFillCamera style={{ fontSize: '30px', margin: '0 0 0 5px', color: 'white' }}></AiFillCamera>
 						<span style={{ fontSize: '15px', color: 'white', margin: '0 5px 0 0' }}>Chỉnh sửa ảnh bìa</span>
 					</button>
 				</div>
 				<div style={{position:'relative'}}>
-					<div className="profile-picture">
+					<div className="profile-picture-self">
 						<img src={avatar} alt="Profile Picture" />
 					</div>
-					<button className="profile-picture__button" style={{ height: '40px' }} onClick={setEditAvatar}>
+					<button className="profile-picture-self__button" style={{ height: '40px' }} onClick={setEditAvatar}>
 						<AiFillCamera style={{ fontSize: '30px', color: 'white' }}></AiFillCamera>
 					</button>
 					<div className="usename-button">
@@ -108,17 +108,7 @@ export default function Profile() {
 						</span>
 					</div>
 				</div>
-				<div
-					style={{
-						display: 'flex',
-						justifyContent: 'start',
-						position: 'relative',
-						top: '118px',
-						borderTop: '1px solid #e6e6e6',
-						borderBottom: '1px solid #e6e6e6',
-					}}
-					className="group-menu"
-				></div>
+				
 				{selectedOption === 'introduce' ? (
 					<div className="introduce" style={{ justifyContent: 'center', display: 'flex', marginTop: '8rem' }}>
 						<div style={{ textAlign: 'start' }}>

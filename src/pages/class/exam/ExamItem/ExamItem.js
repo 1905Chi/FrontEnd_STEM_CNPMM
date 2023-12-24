@@ -43,10 +43,12 @@ export default function ExamItem(props) {
 			navigate('/exam/' + id + '/submit');
 		}, 1000);
 	};
-	const ReviewExam = () => {
+	const ReviewExam = (record) => {
 		localStorage.setItem('typesubmit', 'review');
-		localStorage.setItem('StartAt', examId.submission.startedAt);
-		localStorage.setItem('submissionId', examId.submission.id);
+		console.log(record);	
+		console.log(examId);
+		localStorage.setItem('StartAt', examId.submission? examId.submission.startedAt : record.startedAt);
+		localStorage.setItem('submissionId', examId.submission ? examId.submission.id : record.id);
 		localStorage.setItem('duration', examId.exam.duration);
 		setTimeout(() => {
 			navigate('/exam/' + id + '/submit');
@@ -122,10 +124,13 @@ export default function ExamItem(props) {
 						const list = response.data.result.map((item, index) => {
 							return {
 								key: index,
-								authorId: item.authorId,
+								authorId: item.user.id,
 								score: item.score,
 								createdAt: item.createdAt,
 								updatedAt: item.updatedAt,
+								firstName: item.user.firstName,
+								lastName: item.user.lastName,
+								id: item.id,
 							};
 						});
 						setlistsubmit(list);
@@ -207,8 +212,11 @@ export default function ExamItem(props) {
 		},
 		{
 			title: 'Học sinh',
-			dataIndex: 'authorId',
-			key: 'authorId',
+			dataIndex: 'firstName'+'lastName',
+			key: 'firstName' + ' ' + 'lastName',
+			render: (firstName, lastName) =>(
+				<span>{firstName + ' ' + lastName}</span>
+			)
 		},
 		{
 			title: 'Điểm',
@@ -231,7 +239,7 @@ export default function ExamItem(props) {
 			key: 'action',
 			render: (text, record) => (
 				<span>
-					<button className="exam-item__button__start" onClick={ReviewExam}>
+					<button className="exam-item__button__start" onClick={()=>ReviewExam(record)}>
 						Xem
 					</button>
 				</span>

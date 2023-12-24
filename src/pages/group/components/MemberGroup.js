@@ -87,7 +87,7 @@ export default function MemberGroup() {
 						<h3>Yêu cầu tham gia</h3>
 
 						{memberGroupRequest.map((item, index) => (
-							<div className="member-group-request__item" key={item.id}>
+							<div className="member-group-request__item" key={item.id} >
 								<div style={{ display: 'flex', flex: '1' }}>
 									<div className="member-group-request__item__avatar">
 										<Avatar src={item.user.avatarUrl} alt="" />
