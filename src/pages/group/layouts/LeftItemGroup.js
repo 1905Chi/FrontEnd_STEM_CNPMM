@@ -27,12 +27,13 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FaSignsPost } from 'react-icons/fa6';
 import { MdGroups2 } from 'react-icons/md';
-import { Skeleton, Avatar } from 'antd';
+import { Skeleton, Avatar, Input } from 'antd';
 import { Dialog } from 'primereact/dialog';
 import moment from 'moment';
 import { selectFriendInvite, editSelectFriendInvite, selectselectFriendInvite } from '../../../redux/Friend';
 import anh_logo_1 from './../../../assets/images/anh_logo_1.jpg';
 import Loading from '../../../components/Loading';
+import { Edit } from '@material-ui/icons';
 export default function LeftItemGroup() {
 	const { theme } = UseTheme();
 	const [inforGroup, setInforGroup] = useState(null);
@@ -51,6 +52,10 @@ export default function LeftItemGroup() {
 	const selectedOption = useSelector(selectSelectedOption);
 	const [listFriendSearch, setListFriendSearch] = useState([...listfriend]);
 	const listfriendSelected = useSelector(selectselectFriendInvite);
+	const [newName, setNewName] = useState('');
+	const [openEditName, setOpenEditName] = useState(false);
+	const [newDescription, setNewDescription] = useState('');
+	const [openChangeAvatar, setOpenChangeAvatar] = useState(false);
 	const headers = {
 		Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 		'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
@@ -60,15 +65,12 @@ export default function LeftItemGroup() {
 			.then((response) => {
 				if (response.data.statusCode === 200) {
 					toast.success(response.data.message);
-				} 
-				else if(response.data.statusCode === 201){
+				} else if (response.data.statusCode === 201) {
 					toast.success(response.data.message);
 					window.location.reload();
-				}
-				else {
+				} else {
 					toast.error(response.data.message);
 				}
-
 			})
 			.catch((error) => {
 				toast.error(error);
@@ -273,6 +275,80 @@ export default function LeftItemGroup() {
 			setVisible(false);
 		}
 	};
+	const EditNameGroup = () => {
+		setLoading(true);
+		Api.put(
+			url + 'api/v1/groups/' + uuid + 'updateDetail',
+			{
+				name: newName,
+				description: newDescription,
+			},
+			{ headers: headers }
+		)
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					toast.success(response.data.message);
+					setOpenEditName(false);
+
+					setNewName('');
+					setNewDescription('');
+					window.location.reload();
+				} else {
+					toast.error(response.data.message);
+				}
+			})
+			.catch((error) => {
+				toast.error(error);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+	};
+	const [AvartarPicture, setAvartarPicture] = useState(group.avatarUrl);
+	const [selectedFile, setSelectedFile] = useState(null);
+	const openAvatarPictureDialog = () => {
+		document.getElementById('AvartarPictureInput').click();
+	};
+	const handleAvatarPictureChange = (e) => {
+		const file = e.target.files[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = () => {
+				setAvartarPicture(reader.result);
+				setSelectedFile(file);
+			};
+			reader.readAsDataURL(file);
+		}
+	};
+	const UpdateAvatar = () => {
+		const headers = {
+			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+			'Content-Type': 'multipart/form-data',
+		};
+		setLoading(true);
+		let FormData = new FormData();
+		FormData.append('mediaFile', selectedFile);
+		Api.put(url + 'api/v1/groups/' + uuid + '/updateAvatar', FormData, {
+			headers: headers,
+		})
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					toast.success(response.data.message);
+					setAvartarPicture(response.data.result);
+					setSelectedFile(null);
+					window.location.reload();
+				} else {
+					toast.error(response.data.message);
+				}
+			})
+			.catch((error) => {
+				toast.error(error);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
+
+	};
 	return (
 		<>
 			{loading ? <Loading /> : null}
@@ -350,6 +426,100 @@ export default function LeftItemGroup() {
 					</button>
 				</div>
 			</Dialog>
+			<Dialog
+				header="Đổi thông tin nhóm"
+				visible={openEditName}
+				style={{ width: '50vw' }}
+				onHide={() => {
+					setOpenEditName(false);
+					setNewName('');
+					setNewDescription('');
+				}}
+			>
+				<div className="p-fluid">
+					<div className="p-field">
+						<Input
+							value={newName}
+							onChange={(e) => {
+								setNewName(e.target.value);
+							}}
+							placeholder={group.name}
+						/>
+						<Input
+							value={newDescription}
+							onChange={(e) => {
+								setNewDescription(e.target.value);
+							}}
+							placeholder={group.description}
+						/>
+					</div>
+				</div>
+				<Button
+					type="primary"
+					style={{ width: '10rem', marginTop: '1rem' }}
+					onClick={() => {
+						EditNameGroup();
+					}}
+				>
+					Lưu
+				</Button>
+			</Dialog>
+
+			<Dialog
+				header="Đổi ảnh đại diện "
+				visible={openChangeAvatar}
+				style={{ width: '50vw' }}
+				onHide={() => {
+					setOpenChangeAvatar(false);
+					
+				}}
+			>
+				<div className="p-fluid">
+					<div className="p-field">
+						<div className="anhdaidien">
+							<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+								<h3 style={{ textAlign: 'start', margin: '0 0 0 10px' }}>Ảnh bìa</h3>
+								<button
+									style={{
+										textAlign: 'end',
+										margin: '0 10px 0 0',
+										color: 'blue',
+										backgroundColor: 'white',
+									}}
+									onClick={openAvatarPictureDialog}
+								>
+									Thêm
+								</button>
+							</div>
+							<div className="Cover-picture-edit">
+								<img src={AvartarPicture} alt="Cover Picture" />
+							</div>
+						</div>
+						<div>
+							<input
+								style={{ display: 'none' }}
+								type="file"
+								accept="image/*"
+								onChange={handleAvatarPictureChange}
+								id="AvartarPictureInput"
+							/>
+							<button style={{ margin: '30px 30px', width: '92%' }} onClick={UpdateAvatar}>
+								Lưu
+							</button>
+						</div>
+					</div>
+				</div>
+				<Button
+					type="primary"
+					style={{ width: '10rem', marginTop: '1rem' }}
+					onClick={() => {
+						EditNameGroup();
+					}}
+				>
+					Lưu
+				</Button>
+			</Dialog>
+
 			<div style={{ position: 'relative', borderRight: '0.2px solid black', top: '45px' }}>
 				{memberGroup === null || inforGroup === null ? (
 					<Skeleton />
@@ -514,7 +684,7 @@ export default function LeftItemGroup() {
 					</div>
 				)}
 
-				<ToastContainer style={{zIndex:'1000'}} />
+				<ToastContainer style={{ zIndex: '1000' }} />
 			</div>
 		</>
 	);
