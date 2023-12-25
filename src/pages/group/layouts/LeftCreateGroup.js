@@ -20,7 +20,7 @@ export default function LeftCreateGroup() {
 	const location = useLocation();
 	const { Option } = Select;
 	const isClassesPath = location.pathname.includes('classes');
-	
+	const [grade, setGrade] = useState(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']);
 	const [policyDescription, setPolicyDescription] = useState('');
 	const [subjects, setSubjects] = useState([]);
 	const description = (e) => {
@@ -168,7 +168,7 @@ export default function LeftCreateGroup() {
 								<Form.Item
 									name="subject"
 									rules={[{ required: true, message: 'Vui lòng chọn môn học!' }]}
-									className="form-item-register"
+									className=""
 								>
 									<Select
 										showSearch
@@ -197,7 +197,18 @@ export default function LeftCreateGroup() {
 									},
 								]}
 							>
-								<Input placeholder="Khối" style={{ width: '80%', marginLeft: '20px' }} />
+								<Select
+								showSearch
+								style={{ width: '80%', marginLeft: '20px' }}
+								placeholder="Khối học"
+								optionFilterProp="children"
+							>
+								{grade.map((grade) => (
+									<Option value={grade} key={grade} style={{ color: 'black' }}>
+										{grade}
+									</Option>
+								))}
+							</Select>
 							</Form.Item>
 						) : null}
 						<Form.Item

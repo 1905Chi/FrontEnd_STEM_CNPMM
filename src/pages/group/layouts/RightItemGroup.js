@@ -4,10 +4,12 @@ import './RightItemGroup.css';
 import {useSelector} from 'react-redux';
 import {selectselecteventGroup} from '../../../redux/EventGroup';
 import { selectselectexam } from '../../../redux/Exam';
-
+import { Empty } from 'antd';
 export default function RightItemClass() {
 	const event = useSelector(selectselecteventGroup);
 	const exam= useSelector(selectselectexam);
+	console.log(event);
+	console.log(exam);
 
 	// sự kiện sắp diễn ra
 
@@ -19,13 +21,13 @@ export default function RightItemClass() {
 	// }
 
 	return (
-		<div className='right-class-group'>
+		<div className='right-class-group' style={{height:'99vh', overflowY:'auto', backgroundColor:'white'}}>
 			<div className="Lich">
 				<CalendarAntd />
 			</div>
 			<div className="event-upcoming">
 				<h3>Sự kiện sắp diễn ra</h3>
-				{ event && event.map((event, index) => (
+				{ event && event!== null && event.length>0 ?( event.map((event, index) => (
 						<div className="event-upcoming__item">
 							<div >
 								<div className="event-upcoming__item__title">
@@ -39,7 +41,7 @@ export default function RightItemClass() {
 							</div>
 						
 						</div>
-					))}
+					))): <Empty />}
 			</div>
 		</div>
 	);

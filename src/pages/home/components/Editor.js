@@ -81,19 +81,20 @@ export default function Editor(props) {
 			const stringValue = value.toString();
 			console.log(stringValue);
 			setIsLoading(true);
-			const data = {
-				postId: props.idPost,
-				content: stringValue,
-				
-			}
+			let  data = new FormData();
+			data.append('content',stringValue);
+			data.append('postId',props.idPost);
+		
+
 			const headers = {
 				Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
-				'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
+				'Content-Type': 'multipart/form-data', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
 			};
 			Api.post(url + 'api/v1/comments/commentPost', data, { headers: headers })
 				.then((response) => {
 					if (response.data.statusCode === 200) {
 						toast.success('Bình luận thành công');
+						callapiPost()
 						if(props.homePosts)
 						{
 							props.homePosts();
@@ -161,11 +162,9 @@ export default function Editor(props) {
 			Api.post(url + 'api/v1/posts', data, { headers: headers })
 				.then((response) => {
 					if (response.data.statusCode === 200) {
-						console.log(response.data.post);
+						
 						 callapiPost();
-						setTimeout(() => {
-							toast.success('Đăng bài thành công');
-						}, 1000);
+						toast.success('Đăng bài thành công');			
 						if(props.homePosts)
 						{
 							props.homePosts();

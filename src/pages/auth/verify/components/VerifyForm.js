@@ -326,7 +326,7 @@ export default function VerifyForm(props) {
 					</div>
 					<Form.Item>
 						<Button type="primary" htmlType="submit" className="login-form-button">
-							Xác thực
+							Lưu
 						</Button>
 					</Form.Item>
 				</Form>

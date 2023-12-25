@@ -10,6 +10,7 @@ import { url } from '../../../constants/Constant';
 import Loading from '../../../components/Loading';
 import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
+import "./CreateQuiz.css"
 import { RiArrowGoBackLine } from 'react-icons/ri';
 const CreateQuiz = () => {
 	const [form] = Form.useForm();
@@ -192,7 +193,7 @@ const CreateQuiz = () => {
 										onClick={() => handleEditQuestion(index)}
 									>
 										<lable> Câu hỏi: </lable>
-										<div dangerouslySetInnerHTML={{ __html: value[index] }} />
+										<div dangerouslySetInnerHTML={{ __html: value[index] }}  className='question-content'/>
 									</div>
 
 									<Form.Item name={[name, 'answerType']} valuePropName="checked">

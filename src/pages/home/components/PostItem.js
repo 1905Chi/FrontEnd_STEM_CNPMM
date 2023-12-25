@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 import {ueseSelector, useSelector} from 'react-redux'
 import {selectselctPostHome} from '../../../redux/Group'
 function PostItem(props) {
-	
+	console.log(props)
 	const [myReaction, setMyReaction] = useState(props.reaction);
 	const [isLiked, setIsLiked] = useState(
 		props.reaction !== null &&
@@ -25,11 +25,12 @@ function PostItem(props) {
 			: false
 	); // Trạng thái ban đầu là "không thích"
 	const [isEditPost, setisEditPost] = useState(false); // Trạng thái ban đầu là "không chỉnh sửa"
-	const [contentPost, setContentPost] = useState(props.content);
+	const [contentPost, setContentPost] = useState(null);
+	console.log("contentPost",props.content)
 	const [idComment, setIdComment] = useState(null);
 	const [responseComement, setResponseComement] = useState(false);
 	const [xemthem, setXemthem] = useState(false);
-	const [countReaction, setCountReaction] = useState(props.totalReactions);
+	const [countReaction, setCountReaction] = useState(null);
 
 	const [ListReaction, setListReaction] = useState([
 		{
@@ -105,6 +106,7 @@ function PostItem(props) {
 		}
 		setIsLiked(!isLiked); // Đảo ngược trạng thái khi nút "like" được nhấn
 	}
+
 	const deletePost = () => {
 		const headers = {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
@@ -113,7 +115,8 @@ function PostItem(props) {
 		Api.delete(url + 'api/v1/posts/' + props.id, { headers: headers })
 			.then((response) => {
 				if (response.data.statusCode === 200) {
-					console.log(response.data.result);
+					toast.success(response.data.message);
+					props.callBackApi()
 					if(props.homePosts)
 					{
 						props.homePosts();
@@ -156,7 +159,17 @@ function PostItem(props) {
 				showLessButton.style.display = 'none';
 			}
 		}
-	}, [contentPost]);
+		if (props.content !== null && props.content !== undefined) {
+			setContentPost(props.content);
+		}
+		if (props.reaction !== null && props.reaction !== undefined) {
+			setMyReaction(props.reaction);
+		}
+		if (props.totalReactions !== null && props.totalReactions !== undefined) {
+			setCountReaction(props.totalReactions);
+		}
+		
+	}, [props.content ]);
 	const SeeMore = () => {
 		const contentContainer = document.querySelector('.content' + props.id);
 		const showMoreButton = document.querySelector('#show' + props.id);
@@ -295,7 +308,7 @@ function PostItem(props) {
 				{props?.refUrls && props.refUrls.length > 0 && props.refUrls !== null
 					? props.refUrls.map((item, index) => {
 							if (item !== null) {
-								console.log('item', item);
+								
 								const indexAfterNumbers = item.indexOf('_') + 1;
 								const truncatedFileName = item.slice(indexAfterNumbers);
 								return <LabelFile key={index} type={'docx'} filename={truncatedFileName} link={item} />;
