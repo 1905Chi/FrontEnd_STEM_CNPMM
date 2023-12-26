@@ -235,7 +235,33 @@ function PostItem(props) {
 			),
 		},
 	];
+	const getTypes = (filename) => {
+		const parts = filename.split('.');
 
+		// Lấy phần mở rộng của tệp từ phần tử cuối cùng của mảng
+		const fileExtension = parts[parts.length - 1];
+
+		// Chuyển đổi phần mở rộng thành chữ thường để so sánh dễ dàng hơn
+		const lowerCaseExtension = fileExtension.toLowerCase();
+
+		// Kiểm tra loại file và trả về kết quả tương ứng
+		console.log(lowerCaseExtension);
+		switch (lowerCaseExtension) {
+			case 'pdf':
+				return 'pdf';
+			case 'docx':
+				return 'docx';
+			// Thêm các loại file khác nếu cần thiết
+			case 'doc':
+				return 'doc';
+			case 'ppt':
+				return 'ppt';
+			case 'pptx':
+				return 'pptx';
+			default:
+				return 'other';
+		}
+	};
 	const likeButtonStyle = isLiked ? { color: 'blue' } : {}; // Đổi màu của biểu tượng "like"
 	return (
 		<div className="post-item">
@@ -311,7 +337,9 @@ function PostItem(props) {
 								
 								const indexAfterNumbers = item.indexOf('_') + 1;
 								const truncatedFileName = item.slice(indexAfterNumbers);
-								return <LabelFile key={index} type={'docx'} filename={truncatedFileName} link={item} />;
+								console.log(truncatedFileName)
+								console.log(getTypes(truncatedFileName))
+								return <LabelFile key={index} type={getTypes(truncatedFileName)} filename={truncatedFileName} link={item} />;
 							}
 							return null;
 					  })

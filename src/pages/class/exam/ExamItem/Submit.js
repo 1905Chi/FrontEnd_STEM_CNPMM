@@ -311,7 +311,7 @@ export default function Submit() {
 								</div>
 							</div>
 						))}
-					<button onClick={onFinish}>Submit</button>
+					<button onClick={onFinish}>Nộp bài</button>
 				</div>
 			) : null
 			)}
