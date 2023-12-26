@@ -28,6 +28,8 @@ const menuSlice = createSlice({
     selectPostGroup: (state, action) => {
       state.selectedPostGroup = action.payload;
     },
+    
+    
     editPostGroup: (state, action) => {
       state.selectedPostGroup = state.selectedPostGroup.map((item) => {
         if (item.post.id === action.payload.id) {
@@ -47,7 +49,7 @@ const menuSlice = createSlice({
   },
 });
 
-export const { selectOption,selectOptionProfile ,selectGroupOwner,selectGroupMember,selectPostGroup,editPostGroup , selectPostHome} = menuSlice.actions;
+export const { selectOption,selectOptionProfile ,selectGroupOwner,selectGroupMember,selectPostGroup,editPostGroup , selectPostHome,deleteRaction} = menuSlice.actions;
 export const selectSelectedOption = (state) => state.menu.selectedOption;
 export const selectSelectedOptionProfile = (state) => state.menu.selectedOptionProfile;
 export const selectSelectedGroupOwner = (state) => state.menu.selectedGrouOwner;

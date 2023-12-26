@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './PostItem.css'; // Import tệp CSS
 import { useState } from 'react';
-import { Avatar, Button, Dropdown } from 'antd';
+import { Avatar, Button, Dropdown,Popconfirm  } from 'antd';
 import { BiCommentDetail, BiSolidShare, BiLike } from 'react-icons/bi';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { MdBugReport } from 'react-icons/md';
@@ -12,10 +12,12 @@ import { url } from '../../../constants/Constant';
 import Editor from './Editor';
 import LabelFile from '../../profile/component/LabelFile';
 import { toast } from 'react-toastify';
-import {ueseSelector, useSelector} from 'react-redux'
-import {selectselctPostHome} from '../../../redux/Group'
+import {ueseSelector, useDispatch} from 'react-redux'
+import {selectselctPostHome, deleteRaction} from '../../../redux/Group'
+import { deletequestionChoose } from '../../../redux/Exam';
 function PostItem(props) {
 	console.log(props)
+	const dispatch = useDispatch()
 	const [myReaction, setMyReaction] = useState(props.reaction);
 	const [isLiked, setIsLiked] = useState(
 		props.reaction !== null &&
@@ -31,7 +33,8 @@ function PostItem(props) {
 	const [responseComement, setResponseComement] = useState(false);
 	const [xemthem, setXemthem] = useState(false);
 	const [countReaction, setCountReaction] = useState(null);
-
+	const [open, setOpen] = useState(false);
+	const [confirmLoading, setConfirmLoading] = useState(false);
 	const [ListReaction, setListReaction] = useState([
 		{
 			key: '1',
@@ -59,27 +62,25 @@ function PostItem(props) {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			conttentType: 'application/json',
 		};
-		let data = {
-			postId: props.id,
-			typeName: 'LIKE',
-		};
-		// if (isLiked === false) {
-		// 	data = {
-		// 		postId: props.id,
-		// 		typeName: 'LIKE',
-		// 	};
-		// } else {
-		// 	data = {
-		// 		postId: props.id,
-		// 		typeName: 'DISLIKE',
-		// 	};
-		// }
+		let data
+		if (isLiked === false) {
+			data = {
+				postId: props.id,
+				typeName: 'LIKE',
+			};
+		} else {
+			data = {
+				postId: props.id,
+				typeName: 'DISLIKE',
+			};
+		}
 		if (myReaction) {
-			Api.delete(url + `api/v1/reactions/${myReaction.id}`, { headers: headers })
+			Api.put(url + `api/v1/reactions` , data,{ headers: headers })
 				.then((response) => {
 					if (response.data.statusCode === 200) {
 						toast.success(response.data.message);
 						setCountReaction(response.data.result.count);
+						props.callBackApi()
 						setMyReaction(null);
 					} else {
 						console.log(response.error);
@@ -95,6 +96,7 @@ function PostItem(props) {
 						toast.success(response.data.message);
 						setCountReaction(response.data.result.count);
 						setMyReaction(response.data.result.reaction);
+						props.callBackApi()
 						
 					} else {
 						console.log(response.error);
@@ -108,6 +110,7 @@ function PostItem(props) {
 	}
 
 	const deletePost = () => {
+		setConfirmLoading(true);
 		const headers = {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			conttentType: 'application/json',
@@ -116,6 +119,9 @@ function PostItem(props) {
 			.then((response) => {
 				if (response.data.statusCode === 200) {
 					toast.success(response.data.message);
+					setConfirmLoading(false);
+					setOpen(false)
+
 					props.callBackApi()
 					if(props.homePosts)
 					{
@@ -201,17 +207,26 @@ function PostItem(props) {
 		}
 		setXemthem(false);
 	};
-
+	const handleOpenConfirm = () => {
+		setOpen(true);
+	  };
+	
+	  const handleCancel = () => {
+		setOpen(false);
+	  };
 	const items = [
 		{
 			key: '1',
 			label: (
-				<div style={{ font: '15px' }} onClick={deletePost}>
+				<div style={{ font: '15px' }}>
 					{props.authorId === JSON.parse(localStorage.getItem('user')).id ? (
-						<div>
-							<RiDeleteBin6Fill style={{ color: 'red', fontSize: '15px' }} />
+						
+						<div onClick={deletePost}>
+							<RiDeleteBin6Fill style={{ color: 'red', fontSize: '15px' }}  />
 							<span style={{ fontSize: '15px' }}>Xóa bài đăng</span>
 						</div>
+					 
+						
 					) : (
 						<div>
 							<MdBugReport style={{ color: 'red' }} />
@@ -346,17 +361,9 @@ function PostItem(props) {
 					: null}
 			</div>
 			<div>
-				<Dropdown
-					menu={{
-						items,
-					}}
-					placement="bottomRight"
-					arrow={{
-						pointAtCenter: true,
-					}}
-				>
+				
 					<Button style={{ backgroundColor: 'white', border: 'none' }}>{countReaction} likes</Button>
-				</Dropdown>
+				
 			</div>
 
 			<div className="post-actions">
@@ -409,9 +416,9 @@ function PostItem(props) {
 								/>
 							</div>
 							<div className="react-post">
-								<button>Thích</button>
-								{/* //	<button onClick={repComent(comment[comment.length-1].content )}>Phản hồi</button> */}
-								<button>Phản hồi</button>
+								{/* <button>Thích</button>
+								
+								<button>Phản hồi</button> */}
 							</div>
 						</div>
 					</div>
@@ -440,10 +447,10 @@ function PostItem(props) {
 										}}
 									/>
 								</div>
-								<div className="react-post">
+								{/* <div className="react-post">
 									<button>Thích</button>
 									<button>Phản hồi</button>
-								</div>
+								</div> */}
 							</div>
 						</div>
 					))}
