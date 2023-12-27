@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import LableGroup from './../components/LableGroup';
-import { Button, Checkbox } from 'antd';
+import { Button, Checkbox, Dropdown } from 'antd';
 import './LeftItemGroup.css';
 import { BsFillCalendar2WeekFill } from 'react-icons/bs';
 import { InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
@@ -34,6 +34,8 @@ import { selectFriendInvite, editSelectFriendInvite, selectselectFriendInvite } 
 import anh_logo_1 from './../../../assets/images/anh_logo_1.jpg';
 import Loading from '../../../components/Loading';
 import { Edit } from '@material-ui/icons';
+import { MdDriveFileRenameOutline } from "react-icons/md";
+import { CiCamera } from "react-icons/ci";
 export default function LeftItemGroup() {
 	const { theme } = UseTheme();
 	const [inforGroup, setInforGroup] = useState(null);
@@ -86,8 +88,7 @@ export default function LeftItemGroup() {
 				}
 			});
 	};
-
-	useEffect(() => {
+	const getGroup = () => {
 		Api.get(url + 'api/v1/groups/' + uuid, { headers: headers })
 			.then((response) => {
 				if (response.data.statusCode === 200) {
@@ -124,6 +125,9 @@ export default function LeftItemGroup() {
 					}, 2000);
 				}
 			});
+	};
+	useEffect(() => {
+		getGroup();
 		Api.get(url + 'api/v1/group-members?groupId=' + uuid, { headers: headers })
 			.then((response) => {
 				if (response.data.statusCode === 200) {
@@ -275,10 +279,23 @@ export default function LeftItemGroup() {
 			setVisible(false);
 		}
 	};
+	const items = [
+		{
+			key:'1',
+			label:(<div style={{display:'flex',alignItems:'center'}} onClick={()=>{setOpenEditName(true)}}><MdDriveFileRenameOutline style={{marginRight:'10px'}}/>Đổi thông tin nhóm</div>),
+			
+		},
+		{
+			key:'2',
+			label: (<div style={{display:'flex',alignItems:'center'}} onClick={()=>{setOpenChangeAvatar(true)}}><CiCamera style={{marginRight:'10px'}}/>Đổi ảnh đại diện</div>),
+			
+			
+		},
+	];
 	const EditNameGroup = () => {
 		setLoading(true);
 		Api.put(
-			url + 'api/v1/groups/' + uuid + 'updateDetail',
+			url + 'api/v1/groups/' + uuid + '/updateDetail',
 			{
 				name: newName,
 				description: newDescription,
@@ -309,8 +326,8 @@ export default function LeftItemGroup() {
 	const openAvatarPictureDialog = () => {
 		document.getElementById('AvartarPictureInput').click();
 	};
-	const handleAvatarPictureChange = (e) => {
-		const file = e.target.files[0];
+	const handleAvatarPictureChange = (event) => {
+		const file = event.target.files[0];
 		if (file) {
 			const reader = new FileReader();
 			reader.onload = () => {
@@ -326,9 +343,9 @@ export default function LeftItemGroup() {
 			'Content-Type': 'multipart/form-data',
 		};
 		setLoading(true);
-		let FormData = new FormData();
-		FormData.append('mediaFile', selectedFile);
-		Api.put(url + 'api/v1/groups/' + uuid + '/updateAvatar', FormData, {
+		let data = new FormData();
+		data.append('mediaFile', selectedFile);
+		Api.put(url + 'api/v1/groups/' + uuid + '/updateAvatar', data, {
 			headers: headers,
 		})
 			.then((response) => {
@@ -347,7 +364,6 @@ export default function LeftItemGroup() {
 			.finally(() => {
 				setLoading(false);
 			});
-
 	};
 	return (
 		<>
@@ -427,7 +443,7 @@ export default function LeftItemGroup() {
 				</div>
 			</Dialog>
 			<Dialog
-				header="Đổi thông tin nhóm"
+				header= {<div style={{ textAlign: "center", fontWeight: "bold", fontSize: "1.5em" }}>Đổi thông tin</div>}
 				visible={openEditName}
 				style={{ width: '50vw' }}
 				onHide={() => {
@@ -437,21 +453,31 @@ export default function LeftItemGroup() {
 				}}
 			>
 				<div className="p-fluid">
-					<div className="p-field">
+					<div className="p-field" style={{textAlign:'center'}}>
+						<div style={{display:'flex', marginTop:'2rem'}}>
+						<label >Tên nhóm</label>
 						<Input
 							value={newName}
+							label="Tên nhóm"
 							onChange={(e) => {
 								setNewName(e.target.value);
 							}}
 							placeholder={group.name}
+							style={{ marginBottom: '1rem' , width:'80%', marginLeft:'1.2rem'}}
 						/>
+						</div>
+						<div style={{display:'flex'}}>
+						<label htmlFor="description">Mô tả</label>
 						<Input
 							value={newDescription}
+							label="Mô tả"
 							onChange={(e) => {
 								setNewDescription(e.target.value);
 							}}
 							placeholder={group.description}
+							style={{ marginBottom: '1rem', width:'80%' , marginLeft:'3rem'}}
 						/>
+						</div>
 					</div>
 				</div>
 				<Button
@@ -466,12 +492,11 @@ export default function LeftItemGroup() {
 			</Dialog>
 
 			<Dialog
-				header="Đổi ảnh đại diện "
+				header= {<div style={{ textAlign: "center", fontWeight: "bold", fontSize: "1.5em" }}>Đổi ảnh đại diện</div>}
 				visible={openChangeAvatar}
 				style={{ width: '50vw' }}
 				onHide={() => {
 					setOpenChangeAvatar(false);
-					
 				}}
 			>
 				<div className="p-fluid">
@@ -484,7 +509,7 @@ export default function LeftItemGroup() {
 										textAlign: 'end',
 										margin: '0 10px 0 0',
 										color: 'blue',
-										backgroundColor: 'white',
+										backgroundColor:'blanchedalmond'
 									}}
 									onClick={openAvatarPictureDialog}
 								>
@@ -503,9 +528,7 @@ export default function LeftItemGroup() {
 								onChange={handleAvatarPictureChange}
 								id="AvartarPictureInput"
 							/>
-							<button style={{ margin: '30px 30px', width: '92%' }} onClick={UpdateAvatar}>
-								Lưu
-							</button>
+						
 						</div>
 					</div>
 				</div>
@@ -513,7 +536,7 @@ export default function LeftItemGroup() {
 					type="primary"
 					style={{ width: '10rem', marginTop: '1rem' }}
 					onClick={() => {
-						EditNameGroup();
+						UpdateAvatar();
 					}}
 				>
 					Lưu
@@ -665,16 +688,22 @@ export default function LeftItemGroup() {
 												<AiOutlineUsergroupAdd className="icon-option-group" size={20} />
 												<span className="option-label-group">Quản lý thành viên</span>
 											</div>
-											<div
-												className={`custom-option-group ${
-													selectedOption === 'manager-group' ? 'active' : ''
-												}`}
-												onClick={() => {
-													dispatch(selectOption('manager-group'));
-												}}
-											>
-												<HiInformationCircle className="icon-option-group" size={20} />
-												<span className="option-label-group">Quản lý nhóm</span>
+											<div>
+												<Dropdown
+													menu={{
+														items,
+													}}
+													placement="TopRight"
+													arrow={{
+														pointAtCenter: true,
+													}}
+													style={{ border: 'none', flex: 1 }}
+												>
+													<button style={{backgroundColor:'white', width:'94%',textAlign:'start'}}>
+														<HiInformationCircle className="icon-option-group" size={20}  />
+														<span className="option-label-group">Quản lý nhóm</span>
+													</button>
+												</Dropdown>
 											</div>
 										</div>
 									) : null}
