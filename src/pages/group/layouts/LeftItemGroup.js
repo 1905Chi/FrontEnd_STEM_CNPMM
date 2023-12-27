@@ -94,6 +94,7 @@ export default function LeftItemGroup() {
 				if (response.data.statusCode === 200) {
 					if (response.data.result.user) {
 						setRole(response.data.result.user.role);
+						localStorage.setItem('roleGroup', response.data.result.user.role);
 					}
 
 					setGroup(response.data.result.group);
