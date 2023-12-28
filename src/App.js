@@ -4,7 +4,7 @@ import { useState } from 'react';
 import DefaultLayout from './layouts/DefaultLayout';
 import DefaultLayoutLogin from './layouts/DefaultLayoutLogin';
 import DefaultLayoutTwoPage from './layouts/DefaultLayoutTwoPage';
-import { publicRoutes, privateRoutes, notFoundRoute, privateRoutes2page ,private1page} from './routes/index';
+import { publicRoutes, privateRoutes, notFoundRoute, privateRoutes2page ,private1page,publicRoutes2} from './routes/index';
 import { useEffect, useRef } from 'react';
 import Topbar from './components/Topbar';
 import Footer from './components/Footer';
@@ -119,7 +119,29 @@ export default function App() {
 								}
 							/>
 						);
+					})},
+					{publicRoutes2.map((route, index) => {
+						const Page = route.component;
+						const Left = route.Left;
+
+						return (
+							<Route
+								key={index}
+								path={route.path}
+								element={
+									
+										<>
+										<DefaultLayoutTwoPage setIsLogin={setIsLogin} Left={<Left />}>
+											<Page />
+										</DefaultLayoutTwoPage>
+										
+										</>
+									
+								}
+							/>
+						);
 					})}
+
 					,
 					{private1page.map((route, index) => {
 						const Page = route.component;

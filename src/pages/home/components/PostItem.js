@@ -15,7 +15,9 @@ import { toast } from 'react-toastify';
 import {ueseSelector, useDispatch} from 'react-redux'
 import {selectselctPostHome, deleteRaction} from '../../../redux/Group'
 import { deletequestionChoose } from '../../../redux/Exam';
+import { useNavigate } from 'react-router-dom';
 function PostItem(props) {
+	const navigate = useNavigate();
 	console.log(props)
 	const dispatch = useDispatch()
 	const [myReaction, setMyReaction] = useState(props.reaction);
@@ -58,6 +60,17 @@ function PostItem(props) {
 	}
 
 	function handleLike() {
+		if(localStorage.getItem('user')===null )
+		{
+			toast.error('Bạn cần đăng nhập để thực hiện chức năng này');
+			return;
+		}
+		else if(props.id === null || props.id === undefined)
+		{	
+			toast.error('Không thể thực hiện chức năng này bên ngoài nhóm/lớp');
+			return;
+
+		}
 		const headers = {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			conttentType: 'application/json',
@@ -141,6 +154,16 @@ function PostItem(props) {
 		setisEditPost(!isEditPost); //
 	}
 	function openComment() {
+		if(localStorage.getItem('user')===null)
+		{
+			toast.error('Bạn cần đăng nhập để thực hiện chức năng này');
+			return;
+		}
+		if(props.id === null || props.id === undefined)
+		{
+			toast.error('Không thể thực hiện chức năng này bên ngoài nhóm/lớp');
+			return;
+		}
 		setResponseComement(!responseComement);
 	}
 	function repComent(id) {
@@ -219,7 +242,7 @@ function PostItem(props) {
 			key: '1',
 			label: (
 				<div style={{ font: '15px' }}>
-					{props.authorId === JSON.parse(localStorage.getItem('user')).id ? (
+					{JSON.parse(localStorage.getItem('user')) && props.authorId === JSON.parse(localStorage.getItem('user')).id ? (
 						
 						<div onClick={deletePost}>
 							<RiDeleteBin6Fill style={{ color: 'red', fontSize: '15px' }}  />
@@ -240,7 +263,7 @@ function PostItem(props) {
 			key: '2',
 			label: (
 				<div style={{ font: '15px' }} onClick={EditPost}>
-					{props.authorId === JSON.parse(localStorage.getItem('user')).id ? (
+					{JSON.parse(localStorage.getItem('user')) && props.authorId === JSON.parse(localStorage.getItem('user')).id ? (
 						<div>
 							<EditOutlined style={{ color: 'red', fontSize: '15px' }} />
 							<span style={{ fontSize: '15px' }}>Chỉnh sửa bài đăng</span>
@@ -301,7 +324,12 @@ function PostItem(props) {
 					<Avatar
 						src={props.authorAvatar}
 						onClick={() => {
-							window.location.href = '/profile/' + props.authorId;
+							if(localStorage.getItem('user')===null)
+							{
+								toast.error('Bạn cần đăng nhập để xem thông tin người dùng này');
+								return;
+							}
+							  navigate('/profile/' + props.authorId);
 						}}
 					/>
 				</div>

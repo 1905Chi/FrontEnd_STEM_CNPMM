@@ -18,13 +18,12 @@ export default function LeftSearch() {
 	const location = useLocation();
 
 	const searchParams = new URLSearchParams(location.search);
-	const searchValue = searchParams.get('search');
+	const searchValue = searchParams.get('query');
 	useEffect(() => {
 		dispatch(selectOption('all'));
-	/// bài viết
+		/// bài viết
 		Api.get(url + 'api/v1/posts/search?query=' + searchValue)
 			.then((res) => {
-				
 				dispatch(selectpost(res.data));
 				console.log(res.data);
 			})
@@ -62,14 +61,23 @@ export default function LeftSearch() {
 			};
 
 			const validateFriendshipPromises = usersResponse.data.map(async (user) => {
-				try {
-					const friendshipResponse = await Api.get(url + 'api/v1/friendships/validate?friendId=' + user.id, {
-						headers,
-					});
-					const isFriend = friendshipResponse.data.result === true ? 1 : 0; // 1 đã kết bạn , 0 chưa kết bạn
-					return { ...user, isFriend };
-				} catch (err) {
-					console.error(err);
+				if (localStorage.getItem('user') !== null) {
+					try {
+						const friendshipResponse = await Api.get(
+							url + 'api/v1/friendships/validate?friendId=' + user.id,
+							{
+								headers,
+							}
+						);
+						const isFriend = friendshipResponse.data.result === true ? 1 : 0; // 1 đã kết bạn , 0 chưa kết bạn
+						return { ...user, isFriend };
+					} catch (err) {
+						console.error(err);
+						return { ...user, isFriend: 2 }; // chưa đăng nhập
+					}
+				}
+				else
+				{
 					return { ...user, isFriend: 2 }; // chưa đăng nhập
 				}
 			});

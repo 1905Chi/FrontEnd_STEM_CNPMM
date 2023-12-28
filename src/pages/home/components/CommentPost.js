@@ -14,6 +14,15 @@ export default function CommentPost({user,idPost, homePosts}) {
 	const [value, setValue] = useState('');
 	const [showEditor, setShowEditor] = useState(false);
 const openEditor = () => {
+	console.log(idPost);
+	if(localStorage.getItem('user')===null){
+		toast.error('Bạn cần đăng nhập để thực hiện chức năng này');
+		return;
+	}
+	else if(idPost===null || idPost===undefined){
+		toast.error('Bạn không thể thực hiện chức năng này ngoài nhóm /lớp');
+		return;
+	}
 		setShowEditor(true);
 		
 

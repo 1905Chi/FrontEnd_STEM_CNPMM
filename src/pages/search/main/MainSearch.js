@@ -32,6 +32,10 @@ export default function MainSearch() {
 	
 	const user = JSON.parse(localStorage.getItem('user'));
 	const Requestfriend = async (id) => {
+		if(user===null){
+			toast.error('Bạn cần đăng nhập để thực hiện chức năng này');
+			return;
+		}
 		const headers = {
 			'Content-Type': 'application/json',
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
@@ -78,6 +82,10 @@ export default function MainSearch() {
 	//         }
 	//     }
 	const requestParent = async (id) => {
+		if(user===null){
+			toast.error('Bạn cần đăng nhập để thực hiện chức năng này');
+			return;
+		}
 		Api.post(url + 'api/v1/relationships' , {studentId:id}, {
 			'Content-Type': 'application/json',
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
@@ -146,6 +154,10 @@ export default function MainSearch() {
 										{item.isFriend === 1 ? (
 											<button
 												onClick={() => {
+													if(localStorage.getItem('user')===null){
+														toast.error('Bạn cần đăng nhập để thực hiện chức năng này');
+														return;	
+													}
 													navigate('/profile/' + item.id);
 												}}
 											>
@@ -155,9 +167,8 @@ export default function MainSearch() {
 											<button onClick={() => Requestfriend(item.id)}>Thêm bạn</button>
 										) : item.isFriend === -1 ? (
 											<button>Đã gửi lời mời</button>
-										) : null}
-										{(item.role === 'STUDENT' && ( user.role === 'PARENT' || user.role==='TEACHER')) ||
-										(item.role === 'STUDENT' && (localStorage.getItem('role') === 'PARENT')  || localStorage.getItem('role')==='TEACHER')? (
+										) : <button>Chưa đăng nhập</button>}
+										{(item.role === 'STUDENT' && (user!==null && (user.role === 'PARENT' || user.role==='TEACHER'))) 										? (
 											<button onClick={() => requestParent(item.id)}>Phụ huynh- học sinh</button>
 										) : null}
 									</div>
@@ -203,6 +214,10 @@ export default function MainSearch() {
 										{item.isFriend === 1 ? (
 											<button
 												onClick={() => {
+													if(localStorage.getItem('user')===null){
+														toast.error('Bạn cần đăng nhập để thực hiện chức năng này');
+														return;	
+													}
 													navigate('/profile/' + item.id);
 												}}
 											>
@@ -212,10 +227,9 @@ export default function MainSearch() {
 											<button onClick={() => Requestfriend(item.id)}>Thêm bạn</button>
 										) : item.isFriend === -1 ? (
 											<button>Đã gửi lời mời</button>
-										) : null}
-										{(item.role === 'STUDENT' && ( user.role === 'PARENT' || user.role==='TEACHER')) ||
-										(item.role === 'STUDENT' && (localStorage.getItem('role') === 'PARENT')  || localStorage.getItem('role')==='TEACHER')? (
-											<button onClick={() => requestParent(item.id)}>phụ huynh- học sinh</button>
+										) : <button>Chưa đăng nhập</button>}
+										{(item.role === 'STUDENT' && (user!==null && (user.role === 'PARENT' || user.role==='TEACHER'))) 										? (
+											<button onClick={() => requestParent(item.id)}>Phụ huynh- học sinh</button>
 										) : null}
 									</div>
 								))}
