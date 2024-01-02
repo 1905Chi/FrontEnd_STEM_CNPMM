@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 import { selectSelectedPostGroup } from '../../../redux/Group';
 export default function Editor(props) {
 	const [value, setValue] = useState(props.data || '');
+	console.log(props);
 	const { uuid } = useParams();
 	const headers = {
 		Authorization: 'Bearer ' + localStorage.getItem('accessToken'),

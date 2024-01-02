@@ -4,30 +4,113 @@ import { CloseOutlined } from '@ant-design/icons';
 import LabelFile from '../../profile/component/LabelFile';
 import { DownOutlined } from '@ant-design/icons';
 import AddFile from '../../class/components/AddFile';
-import { selectSelectedPostGroup } from '../../../redux/Group';
-import { useSelector } from 'react-redux';
+import { selectSelectedPostGroup ,} from '../../../redux/Group';
+import { useSelector, useDispatch } from 'react-redux';
 import './Document.css';
 import Loading from '../../../components/Loading';
 import { selectselectMemberGroup } from '../../../redux/MemberGroup';
+import moment from 'moment';
+import { selectOptionSearchDocementbyDate, selectOptionSearchDocumentbyName,selectOptionSearchDocumentbySender,selectOptionSearchDocumentbyType } from '../../../redux/Group';
+import { selectSelectOptionSearchDocementbyDate,selectSelectOptionSearchDocumentbyName, selectSelectOptionSearchDocumentbySender, selectSelectOptionSearchDocumentbyType } from '../../../redux/Group';
 export default function DocumentGroup() {
 	const [isShowAllFile, setIsShowAllFile] = useState(false);
+	const  dispatch = useDispatch();
 	const [loading, setLoading] = useState(false);
 	const { Option } = Select;
 	const { Search } = Input;
 	const { RangePicker } = DatePicker;
 	const [visible, setVisible] = useState(false);
 	const [isopenAddFile, setIsopenAddFile] = useState(false);
-	const [rangetime, setrangtime] = useState();
-	const [type, setType] = useState('all');
-	const [sender, setSender] = useState('all');
-	const [search, setSearch] = useState([]);
 	const member = useSelector(selectselectMemberGroup);
 	const [searchQuery, setSearchQuery] = useState('');
 
+	const searchName = useSelector(selectSelectOptionSearchDocumentbyName);
+	const searchType = useSelector(selectSelectOptionSearchDocumentbyType);
+	const searchSender = useSelector(selectSelectOptionSearchDocumentbySender);
+	const searchDate = useSelector(selectSelectOptionSearchDocementbyDate);
+	
+	
+	///
+	const [post,setPost] =useState( useSelector(selectSelectedPostGroup).posts);
+	
+	const [search,setSearch] = useState([]);
+	const [file, setFile] = useState([]);
+	useEffect(()=>{
+		Filter();
+	},[searchName,searchType,searchSender,searchDate]);
+
+	const Filter=()=>{
+		if((searchName=== null|| searchName===''|| searchName=== undefined) && (searchType===null || searchType=== 'all') && (searchSender===null|| searchSender==='all') && searchDate===null ){
+			setFile(search);
+			return;
+		}
+		var postFilter=search;
+		if(searchName!==null && searchName!==''){
+			postFilter=postFilter.filter((item)=>{
+				return item.filename.includes(searchName);
+			});
+		}
+		if(searchType!==null && searchType!=='all'){
+			if(searchType==='all'){
+				postFilter=postFilter.filter((item)=>{
+					return item.type==='doc' || item.type==='docx' || item.type==='pdf' || item.type==='ppt' || item.type==='pptx';
+				});
+			}
+			else if(searchType==="doc"){
+				postFilter=postFilter.filter((item)=>{
+					return item.type==='doc' || item.type==='docx';
+				});
+			}
+			else if(searchType==="pdf"){
+				postFilter=postFilter.filter((item)=>{
+					return item.type==='pdf';
+				});
+			}
+			else if(searchType==="ppt"){
+				postFilter=postFilter.filter((item)=>{
+					return item.type==='ppt' || item.type==='pptx';
+				});
+			}
+			else if(searchType==="other"){
+				postFilter=postFilter.filter((item)=>{
+					return item.type!=='doc' && item.type!=='docx' && item.type!=='pdf' && item.type!=='ppt' && item.type!=='pptx';
+				});
+			}
+			
+		}
+		if(searchSender!==null && searchSender!=='all'){
+			postFilter=postFilter.filter((item)=>{
+				return item.sender===searchSender;
+			});
+		}
+		if(searchDate!==null && searchDate.length>0){
+			postFilter=postFilter.filter((item)=>{
+				return checktime(searchDate[0],item.createdAt,searchDate[1]);
+			});
+		}
+		console.log("postFilter",postFilter);
+		
+		let setKetQua= new Set(postFilter);
+		postFilter=Array.from(setKetQua);
+		console.log("postFilter",postFilter);
+		//setPost(postFilter);
+		setFile(postFilter);
+
+	}
+
+	const checktime = (startedAt, now, endedAt) => {
+		const startTime = moment(startedAt, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
+		const endTime = moment(endedAt, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
+		const nowTime = moment(now, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
+		if (nowTime > startTime && nowTime < endTime) {
+			return true;
+		}
+		return false;
+	}
 	const openAddFile = () => {
 		setIsopenAddFile(!isopenAddFile);
 	};
-	const [file, setFile] = useState([]);
+	
 
 	const handleFile = () => {
 		setIsShowAllFile(!isShowAllFile);
@@ -35,8 +118,9 @@ export default function DocumentGroup() {
 	const handleDateChange = (value, dateString) => {
 		console.log('Selected Time: ', value);
 		console.log('Formatted Selected Time: ', dateString);
+		dispatch(selectOptionSearchDocementbyDate(dateString));
 	};
-	const post = useSelector(selectSelectedPostGroup).posts;
+	
 
 	const getTypes = (filename) => {
 		const parts = filename.split('.');
@@ -64,81 +148,11 @@ export default function DocumentGroup() {
 				return 'other';
 		}
 	};
-	const changType = (value) => {
+
+
+	
 		
-		console.log(value);
-		let SearchFile=file;
-		if(searchQuery==='' && type==='all' && sender==='all'){
-			setFile(search);
-		}
-		if(value!=='all'){
-			if(value==='doc'){
-				console.log('doc');
-				SearchFile.filter((item) => {
-					return item.type==='doc'||item.type==='docx';
-				})
-			}
-			
-			if(value==='pdf') {
-				SearchFile.filter((item) => {
-					return item.type==='pdf';
-				})
-			}
-			if(value==='ppt'){
-				SearchFile.filter((item) => {
-					return item.type==='ppt'||item.type==='pptx';
-				})
-			}
-			if(value==='other'){
-				SearchFile.filter((item) => {
-					return item.type!=='ppt'&&item.type!=='pptx'&&item.type!=='pdf'&&item.type!=='doc'&&item.type!=='docx';
-				})
-			}
-			
-
-		}
-		const uniqueArray = [...new Set(SearchFile)];
-
-		console.log(uniqueArray);
-
-		
-	};
-	const changMember = (value) => {
-		let SearchFile=file;
-		console.log(value);
-		if(searchQuery==='' && type==='all' && sender==='all'){
-			setFile(search);
-		}
-		if(value!=='all'){
-			SearchFile.filter((item) => {
-				return item.sender===sender;
-			})
-		}
-		const uniqueArray = [...new Set(SearchFile)];
-		setFile(uniqueArray);
-
-		console.log(uniqueArray);
-	}
-
-	const handleSearchChange = (e) => {
-		
-		
-	  let SearchFile=file;
-		console.log(e.target.value);
-		
-		if(searchQuery==='' && type==='all' && sender==='all'){
-			setFile(search);
-		}
-
-		if(searchQuery!==''){
-			SearchFile.filter((item) => {
-				return item.filename.toLowerCase().includes(e.target.value.toLowerCase());
-			})
-		}
-		const uniqueArray = [...new Set(SearchFile)];
-		setFile(uniqueArray);
-		console.log(uniqueArray);
-	  };
+	 
 
 
 
@@ -152,6 +166,7 @@ export default function DocumentGroup() {
 						const truncatedFileName = item1.slice(indexAfterNumbers);
 						var files = {
 							type: getTypes(truncatedFileName),
+							createdAt: item.post.createdAt,
 							link: item1,
 							filename: truncatedFileName,
 							sender: item.post.authorId,
@@ -201,14 +216,17 @@ export default function DocumentGroup() {
 			</div>
 			{isShowAllFile ? (
 				<div className="file-show-all">
-					{/* <div className="document-group-search">
+					<div className="document-group-search">
 						<div style={{ width: '83%', margin: '50px' }}>
 							<Search
 								placeholder="Tìm kiếm tài liệu"
 								style={{ borderRadius: '50px' }}
-								onChange={(e) => {handleSearchChange(e)
-								setSearchQuery(e.target.value)}}
+								onChange={(e) => {
+									setSearchQuery(e.target.value);
+								dispatch(selectOptionSearchDocumentbyName(e.target.value));
+							}}
 								value={searchQuery}
+								
 							/>
 						</div>
 						<div className="search-file">
@@ -216,8 +234,8 @@ export default function DocumentGroup() {
 								style={{ width: '30%', marginLeft: '15px' }}
 								placeholder="Loại"
 								onChange={(value) => {
-									setType(value);
-									changType(value);
+									
+									dispatch(selectOptionSearchDocumentbyType(value));
 								}}
 							>
 								<Option value="all">Tất cả</Option>
@@ -229,8 +247,8 @@ export default function DocumentGroup() {
 								style={{ width: '30%', marginLeft: '15px' }}
 								placeholder="Người gửi"
 								onChange={(value) => {
-									setSender(value);
-									changMember(value);
+									dispatch(selectOptionSearchDocumentbySender(value));
+									
 								}}
 							>
 								<Option value="all">Tất cả</Option>
@@ -247,6 +265,9 @@ export default function DocumentGroup() {
 								visible={visible}
 								onVisibleChange={(v) => setVisible(v)}
 								trigger={['click']}
+								onChange={(value) => {
+									dispatch(selectOptionSearchDocementbyDate(value));
+								}}
 								style={{ width: '30%', marginLeft: '15px' }}
 							>
 								<Button style={{ marrginLeft: '15px', marginRight: '30px' }}>
@@ -254,7 +275,7 @@ export default function DocumentGroup() {
 								</Button>
 							</Dropdown>
 						</div>
-					</div> */}
+					</div>
 					<div className="document-group-content document-group-content-allfile">
 						{file.map((file, index) => {
 							return <LabelFile type={file.type} filename={file.filename} link={file.link}></LabelFile>;

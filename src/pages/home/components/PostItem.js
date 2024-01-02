@@ -432,14 +432,14 @@ function PostItem(props) {
 						<div style={{ flex: 8 }}>
 							<div className="content-comment">
 								<p className="user-name" style={{ fontWeight: 'bold' }}>
-									{props.comments[props.comments.length - 1].authorFirstName +
+									{props.comments[0].authorFirstName +
 										' ' +
-										props.comments[props.comments.length - 1].authorLastName}
+										props.comments[0].authorLastName}
 								</p>
 								<div
 									className="comment-content"
 									dangerouslySetInnerHTML={{
-										__html: props.comments[props.comments.length - 1].content,
+										__html: props.comments[0].content,
 									}}
 								/>
 							</div>
@@ -460,18 +460,18 @@ function PostItem(props) {
 					</button>
 					{props.comments.map((item, index) => (
 						<div className="new-comment">
-							<Avatar src={props.comments[props.comments.length - 1 - index].authorAvatar} />
+							<Avatar src={props.comments[index].authorAvatar} />
 							<div style={{ flex: 8 }}>
 								<div className="content-comment">
 									<p className="user-name" style={{ fontWeight: 'bold' }}>
-										{props.comments[props.comments.length - 1 - index].authorFirstName +
+										{props.comments[index].authorFirstName +
 											' ' +
-											props.comments[props.comments.length - 1 - index].authorLastName}
+											props.comments[index].authorLastName}
 									</p>
 									<div
 										className="comment-content"
 										dangerouslySetInnerHTML={{
-											__html: props.comments[props.comments.length - 1 - index].content,
+											__html: props.comments[index].content,
 										}}
 									/>
 								</div>

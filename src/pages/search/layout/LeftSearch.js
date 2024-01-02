@@ -5,7 +5,7 @@ import { MdPeopleAlt } from 'react-icons/md';
 import { MdClass } from 'react-icons/md';
 import { MdGroups3 } from 'react-icons/md';
 import './LeftSearch.css';
-import { selectOption, selectSelectedOption, selectOptionSearchGrade,selectOptionSearchSubject } from '../../../redux/Group';
+import { selectOption, selectSelectedOption, selectOptionSearchGrade,selectOptionSearchSubject, selectOptionSearchPeople } from '../../../redux/Group';
 import { useSelector, useDispatch } from 'react-redux';
 import Api from '../../../api/Api';
 import { useHistory } from 'react-router-dom';
@@ -14,6 +14,7 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { Select } from 'antd';
 import { selectSearchpeople, selectclass, selectgroup, selectpost, selectSearch } from '../../../redux/Search';
+
 export default function LeftSearch() {
 	const dispatch = useDispatch();
 	const Option = Select.Option;
@@ -137,6 +138,27 @@ export default function LeftSearch() {
 					<MdPeopleAlt className="icon-menu" />
 					<span>Mọi người</span>
 				</button>
+				{option === 'people' ? (
+					<div style={{marginLeft:'30px'}} className='filter-people'>
+						<span>Bộ lọc</span>
+						<button onClick={()=>{dispatch(selectOptionSearchPeople('all'))}}><span>Tất cả</span></button>
+						<button onClick={()=>{
+								dispatch(selectOptionSearchPeople('TEACHER'));
+						}}>
+							<span>Giáo viên</span>
+						</button>
+						<button onClick={()=>{
+							dispatch(selectOptionSearchPeople('STUDENT'));
+						}}>
+							<span>Học sinh</span>
+						</button>
+						<button onClick={()=>{
+							dispatch(selectOptionSearchPeople('PARENT'));
+						}}>
+							<span>Phụ huynh</span>
+						</button>
+					</div>
+					): null}
 				<button
 					className={`menu-item ${selectedOption === 'class' ? 'active' : ''}`}
 					onClick={() => handleButtonClick('class')}
@@ -144,6 +166,7 @@ export default function LeftSearch() {
 					<MdClass className="icon-menu" />
 					<span>Lớp học</span>
 				</button>
+			
 				{option === 'class' ? (
 					<div className="grade" style={{marginLeft:'2rem'}}>
 						<div style={{marginBottom:'15px'}}>

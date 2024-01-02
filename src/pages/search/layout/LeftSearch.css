@@ -36,6 +36,8 @@
     background-color: #e6e6e6; /* Đặt màu nền khi button được chọn */
   }
 
-.grade button {
+.filter-people button {
     width: 80%;
+    margin-left: 2rem;
+    margin-bottom: 0.5rem;
 }

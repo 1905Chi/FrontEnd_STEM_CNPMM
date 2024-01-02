@@ -18,12 +18,13 @@ import { url } from '../../../constants/Constant';
 import { useNavigate } from 'react-router-dom';
 import { Empty } from 'antd';
 import { useState } from 'react';
-import { selectSelectOptionSearchGrade, selectSelectOptionSearchSubject } from '../../../redux/Group';
+import { selectSelectOptionSearchGrade, selectSelectOptionSearchSubject, selectSelectOptionSearchPeople } from '../../../redux/Group';
 export default function MainSearch() {
 	const navigate = useNavigate();
 	const selectedOption = useSelector(selectSelectedOption);
 	const selectedOptionSearchGrade = useSelector(selectSelectOptionSearchGrade);
 	const selectedOptionSearchSubject = useSelector(selectSelectOptionSearchSubject);
+	const selectedOptionSearchPeople = useSelector(selectSelectOptionSearchPeople);
 	const dispatch = useDispatch();
 	const post = useSelector(selectselectpost);
 
@@ -32,13 +33,29 @@ export default function MainSearch() {
 	const [classs, setClass] = useState(useSelector(selectselectclass));
 	const clasaSearch = useSelector(selectselectclass);
 
-	const people = useSelector(selectselectSearchpeople);
+	const [people, setPeople] = useState(useSelector(selectselectSearchpeople));
+	const peopleSearch = useSelector(selectselectSearchpeople);
 
 	const user = JSON.parse(localStorage.getItem('user'));
 
 	useEffect(() => {
 		searchClass();
 	}, [selectedOptionSearchGrade, selectedOptionSearchSubject]);
+
+	useEffect(() => {
+		searchPeople();
+	},[selectedOptionSearchPeople])	
+	const searchPeople = async () => {
+		if (selectedOptionSearchPeople === 'all' || selectedOptionSearchPeople === null) {
+			setPeople(peopleSearch);
+			return;
+		} else {
+			const search = peopleSearch.filter((item) => item.role === selectedOptionSearchPeople);
+			setPeople(search);
+			return;
+		}
+	};
+
 	const searchClass = async () => {
 		if (
 			(selectedOptionSearchGrade === 'all' && selectedOptionSearchSubject === 'all') ||

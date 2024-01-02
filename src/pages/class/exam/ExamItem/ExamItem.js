@@ -54,6 +54,27 @@ export default function ExamItem(props) {
 			navigate('/exam/' + id + '/submit');
 		}, 1000);
 	};
+	const deleteExam = () => {
+		const headers = {
+			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+			'Content-Type': 'application/json', // Đặt tiêu đề 'Content-Type' nếu bạn gửi dữ liệu dưới dạng JSON.
+		};
+		Api.delete(url + 'api/v1/exams/' + id, { headers: headers })
+
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					toast.success('Xóa thành công');
+					setTimeout(() => {
+						navigate('/classes/' + uuid);
+					}, 1000);
+				} else {
+					toast.error(response.data.message);
+				}
+			})
+			.catch((error) => {
+				toast.error(error);
+			});
+	};
 
 	useEffect(() => {
 		const headers = {
@@ -237,9 +258,9 @@ export default function ExamItem(props) {
 		},
 		{
 			title: 'Học sinh',
-			dataIndex: 'firstName' + 'lastName',
-			key: 'firstName' + ' ' + 'lastName',
-			render: (firstName, lastName) => <span>{firstName + ' ' + lastName}</span>,
+			
+			key: 'firstName',
+			render: (record) => <span>{record.firstName + ' ' + record.lastName}</span>,
 		},
 		{
 			title: 'Điểm',
@@ -341,7 +362,7 @@ export default function ExamItem(props) {
 							<div>
 								<div style={{ display: 'flex', justifyContent: 'center' }}>
 									<div className="exam-item__button">
-										<button className="exam-item__button__start" onClick={() => {}}>
+										<button className="exam-item__button__start" onClick={() => {deleteExam()}}>
 											Xóa
 										</button>
 									</div>
