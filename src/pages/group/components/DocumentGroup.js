@@ -8,6 +8,7 @@ import { selectSelectedPostGroup } from '../../../redux/Group';
 import { useSelector } from 'react-redux';
 import './Document.css';
 import Loading from '../../../components/Loading';
+import { selectselectMemberGroup } from '../../../redux/MemberGroup';
 export default function DocumentGroup() {
 	const [isShowAllFile, setIsShowAllFile] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -16,6 +17,12 @@ export default function DocumentGroup() {
 	const { RangePicker } = DatePicker;
 	const [visible, setVisible] = useState(false);
 	const [isopenAddFile, setIsopenAddFile] = useState(false);
+	const [rangetime, setrangtime] = useState();
+	const [type, setType] = useState('all');
+	const [sender, setSender] = useState('all');
+	const [search, setSearch] = useState([]);
+	const member = useSelector(selectselectMemberGroup);
+	const [searchQuery, setSearchQuery] = useState('');
 
 	const openAddFile = () => {
 		setIsopenAddFile(!isopenAddFile);
@@ -30,6 +37,7 @@ export default function DocumentGroup() {
 		console.log('Formatted Selected Time: ', dateString);
 	};
 	const post = useSelector(selectSelectedPostGroup).posts;
+
 	const getTypes = (filename) => {
 		const parts = filename.split('.');
 
@@ -56,6 +64,85 @@ export default function DocumentGroup() {
 				return 'other';
 		}
 	};
+	const changType = (value) => {
+		
+		console.log(value);
+		let SearchFile=file;
+		if(searchQuery==='' && type==='all' && sender==='all'){
+			setFile(search);
+		}
+		if(value!=='all'){
+			if(value==='doc'){
+				console.log('doc');
+				SearchFile.filter((item) => {
+					return item.type==='doc'||item.type==='docx';
+				})
+			}
+			
+			if(value==='pdf') {
+				SearchFile.filter((item) => {
+					return item.type==='pdf';
+				})
+			}
+			if(value==='ppt'){
+				SearchFile.filter((item) => {
+					return item.type==='ppt'||item.type==='pptx';
+				})
+			}
+			if(value==='other'){
+				SearchFile.filter((item) => {
+					return item.type!=='ppt'&&item.type!=='pptx'&&item.type!=='pdf'&&item.type!=='doc'&&item.type!=='docx';
+				})
+			}
+			
+
+		}
+		const uniqueArray = [...new Set(SearchFile)];
+
+		console.log(uniqueArray);
+
+		
+	};
+	const changMember = (value) => {
+		let SearchFile=file;
+		console.log(value);
+		if(searchQuery==='' && type==='all' && sender==='all'){
+			setFile(search);
+		}
+		if(value!=='all'){
+			SearchFile.filter((item) => {
+				return item.sender===sender;
+			})
+		}
+		const uniqueArray = [...new Set(SearchFile)];
+		setFile(uniqueArray);
+
+		console.log(uniqueArray);
+	}
+
+	const handleSearchChange = (e) => {
+		
+		
+	  let SearchFile=file;
+		console.log(e.target.value);
+		
+		if(searchQuery==='' && type==='all' && sender==='all'){
+			setFile(search);
+		}
+
+		if(searchQuery!==''){
+			SearchFile.filter((item) => {
+				return item.filename.toLowerCase().includes(e.target.value.toLowerCase());
+			})
+		}
+		const uniqueArray = [...new Set(SearchFile)];
+		setFile(uniqueArray);
+		console.log(uniqueArray);
+	  };
+
+
+
+
 	useEffect(() => {
 		if (post && post.length > 0) {
 			post.map((item) => {
@@ -67,13 +154,18 @@ export default function DocumentGroup() {
 							type: getTypes(truncatedFileName),
 							link: item1,
 							filename: truncatedFileName,
+							sender: item.post.authorId,
 						};
 						setFile((file) => {
 							return [...file, files];
 						});
+						setSearch((search) => {
+							return [...search, files];
+						});
 					});
 				}
 			});
+			
 		}
 	}, [post]);
 
@@ -94,11 +186,11 @@ export default function DocumentGroup() {
 					</button>
 				</div>
 				<div className="document-group-content">
-					{file && file.length > 0 ? (
-						<LabelFile type={file[0].type} filename={file[0].filename} link={file[0].link}></LabelFile>
+					{search && search.length > 0 ? (
+						<LabelFile type={search[0].type} filename={search[0].filename} link={search[0].link}></LabelFile>
 					) : null}
-					{file && file.length > 1 ? (
-						<LabelFile type={file[1].type} filename={file[1].filename} link={file[1].link}></LabelFile>
+					{search && search.length > 1 ? (
+						<LabelFile type={search[1].type} filename={search[1].filename} link={search[1].link}></LabelFile>
 					) : null}
 				</div>
 				{file && file.length > 2 ? (
@@ -109,22 +201,46 @@ export default function DocumentGroup() {
 			</div>
 			{isShowAllFile ? (
 				<div className="file-show-all">
-					<div className="document-group-search">
+					{/* <div className="document-group-search">
 						<div style={{ width: '83%', margin: '50px' }}>
-							<Search placeholder="Tìm kiếm tài liệu" style={{ borderRadius: '50px' }} />
+							<Search
+								placeholder="Tìm kiếm tài liệu"
+								style={{ borderRadius: '50px' }}
+								onChange={(e) => {handleSearchChange(e)
+								setSearchQuery(e.target.value)}}
+								value={searchQuery}
+							/>
 						</div>
 						<div className="search-file">
-							<Select style={{ width: '30%', marginLeft: '15px' }} placeholder="Loại">
+							<Select
+								style={{ width: '30%', marginLeft: '15px' }}
+								placeholder="Loại"
+								onChange={(value) => {
+									setType(value);
+									changType(value);
+								}}
+							>
 								<Option value="all">Tất cả</Option>
-								<Option value="word">Word</Option>
+								<Option value="doc">Word</Option>
 								<Option value="pdf">PDF</Option>
 								<Option value="other">Khác</Option>
 							</Select>
-							<Select style={{ width: '30%', marginLeft: '15px' }} placeholder="Người gửi">
+							<Select
+								style={{ width: '30%', marginLeft: '15px' }}
+								placeholder="Người gửi"
+								onChange={(value) => {
+									setSender(value);
+									changMember(value);
+								}}
+							>
 								<Option value="all">Tất cả</Option>
-								<Option value="Chi">Chi</Option>
-								<Option value="Kiet">Kiet</Option>
-								<Option value="other">Khác</Option>
+								{member.map((item, index) => {
+									return (
+										<Option value={item.user.id}>
+											{item.user.firstName} {item.user.lastName}
+										</Option>
+									);
+								})}
 							</Select>
 							<Dropdown
 								overlay={dropdownMenu}
@@ -138,7 +254,7 @@ export default function DocumentGroup() {
 								</Button>
 							</Dropdown>
 						</div>
-					</div>
+					</div> */}
 					<div className="document-group-content document-group-content-allfile">
 						{file.map((file, index) => {
 							return <LabelFile type={file.type} filename={file.filename} link={file.link}></LabelFile>;

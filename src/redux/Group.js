@@ -10,6 +10,9 @@ const menuSlice = createSlice({
     selectedGroupMember: null,  
     selectedPostGroup: null,
     selectedPostHome: null,
+    selectedOptionSearchGrade: null,
+    selectedOptionSearchSubject: null,
+   
    
   },
   reducers: {
@@ -27,6 +30,12 @@ const menuSlice = createSlice({
     },
     selectPostGroup: (state, action) => {
       state.selectedPostGroup = action.payload;
+    },
+    selectOptionSearchGrade : (state, action) => {
+      state.selectedOptionSearchGrade = action.payload;
+    },
+    selectOptionSearchSubject: (state, action) => {
+      state.selectedOptionSearchSubject = action.payload;
     },
     
     
@@ -49,11 +58,13 @@ const menuSlice = createSlice({
   },
 });
 
-export const { selectOption,selectOptionProfile ,selectGroupOwner,selectGroupMember,selectPostGroup,editPostGroup , selectPostHome,deleteRaction} = menuSlice.actions;
+export const { selectOption,selectOptionProfile ,selectGroupOwner,selectGroupMember,selectPostGroup,editPostGroup , selectPostHome,deleteRaction,selectOptionSearchGrade,selectOptionSearchSubject} = menuSlice.actions;
 export const selectSelectedOption = (state) => state.menu.selectedOption;
 export const selectSelectedOptionProfile = (state) => state.menu.selectedOptionProfile;
 export const selectSelectedGroupOwner = (state) => state.menu.selectedGrouOwner;
 export const selectSelectedGroupMember = (state) => state.menu.selectedGroupMember;
 export const selectSelectedPostHome = (state) => state.menu.selectedPostHome;
 export const selectSelectedPostGroup = (state) => state.menu.selectedPostGroup;
+export const selectSelectOptionSearchGrade = (state) => state.menu.selectedOptionSearchGrade;
+export const selectSelectOptionSearchSubject = (state) => state.menu.selectedOptionSearchSubject;
 export default menuSlice.reducer;

@@ -5,22 +5,39 @@ import { MdPeopleAlt } from 'react-icons/md';
 import { MdClass } from 'react-icons/md';
 import { MdGroups3 } from 'react-icons/md';
 import './LeftSearch.css';
-import { selectOption, selectSelectedOption } from '../../../redux/Group';
+import { selectOption, selectSelectedOption, selectOptionSearchGrade,selectOptionSearchSubject } from '../../../redux/Group';
 import { useSelector, useDispatch } from 'react-redux';
 import Api from '../../../api/Api';
 import { useHistory } from 'react-router-dom';
 import { url } from './../../../constants/Constant';
+import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import { Select } from 'antd';
 import { selectSearchpeople, selectclass, selectgroup, selectpost, selectSearch } from '../../../redux/Search';
 export default function LeftSearch() {
 	const dispatch = useDispatch();
+	const Option = Select.Option;
 	const [selectedOption, setSelectedOption] = useState('all');
 	const location = useLocation();
-
+	const [grade, setGrade] = useState(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']);
 	const searchParams = new URLSearchParams(location.search);
+	const [subjects, setSubjects] = useState([]);
 	const searchValue = searchParams.get('query');
+	const callSubject = async () => {
+		await axios
+			.get(url + 'api/v1/subjects')
+			.then((response) => {
+				setSubjects(response.data.result);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+	const option = useSelector(selectSelectedOption);
+
 	useEffect(() => {
 		dispatch(selectOption('all'));
+		callSubject();
 		/// bài viết
 		Api.get(url + 'api/v1/posts/search?query=' + searchValue)
 			.then((res) => {
@@ -75,9 +92,7 @@ export default function LeftSearch() {
 						console.error(err);
 						return { ...user, isFriend: 2 }; // chưa đăng nhập
 					}
-				}
-				else
-				{
+				} else {
 					return { ...user, isFriend: 2 }; // chưa đăng nhập
 				}
 			});
@@ -129,6 +144,44 @@ export default function LeftSearch() {
 					<MdClass className="icon-menu" />
 					<span>Lớp học</span>
 				</button>
+				{option === 'class' ? (
+					<div className="grade" style={{marginLeft:'2rem'}}>
+						<div style={{marginBottom:'15px'}}>
+						<span>Khối: </span>
+						<Select
+							defaultValue="Tất cả"
+							style={{ width: 120, marginLeft: '10px' }}
+							onChange={(value) => {
+								
+								dispatch(selectOptionSearchGrade(value));
+								
+							}}
+						>
+							<Option value="all">Tất cả</Option>
+							{grade.map((item) => (
+								<Option value={item}>{item}</Option>
+							))}
+						</Select>
+						</div>
+						<div>
+						<span>Môn học: </span>
+						<Select
+							defaultValue="Tất cả"
+							style={{ width: 120, marginLeft: '10px' }}
+							onChange={(value) => {
+								
+								dispatch(selectOptionSearchSubject(value));
+							}}
+						>
+							<Option value="all">Tất cả</Option>
+							{subjects.map((item) => (
+								<Option value={item.name}>{item.name}</Option>
+							))}
+						</Select>
+						</div>
+					</div>
+				) : null}
+
 				<button
 					className={`menu-item ${selectedOption === 'group' ? 'active' : ''}`}
 					onClick={() => handleButtonClick('group')}

@@ -35,3 +35,7 @@
 .menu-item.active {
     background-color: #e6e6e6; /* Đặt màu nền khi button được chọn */
   }
+
+.grade button {
+    width: 80%;
+}
