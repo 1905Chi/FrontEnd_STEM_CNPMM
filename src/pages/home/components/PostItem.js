@@ -340,12 +340,18 @@ function PostItem(props) {
 				toast.success(response.data.message);
 				setConfirmLoading(false);
 				setOpentModelDeletecmt(false);
-				props.callBackApi();
+				props.homePosts();
 			} else {
 				console.log(response.error);
 			}
+		}).catch((error) => {
+			toast.error('Xóa bình luận không thành công');
+			console.log(error);}
+		).finally(() => {
+
+			setConfirmLoading(false);
+				setOpentModelDeletecmt(false);
 		});
-	
 
 	};
 	function Comment({ comment }) {
@@ -382,7 +388,7 @@ function PostItem(props) {
 									}}
 								/>
 							</div>
-							<DropdownMenu id={comment.authorId} />
+							<DropdownMenu id={comment.authorId} idcmt={comment.id} />
 						</div>
 						<div className="react-post">
 							<button>Thích</button>
@@ -418,7 +424,7 @@ function PostItem(props) {
 		setOpentModelDeletecmt(true) 
 		setIdCmtDelete(id)
 	}
-	function DropdownMenu({ id }) {
+	function DropdownMenu({ id,idcmt }) {
 		const itemsCmt = [
 			{
 				key: '1',
@@ -426,7 +432,7 @@ function PostItem(props) {
 					<div style={{ fontSize: '15px' }}>
 						{JSON.parse(localStorage.getItem('user')) &&
 							id === JSON.parse(localStorage.getItem('user')).id ? (
-								<div onClick={() =>{deleteCmt(id)}}>
+								<div onClick={() =>{deleteCmt(idcmt)}}>
 									<RiDeleteBin6Fill style={{ color: 'red', fontSize: '15px' }} />
 									<span style={{ fontSize: '15px' }}>Xóa bình luận</span>
 								</div>
