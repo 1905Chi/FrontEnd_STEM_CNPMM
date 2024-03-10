@@ -3,8 +3,7 @@ import './Topbar.css';
 import { MegaMenu } from 'primereact/megamenu';
 import { InputText } from 'primereact/inputtext';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectselectuser } from '../redux/User';
+import { UserOutlined } from '@ant-design/icons';
 import anh_logo_1 from '../../src/assets/images/anh_logo_1.jpg';
 import { Avatar, Badge, List, Typography, Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
@@ -337,7 +336,7 @@ const Topbar = (props) => {
 				) : null}
 
 				{isLogin && user !== null ? (
-					<div style={{ display: 'flex' }}>
+					<div style={{ display: 'flex' }} className='end-topbar-login'>
 						<div className="button-right">
 							<Badge
 								// chỉ tính những thông báo chưa đọc
@@ -452,13 +451,13 @@ const Topbar = (props) => {
 							</Popover>
 						</div>
 
-						{user.avatarUrl !== null ? (
+						{user.avatarUrl !== null &&  user.avatarUrl!== "" ? (
 							<div className="avatar-topbar" onClick={toProfile}>
 								<Avatar alt="avatar" src={user.avatarUrl} height="40" className="mr-2" />
 							</div>
 						) : (
 							<div className="avatar-topbar" onClick={toProfile}>
-								<Avatar alt="avatar" src={anh_logo_1} height="40" className="mr-2" />
+								<Avatar alt="avatar" height="40"icon={<UserOutlined  style={{height:'3em'}}/>} />
 							</div>
 						)}
 					</div>
@@ -525,7 +524,7 @@ const Topbar = (props) => {
 					</div>
 				</div>
 			) : null}
-			<MegaMenu model={items} orientation="horizontal" start={start} end={end} />
+			<MegaMenu model={items} orientation="horizontal" start={start} end={end}  className='Top-bar-start-end'/>
 		</div>
 	);
 };

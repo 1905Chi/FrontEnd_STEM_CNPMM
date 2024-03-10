@@ -12,6 +12,7 @@ import { selectselectMemberGroup } from '../../../redux/MemberGroup';
 import moment from 'moment';
 import { selectOptionSearchDocementbyDate, selectOptionSearchDocumentbyName,selectOptionSearchDocumentbySender,selectOptionSearchDocumentbyType } from '../../../redux/Group';
 import { selectSelectOptionSearchDocementbyDate,selectSelectOptionSearchDocumentbyName, selectSelectOptionSearchDocumentbySender, selectSelectOptionSearchDocumentbyType } from '../../../redux/Group';
+import { SwapHorizontalCircleSharp } from '@material-ui/icons';
 export default function DocumentGroup() {
 	const [isShowAllFile, setIsShowAllFile] = useState(false);
 	const  dispatch = useDispatch();
@@ -84,9 +85,12 @@ export default function DocumentGroup() {
 			});
 		}
 		if(searchDate!==null && searchDate.length>0){
+			if(searchDate[0]===null || searchDate[1]===null || searchDate[0]==='' || searchDate[1]===''){
 			postFilter=postFilter.filter((item)=>{
+				
 				return checktime(searchDate[0],item.createdAt,searchDate[1]);
 			});
+		}
 		}
 		console.log("postFilter",postFilter);
 		
@@ -97,11 +101,19 @@ export default function DocumentGroup() {
 		setFile(postFilter);
 
 	}
+	function soSanhDoiTuong(a, b) {
+		return a.link === b.link && a.createdAt === b.createdAt && a.filename === b.filename && a.sender === b.sender;
+	  }
 
 	const checktime = (startedAt, now, endedAt) => {
 		const startTime = moment(startedAt, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
+		console.log("startTime",startTime);
+
 		const endTime = moment(endedAt, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
+		console.log("endTime",endTime);
+
 		const nowTime = moment(now, 'DD-MM-YYYY HH:mm:ss:SSSSSS').valueOf();
+		console.log("nowTime",nowTime);
 		if (nowTime > startTime && nowTime < endTime) {
 			return true;
 		}
@@ -122,6 +134,7 @@ export default function DocumentGroup() {
 	};
 	
 
+	
 	const getTypes = (filename) => {
 		const parts = filename.split('.');
 
