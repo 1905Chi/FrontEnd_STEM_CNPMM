@@ -221,11 +221,31 @@ text-align: center;
 .sub-comments{
   margin-left: 10%;
 }
+.infor-author{
+  display:'flex';
+  flex-direction: 'row';
+  flex: 9 ;
+  margin-top: 3%;
+}
+.infor-author p {
+  margin-top: 0;
+}
 
 @media screen and (max-width: 768px) {
   .infor-author {
     display: block;
+    margin-top: 5%;
     
+  }
+  .infor-author p {
+    margin-top: 0;
+  }
+  .ant-modal-body {
+    height: 40vh;
+    overflow-y: auto;
+  }
+  .ant-modal {
+    top: 5px
   }
 }
   

@@ -477,8 +477,17 @@ span {
 .end-topbar-login{
 	display: 'flex'
 }
+.menu-topbar {
+	display: none;
+}
 /* Mobile : width <740px */
 @media only screen  and (max-width: 46.1875em){
+	.menu-topbar {
+		display: block;
+    padding-top: 4%;
+    margin-left: 8%;
+    font-size: x-large;
+	}
 	.topbarContainer {
         height: auto;
     }
@@ -522,4 +531,5 @@ span {
 	.end-topbar-login{
 		justify-content: center;
 	}
+	
 }

@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { Modal } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
+import { Title } from '@material-ui/icons';
 function PostItem(props) {
 	const navigate = useNavigate();
 	console.log(props);
@@ -48,6 +49,10 @@ function PostItem(props) {
 		Array(props.comments ? props.comments.length : 0).fill(false)
 	);
 	const [idCmtDelete, setIdCmtDelete] = useState(null);
+	const [selectedReport, setSelectedReport] = useState(null);
+	const [opentReport, setOpentReport] = useState(false);
+	const [reportTo, setReportTo] = useState(null);
+	const [inforReport,setInforReport ] = useState(null);
 	const [ListReaction, setListReaction] = useState([
 		{
 			key: '1',
@@ -241,6 +246,7 @@ function PostItem(props) {
 	const handleCancel = () => {
 		setOpen(false);
 		setOpentModelDeletecmt(false);
+		setOpentReport(false);
 	};
 
 	const items = [
@@ -259,9 +265,15 @@ function PostItem(props) {
 							<span style={{ fontSize: '15px' }}>Xóa bài đăng</span>
 						</div>
 					) : (
-						<div>
+						<div
+							onClick={() => {
+								setOpentReport(true);
+								setReportTo('Báo cáo bài đăng');
+								setSelectedReport(null);
+							}}
+						>
 							<MdBugReport style={{ color: 'red' }} />
-							<span style={{ fontSize: '15px' }}>Báo cáo bài đăng</span>
+							<span style={{ fontSize: '15px' }}>Báo cáo bài đăng cho quản trị viên</span>
 						</div>
 					)}
 				</div>
@@ -270,19 +282,143 @@ function PostItem(props) {
 		{
 			key: '2',
 			label: (
-				<div style={{ font: '15px' }} onClick={EditPost}>
+				<div style={{ font: '15px' }}>
 					{JSON.parse(localStorage.getItem('user')) &&
 					props.authorId === JSON.parse(localStorage.getItem('user')).id ? (
-						<div>
+						<div onClick={EditPost}>
 							<EditOutlined style={{ color: 'red', fontSize: '15px' }} />
 							<span style={{ fontSize: '15px' }}>Chỉnh sửa bài đăng</span>
 						</div>
-					) : null}
+					) : (
+						<div
+							onClick={() => {
+								setOpentReport(true);
+								setReportTo('Báo cáo bài đăng');
+								setSelectedReport(null);
+							}}
+						>
+							<MdBugReport style={{ color: 'red' }} />
+							<span style={{ fontSize: '15px' }}>Báo cáo bài đăng </span>
+						</div>
+					)}
 				</div>
 			),
 		},
 	];
-
+	const reportContent = [
+		{
+			key: '1',
+			reportContent: 'Ảnh khỏa thân hoặc nội dung khiêu dâm',
+			information: `Hoạt động tình dục
+			Bán hoặc mua dâm
+			Nhũ hoa (trừ trường hợp đang cho con bú, liên quan đến sức khỏe và hành động phản đối)
+			Ảnh khỏa thân hiển thị bộ phận sinh dục
+			Ngôn ngữ khiêu dâm`,
+			treeReportContent: [
+				{
+					key: '1',
+					reportContent: 'Ảnh khỏa thân người lớn',
+				},
+				{
+					key: '2',
+					reportContent: 'Ảnh khỏa thân trẻ em',
+				},
+				{
+					key: '3',
+					reportContent: 'Nội dung khiêu dâm',
+				},
+				{
+					key: '4',
+					reportContent: 'Gợi dục',
+				},
+				{
+					key: '5',
+					reportContent: 'Dịch vụ tình dục',
+				},
+			],
+		},
+		{
+			key: '2',
+			reportContent: 'Spam',
+			information: `Mua, bán hay tặng tài khoản, vai trò hoặc quyền
+			Khuyến khích mọi người tương tác với nội dung sai sự thật
+			Dùng liên kết gây hiểu nhầm để chuyển mọi người từ Facebook đến nơi khác`,
+			treeReportContent: [],
+		},
+		{
+			key: '3',
+			reportContent: 'Bán hàng trái phép',
+			information: `Đây là trang web học tập ,chúng tôi không cho phép cá nhân , tổ chức nào kinh doanh bất hợp pháp
+			trên nền tảng này`,
+			treeReportContent: [],
+		},
+		{
+			key: '4',
+			reportContent: 'Bạo lực hoặc tự tử',
+			information: `Chúng tôi chỉ gỡ những nội dung vi phạm Tiêu chuẩn cộng đồng của mình, chẳng hạn như:
+			Đe dọa sử dụng bạo lực
+			Ví dụ: nhắm mục tiêu một người và nhắc đến vũ khí cụ thể
+			Cá nhân hoặc tổ chức nguy hiểm
+			Ví dụ: chủ nghĩa khủng bố hoặc một tổ chức tội phạm
+			Hình ảnh cực kỳ bạo lực
+			Ví dụ: tôn vinh bạo lực hoặc tán dương sự đau khổ
+			Một loại bạo lực khác
+			Ví dụ: hình ảnh hoặc nội dung khác gây khó chịu`,
+			treeReportContent: [
+				{
+					key: '1',
+					reportContent: 'Hình ảnh bạo lực',
+				},
+				{
+					key: '2',
+					reportContent: 'Tử vong hoặc bị thương nặng',
+				},
+				{
+					key: '3',
+					reportContent: 'Mối đe dọa bạo lực',
+				},
+				{
+					key: '4',
+					reportContent: 'Ngược đãi động vật',
+				},
+				{
+					key: '5',
+					reportContent: 'Bạo lực tình dục',
+				},
+				{
+					key: '6',
+					reportContent: 'Vấn đề khác',
+				},
+			],
+		},
+		{
+			key: '5',
+			reportContent: 'Thông tin sai sự thật',
+			information: `Chúng tôi chỉ gỡ những nội dung vi phạm Tiêu chuẩn cộng đồng của mình, chẳng hạn như:
+			Thông tin sai sự thật
+			Ví dụ: thông tin sai về COVID-19
+			Thông tin sai sự thật khác
+			Ví dụ: thông tin sai về sự kiện nổi bật khác`,
+			treeReportContent: [
+				{
+					key: '1',
+					reportContent: 'Sức khỏe',
+				},
+				{
+					key: '2',
+					reportContent: 'Chính trị',
+				},
+				{
+					key: '3',
+					reportContent: 'Kiến thức',
+				},
+				{
+					key: '4',
+					reportContent: 'Vấn đề khác',
+				},
+			],
+		},
+	];
 	const getTypes = (filename) => {
 		const parts = filename.split('.');
 
@@ -328,31 +464,32 @@ function PostItem(props) {
 	const closeEditor = (e) => {
 		setShowEditor(false);
 	};
-	const deleteComent = () => {	
+	const deleteComent = () => {
 		console.log('deleteComent' + idCmtDelete);
 		setConfirmLoading(true);
 		const headers = {
 			Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
 			conttentType: 'application/json',
 		};
-		Api.delete(url + 'api/v1/comments/' + idCmtDelete, { headers: headers }).then((response) => {
-			if (response.data.statusCode === 200) {
-				toast.success(response.data.message);
+		Api.delete(url + 'api/v1/comments/' + idCmtDelete, { headers: headers })
+			.then((response) => {
+				if (response.data.statusCode === 200) {
+					toast.success(response.data.message);
+					setConfirmLoading(false);
+					setOpentModelDeletecmt(false);
+					props.homePosts();
+				} else {
+					console.log(response.error);
+				}
+			})
+			.catch((error) => {
+				toast.error('Xóa bình luận không thành công');
+				console.log(error);
+			})
+			.finally(() => {
 				setConfirmLoading(false);
 				setOpentModelDeletecmt(false);
-				props.homePosts();
-			} else {
-				console.log(response.error);
-			}
-		}).catch((error) => {
-			toast.error('Xóa bình luận không thành công');
-			console.log(error);}
-		).finally(() => {
-
-			setConfirmLoading(false);
-				setOpentModelDeletecmt(false);
-		});
-
+			});
 	};
 	function Comment({ comment }) {
 		const [replyIndex, setReplyIndex] = useState(null); // State để lưu vị trí được chọn
@@ -421,27 +558,31 @@ function PostItem(props) {
 	}
 
 	const deleteCmt = (id) => {
-		setOpentModelDeletecmt(true) 
-		setIdCmtDelete(id)
-	}
-	function DropdownMenu({ id,idcmt }) {
+		setOpentModelDeletecmt(true);
+		setIdCmtDelete(id);
+	};
+	function DropdownMenu({ id, idcmt }) {
 		const itemsCmt = [
 			{
 				key: '1',
 				label: (
 					<div style={{ fontSize: '15px' }}>
 						{JSON.parse(localStorage.getItem('user')) &&
-							id === JSON.parse(localStorage.getItem('user')).id ? (
-								<div onClick={() =>{deleteCmt(idcmt)}}>
-									<RiDeleteBin6Fill style={{ color: 'red', fontSize: '15px' }} />
-									<span style={{ fontSize: '15px' }}>Xóa bình luận</span>
-								</div>
-							) : (
-								<div>
-									<MdBugReport style={{ color: 'red' }} />
-									<span style={{ fontSize: '15px' }}>Báo cáo bình luận</span>
-								</div>
-							)}
+						id === JSON.parse(localStorage.getItem('user')).id ? (
+							<div
+								onClick={() => {
+									deleteCmt(idcmt);
+								}}
+							>
+								<RiDeleteBin6Fill style={{ color: 'red', fontSize: '15px' }} />
+								<span style={{ fontSize: '15px' }}>Xóa bình luận</span>
+							</div>
+						) : (
+							<div>
+								<MdBugReport style={{ color: 'red' }} />
+								<span style={{ fontSize: '15px' }}>Báo cáo bình luận</span>
+							</div>
+						)}
 					</div>
 				),
 			},
@@ -450,28 +591,28 @@ function PostItem(props) {
 				label: (
 					<div style={{ fontSize: '15px' }} onClick={EditPost}>
 						{JSON.parse(localStorage.getItem('user')) &&
-							id === JSON.parse(localStorage.getItem('user')).id ? (
-								<div>
-									<EditOutlined style={{ color: 'red', fontSize: '15px' }} />
-									<span style={{ fontSize: '15px' }}>Chỉnh sửa bình luận</span>
-								</div>
-							) : null}
+						id === JSON.parse(localStorage.getItem('user')).id ? (
+							<div>
+								<EditOutlined style={{ color: 'red', fontSize: '15px' }} />
+								<span style={{ fontSize: '15px' }}>Chỉnh sửa bình luận</span>
+							</div>
+						) : null}
 					</div>
 				),
 			},
 		];
-	
+
 		const handleMenuClick = ({ key }) => {
 			// Handle menu item click here
 			console.log(key);
 		};
-	
+
 		return (
 			<div className="dropdown">
 				<Dropdown
 					overlay={
 						<Menu onClick={handleMenuClick}>
-							{itemsCmt.map(item => (
+							{itemsCmt.map((item) => (
 								<Menu.Item key={item.key}>{item.label}</Menu.Item>
 							))}
 						</Menu>
@@ -489,7 +630,18 @@ function PostItem(props) {
 			</div>
 		);
 	}
-	
+
+	const handleReportSelect = (report) => {
+		setInforReport(null);
+		setSelectedReport(report);
+		if(report.treeReportContent.length === 0){
+			setInforReport(report.reportContent);
+		}
+	};
+
+	const rePort = () => {
+		console.log('rePort');
+	};
 	return (
 		<div className="post-item">
 			<Modal
@@ -509,6 +661,36 @@ function PostItem(props) {
 				onCancel={handleCancel}
 			>
 				<p>"Bạn có muốm xóa bình luận này"</p>
+			</Modal>
+			<Modal
+				title={reportTo}
+				open={opentReport}
+				onOk={rePort}
+				okButtonProps={{ disabled: !inforReport }}
+				confirmLoading={confirmLoading}
+				onCancel={handleCancel}
+			>
+				<h3>Chọn lý do báo cáo:</h3>
+				{reportContent.map((report) => (
+					<div key={report.key}>
+						<Button onClick={() => handleReportSelect(report)} style={{ backgroundColor: selectedReport && selectedReport.key === report.key ? '#1890ff' : '',marginBottom:'1em' }}>{report.reportContent}</Button>
+						
+					</div>
+				))}
+				{
+					selectedReport !== null ? (
+						<div>
+							<h4>Thêm thông tin:</h4>
+							<button>{selectedReport.reportContent} </button>
+							<p>{selectedReport.information}</p> <br />
+							{selectedReport.treeReportContent !== null && selectedReport.treeReportContent.map((subReport) => (
+								<Button key={subReport.key} onClick={() =>{setInforReport(subReport.reportContent)}} style={{ backgroundColor: inforReport === subReport.reportContent ? '#1890ff' : '',marginBottom:'1em'  }}>
+									{subReport.reportContent}
+								</Button>
+							))}
+						</div>
+					): null
+				}
 			</Modal>
 
 			{/* {responseComement ? (
@@ -540,7 +722,7 @@ function PostItem(props) {
 						/>
 					)}
 				</div>
-				<div style={{ display: 'flex', flexDirection: 'row', flex: 9 }} className="infor-author">
+				<div style={{}} className="infor-author">
 					<a style={{ textDecoration: 'none', color: 'black' }}>
 						<p className="user-name" style={{ fontWeight: 'bold' }}>
 							{props.authorFirstName + ' ' + props.authorLastName}

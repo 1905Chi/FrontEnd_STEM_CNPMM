@@ -160,6 +160,7 @@ body {
   .left-web,.right-web {
     display: none; /* Ẩn phần bên trái, phải trên điện thoại */
   }
+ 
 
   .left-web-content,
   .main-web-content {
@@ -168,5 +169,9 @@ body {
   .ant-col-19{
       max-width: 100%;
   }
+  .ant-col-18 {
+    max-width: 100%;
+  }
+ 
 }
 
