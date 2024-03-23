@@ -121,7 +121,7 @@ function Home() {
 	return (
 		<>
 			<div className='Left' >
-			<TfiAngleDoubleRight onClick={()=>{setOpenLeft(!openLeft)}} />
+			<TfiAngleDoubleRight onClick={()=>{setOpenLeft( prev => !prev)}} />
 			</div>
 			{openLeft ? <div className="LeftHome" ref={LeftHomeRef} style={{ position: 'absolute', top: '37px', left: 0, width: '50%', height: '100%', zIndex: 999 }}>
             <Left />
